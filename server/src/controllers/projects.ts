@@ -56,13 +56,13 @@ class ProjectsController implements IProjectController {
 
   public async createProject(req: Request, res: Response, next: NextFunction) {
     try {
-      const project = await primsa.project.create({
-        data: {
-          name: req.body.name,
-          description: req.body.description,
-        },
-      });
-      res.status(201).json(project);
+      // const project = await primsa.project.create({
+      //   data: {
+      //     name: req.body.name,
+      //     description: req.body.description,
+      //   },
+      // });
+      res.status(201).json();
     } catch (err) {
       next(err);
     }

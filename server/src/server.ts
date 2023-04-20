@@ -1,12 +1,23 @@
 import http from "http";
 import express, { Express, Request, Response, NextFunction } from "express";
+import cors from "cors";
+import helmet from "helmet";
+import morgan from "morgan";
+import dotenv from "dotenv";
+
 import routes from "./routes";
 
 // express app initialization
 const app: Express = express();
 
+app.use(helmet());
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+
+app.use(cors());
+
+app.use(morgan("dev"));
 
 // routes
 app.use("/api", routes);
