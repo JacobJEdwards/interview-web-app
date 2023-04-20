@@ -7,7 +7,7 @@ class ProjectsController {
       const projects = await primsa.project.findMany();
       res.status(200).json(projects);
     } catch (err) {
-      res.status(500).json("Internal server error");
+      next(err);
     }
   }
   public async getProject(req: Request, res: Response, next: NextFunction) {
@@ -19,7 +19,7 @@ class ProjectsController {
       });
       res.status(200).json(project);
     } catch (err) {
-      res.status(500).json("Internal server error");
+      next(err);
     }
   }
 
@@ -33,7 +33,7 @@ class ProjectsController {
       });
       res.status(201).json(project);
     } catch (err) {
-      res.status(500).json("Internal server error");
+      next(err);
     }
   }
 
@@ -50,7 +50,7 @@ class ProjectsController {
       });
       res.status(200).json(project);
     } catch (err) {
-      res.status(500).json("Internal server error");
+      next(err);
     }
   }
 
@@ -63,7 +63,7 @@ class ProjectsController {
       });
       res.status(200).json(project);
     } catch (err) {
-      res.status(500).json("Internal server error");
+      next(err);
     }
   }
 }

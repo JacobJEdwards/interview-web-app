@@ -9,11 +9,15 @@ app.use(express.urlencoded({ extended: true }));
 
 app.use("/api", routes);
 
+app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
+    return res.status(500).json({
+        message: err.message,
+    });
+});
+
 app.use((req: Request, res: Response, next: NextFunction) => {
-  const error = new Error("Not found");
-  return res.status(404).json({
-    message: error.message,
-  });
+    const error = new Error("Not found");
+    return res.status(404).json({ message: error.message });
 });
 
 const server = http.createServer(app);

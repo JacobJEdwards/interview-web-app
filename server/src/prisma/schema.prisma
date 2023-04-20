@@ -8,12 +8,12 @@ datasource db {
 }
 
 model Student {
-    id       Int       @id @default(autoincrement())
-    email    String    @unique
-    name     String
+    id           Int       @id @default(autoincrement())
+    email        String    @unique
+    name         String
     passwordHash String
-    modules  Module[]
-    projects Project[]
+    modules      Module[]
+    projects     Project[]
 }
 
 model Teacher {
@@ -24,20 +24,19 @@ model Teacher {
 }
 
 model Project {
-    id       Int       @id @default(autoincrement())
-    name     String
+    id          Int       @id @default(autoincrement())
+    name        String
     description String
-    module  Module    @relation(fields: [moduleId], references: [id])
-    moduleId Int
-    students Student[]
-    teacher Teacher @relation(fields: [teacherId], references: [id])
-    teacherId Int
+    module      Module    @relation(fields: [moduleId], references: [id])
+    moduleId    Int
+    students    Student[]
 }
 
 model Module {
-    id       Int       @id @default(autoincrement())
-    name     String
-    Projects Project[]
-    Students Student[]
-    Teachers Teacher[]
+    id        Int       @id @default(autoincrement())
+    name      String
+    Projects  Project[]
+    Students  Student[]
+    Teacher   Teacher   @relation(fields: [teacherId], references: [id])
+    teacherId Int
 }
