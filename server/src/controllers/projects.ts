@@ -1,7 +1,38 @@
 import { Request, Response, NextFunction } from "express";
-import primsa from "../client";
+import primsa from "../utils/client";
 
-class ProjectsController {
+// used to define the endpoints
+interface IProjectController {
+  getProjects: (
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ) => Promise<void>;
+  getProject: (
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ) => Promise<void>;
+  createProject: (
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ) => Promise<void>;
+  updateProject: (
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ) => Promise<void>;
+  deleteProject: (
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ) => Promise<void>;
+}
+
+// Path: projects.ts
+class ProjectsController implements IProjectController {
+  // basic CRUD operations
   public async getProjects(req: Request, res: Response, next: NextFunction) {
     try {
       const projects = await primsa.project.findMany();
