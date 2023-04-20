@@ -13,6 +13,30 @@ I had to add a list of projects to the teacher as well to make querying the API 
 - When assigned to a module the students can then see it.
 - The students will then pick one of the projects in each module (?).
 
+## Users
+
+The only users that can access this API are students, teachers and admins, which will be provided auth headers (?) on the frontend.
+
+### Student users:
+
+- view their projects (get)
+- view their modules (get)
+- view available projects per module (get)
+- select a project from selection panel per module (post)
+- upload their completed project (post) (possibly behind the scope of this PoC)
+
+### Teacher users:
+
+- view modules (get)
+- view the projects they have set (get)
+- upload a project (post)
+- assign a project to a module
+- view projects uploaded by students (get) (possibly behind the scope of this PoC)
+
+### Admin users:
+
+- full access to the api
+
 ## Controllers
 
 - Student Controller
@@ -28,6 +52,10 @@ I had to add a list of projects to the teacher as well to make querying the API 
 
 - Express
 
+## Testing
+
+- Self-testing using Postman and curl
+
 ## Future
 
 - Auth
@@ -36,5 +64,6 @@ I had to add a list of projects to the teacher as well to make querying the API 
   - Add project to student
   - Add project to module
 - Eventually marking, which would involve possibly soft deleting the project
-- Security -> CORS? Auth headers?
+- Security -> CORS? Auth headers? Auth0?
 - Implement into a React App -> hopefully remix.run if it begins working!
+- finish the seed function (how do I deal with referential integrity?)
