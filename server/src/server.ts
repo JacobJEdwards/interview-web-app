@@ -1,22 +1,22 @@
 import http from "http";
 import express, { Express, Request, Response, NextFunction } from "express";
-import routes from './routes/index'
+import routes from "./routes";
 
-const router: Express = express();
+const app: Express = express();
 
-router.use(express.json());
-router.use(express.urlencoded({ extended: true }));
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
-router.use("/api", routes);
+app.use("/api", routes);
 
-router.use((req: Request, res: Response, next: NextFunction) => {
+app.use((req: Request, res: Response, next: NextFunction) => {
   const error = new Error("Not found");
   return res.status(404).json({
     message: error.message,
   });
 });
 
-const server = http.createServer(router);
+const server = http.createServer(app);
 const port: number | string = process.env.PORT || 6060;
 
 server.listen(port, () => console.log(`Server is running on port ${port}`));
