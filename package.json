@@ -4,5 +4,9 @@
   "description": "Web app used as example implementation of Project Management System",
   "repository": "https://github.com/JacobJEdwards/interview-web-app.git",
   "author": "JacobJEdwards <jvt22fbu@uea.ac.uk>",
-  "private": false
+  "private": true,
+  "workspaces": [
+    "client",
+    "server"
+  ]
 }
