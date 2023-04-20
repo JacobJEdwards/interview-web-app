@@ -43,6 +43,7 @@ router.put("/teachers/:id", TeacherController.updateTeacher);
 router.delete("/teachers/:id", TeacherController.deleteTeacher);
 
 // Assignment routes (not CRUD)
+// Possibly some of these are not needed -> need to think!!!!
 // Assign project to module
 // router.post("/modules/:id/project/:projectId", ModulesController.assignProjectToModule);
 //

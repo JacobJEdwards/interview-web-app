@@ -1,12 +1,14 @@
 import http from "http";
 import express, { Express, Request, Response, NextFunction } from "express";
 import cors from "cors";
-import helmet from "helmet";
+import helmet, { xssFilter } from "helmet";
 import morgan from "morgan";
 import dotenv from "dotenv";
-import normalizePort from "./utils/normalizePort";
 
+import normalizePort from "./utils/normalizePort";
 import routes from "./routes";
+
+dotenv.config();
 
 // express app initialization
 const app: Express = express();
