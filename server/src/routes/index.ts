@@ -44,12 +44,12 @@ router.delete("/teachers/:id", TeacherController.deleteTeacher);
 
 // Assignment routes (not CRUD)
 // Assign project to module
-// router.post("/modules/:id/project/:id", ModulesController.assignProjectToModule);
+// router.post("/modules/:id/project/:projectId", ModulesController.assignProjectToModule);
 //
 // Assign project to student
-// router.post("/students/:id/project/:id", StudentController.assignProjectToStudent);
+// router.post("/students/:id/project/:projectId", StudentController.assignProjectToStudent);
 //
 // Assign teacher to module
-// router.post("/modules/:id/teacher/:id", ModulesController.assignTeacherToModule);
+// router.post("/modules/:id/teacher/:teacherId", ModulesController.assignTeacherToModule);
 
 export default router;

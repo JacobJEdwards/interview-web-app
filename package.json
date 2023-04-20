@@ -5,8 +5,20 @@
   "repository": "https://github.com/JacobJEdwards/interview-web-app.git",
   "author": "JacobJEdwards <jvt22fbu@uea.ac.uk>",
   "private": true,
+  "prisma": {
+    "schema": "server/src/prisma/schema.prisma"
+  },
   "workspaces": [
     "client",
     "server"
-  ]
+  ],
+  "scripts": {
+    "client": "yarn workspace client start",
+    "server": "yarn workspace server start",
+    "dev": "concurrently --kill-others-on-fail \"yarn client\" \"yarn server\""
+  },
+  "devDependencies": {
+    "concurrently": "^8.0.1",
+    "esbuild": "^0.17.17"
+  }
 }
