@@ -62,8 +62,10 @@ The only users that can access this API are students, teachers and admins, which
 - More ergonomic routing for endpoints
 - More controller functions:
   - Add project to student
-  - Add project to module
 - Eventually marking, which would involve possibly soft deleting the project
 - Security -> CORS? Auth headers? Auth0?
 - Implement into a React App -> hopefully remix.run if it begins working!
 - finish the seed function (how do I deal with referential integrity?)
+- draw out how the controllers work -> might be redundant non-crud controllers in my head
+- Most important is the students picking a project
+- frontend visualisation would be handy
