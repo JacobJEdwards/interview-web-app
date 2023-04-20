@@ -17,10 +17,11 @@ model Student {
 }
 
 model Teacher {
-    id      Int      @id @default(autoincrement())
-    email   String   @unique
-    name    String
-    modules Module[]
+    id       Int       @id @default(autoincrement())
+    email    String    @unique
+    name     String
+    modules  Module[]
+    projects Project[]
 }
 
 model Project {
@@ -30,6 +31,8 @@ model Project {
     module      Module    @relation(fields: [moduleId], references: [id])
     moduleId    Int
     students    Student[]
+    teacher     Teacher   @relation(fields: [teacherId], references: [id])
+    teacherId   Int
 }
 
 model Module {

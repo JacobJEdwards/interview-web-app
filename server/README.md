@@ -7,6 +7,12 @@
 - Module with basic information, 1 teacher, list of students, list of projects
 - Project with basic information, list of students, and 1 module
 
+I had to add a list of projects to the teacher as well to make querying the API easier -> should allow the teachers to see the list of projects easier on the frontend.
+
+- Additionally, the teacher will add a new project, and then assign it to a module.
+- When assigned to a module the students can then see it.
+- The students will then pick one of the projects in each module (?).
+
 ## Controllers
 
 - Student Controller
