@@ -13,6 +13,7 @@ model Student {
     name     String
     modules  Module[]
     projects Project[]
+    password String
 }
 
 model Teacher {
@@ -21,6 +22,7 @@ model Teacher {
     name     String
     modules  Module[]
     projects Project[]
+    password String
 }
 
 model Admin {
