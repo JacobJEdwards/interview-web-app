@@ -1,18 +1,13 @@
-import jwt from "express-jwt";
-import jwksRsa from "jwks-rsa";
+import { Request, Response, NextFunction } from "express";
 
-// Define middleware that validates incoming bearer tokens
-const checkJwt = jwt({
-  secret: jwksRsa.expressJwtSecret({
-    cache: true,
-    rateLimit: true,
-    jwksRequestsPerMinute: 5,
-    jwksUri: `https://${process.env.AUTH0_DOMAIN}/.well-known/jwks.json`,
-  }),
+const authorize = (role: string) => {
+    return (req: Request, res: Response, next: NextFunction) => {
+        if (req.user && req.user.role === role) {
+            next();
+        } else {
+            res.status(403).send("Forbidden");
+        }
+    };
+};
 
-  audience: `https://api.internship`,
-  issuer: `https://${process.env.AUTH0_DOMAIN}/`,
-  algorithms: ["RS256"],
-});
-
-export default checkJwt;
+export default authorize;
