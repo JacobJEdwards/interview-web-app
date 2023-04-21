@@ -1,5 +1,6 @@
 import { Request, Response, NextFunction } from "express";
 import prisma from "../utils/db";
+import generateToken from "../utils/generateToken";
 
 class AuthController {
   public async studentLogin(req: Request, res: Response, next: NextFunction) {
@@ -16,11 +17,14 @@ class AuthController {
       if (user.password !== password) {
         return res.status(401).json({ message: "Incorrect password" });
       }
-      return res.status(200).json({ message: "Login successful", user });
+      const token = generateToken(user);
+
+      res.status(200).json({ message: "Login successful", token, user });
     } catch (error) {
       next(error);
     }
   }
+
   public async teacherLogin(req: Request, res: Response, next: NextFunction) {
     try {
       const { email, password } = req.body;
@@ -35,7 +39,9 @@ class AuthController {
       if (user.password !== password) {
         return res.status(401).json({ message: "Incorrect password" });
       }
-      return res.status(200).json({ message: "Login successful", user });
+      const token = generateToken(user);
+
+      res.status(200).json({ message: "Login successful", token, user });
     } catch (error) {
       next(error);
     }
