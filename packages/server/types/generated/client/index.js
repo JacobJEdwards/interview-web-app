@@ -178,8 +178,7 @@ const config = {
     "db"
   ],
   "activeProvider": "sqlite",
-  "dataProxy": false,
-  "postinstall": false
+  "dataProxy": false
 }
 config.dirname = dirname
 config.document = dmmf
