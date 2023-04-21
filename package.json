@@ -6,12 +6,11 @@
     "author": "JacobJEdwards <jvt22fbu@uea.ac.uk>",
     "private": true,
     "prisma": {
-        "schema": "server/src/prisma/schema.prisma",
-        "seed": "ts-node server/src/prisma/seed.ts"
+        "schema": "packages/server/src/prisma/schema.prisma",
+        "seed": "ts-node packages/server/src/prisma/seed.ts"
     },
     "workspaces": [
-        "client",
-        "server"
+        "packages/*"
     ],
     "scripts": {
         "client": "yarn workspace client dev",
