@@ -10,14 +10,13 @@ export const loader: LoaderFunction = async ({ request }: LoaderArgs) => {
     return redirect("/login");
   }
 
-  return json({ user }, { status: 200 });
+  return redirect("/dashboard");
 };
 
 export const meta: V2_MetaFunction = () => {
-    return [{ title: "Home" }];
+  return [{ title: "Home" }];
 };
 
 export default function Index() {
-    const data = useLoaderData();
-    return <div></div>;
+  useLoaderData();
 }

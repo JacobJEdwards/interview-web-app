@@ -11,6 +11,14 @@ interface UserSessionData extends SessionData {
     userType?: string;
 }
 
+export const Roles = {
+    STUDENT: "students",
+    TEACHER: "teachers",
+    ADMIN: "admins",
+} as const;
+
+export type Role = typeof Roles[keyof typeof Roles];
+
 // separate login functions for student and teacher due to database structure
 export async function studentLogin({
     email,
@@ -85,6 +93,7 @@ export async function getUserId(
 
     const userId = session.get("userId") as string;
     const userType = session.get("userType") as string;
+    console.log(userId, userType);
 
     return { userId, userType };
 }
@@ -102,7 +111,7 @@ export async function requireUserId(
     return userId;
 }
 
-async function requireUserType(
+export async function requireUserType(
     request: Request,
     redirectTo: string = new URL(request.url).pathname
 ): Promise<string> {
@@ -153,7 +162,7 @@ export async function logout(request: Request): Promise<Response> {
 
 export async function createUserSession(
     userId: string,
-    userType: string,
+    userType: Role,
     redirectTo: string
 ): Promise<Response> {
     const session = await storage.getSession();
