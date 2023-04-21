@@ -4,9 +4,6 @@ import ModulesController from "../controllers/modules.controller";
 import StudentController from "../controllers/students.controller";
 import TeacherController from "../controllers/teachers.controller";
 
-import { auth } from 'express-oauth2-jwt-bearer'
-
-
 const router = express.Router();
 
 /*

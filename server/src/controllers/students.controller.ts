@@ -56,9 +56,9 @@ class StudentController implements IStudentsController {
 
   public async createStudent(req: Request, res: Response, next: NextFunction) {
     try {
-      const { name, email } = req.body;
+      const { name, email, password } = req.body;
       const student = await prisma.student.create({
-        data: { name, email },
+        data: { name, email, password },
       });
       res.status(201).json(student);
     } catch (err) {
