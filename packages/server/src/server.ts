@@ -11,8 +11,6 @@ import AuthRoutes from "./routes/auth.router";
 
 dotenv.config();
 
-console.log(process.env);
-
 // express app initialization
 const app: Express = express();
 
@@ -33,15 +31,15 @@ app.use("/auth", AuthRoutes);
 
 // error handling
 app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
-    return res.status(500).json({
-        message: err.message,
-    });
+  return res.status(500).json({
+    message: err.message,
+  });
 });
 
 // 404 error handling
 app.use((req: Request, res: Response, next: NextFunction) => {
-    const error = new Error("Not found");
-    return res.status(404).json({ message: error.message });
+  const error = new Error("Not found");
+  return res.status(404).json({ message: error.message });
 });
 
 // server initialization
@@ -58,30 +56,30 @@ server.on("listening", onListening);
 
 // https://github.com/ferreiro/example-monorepo/blob/master/packages/server/bin/www#L15
 function onError(error: NodeJS.ErrnoException): void {
-    if (error.syscall !== "listen") {
-        throw error;
-    }
+  if (error.syscall !== "listen") {
+    throw error;
+  }
 
-    const bind = typeof port === "string" ? "Pipe " + port : "Port " + port;
+  const bind = typeof port === "string" ? "Pipe " + port : "Port " + port;
 
-    // handle specific liseners
-    switch (error.code) {
-        case "EACCES":
-            console.error(bind + " requires elevated privileges");
-            process.exit(1);
-            break;
-        case "EADDRINUSE":
-            console.error(bind + " is already in use");
-            process.exit(1);
-            break;
-        default:
-            throw error;
-    }
+  // handle specific liseners
+  switch (error.code) {
+    case "EACCES":
+      console.error(bind + " requires elevated privileges");
+      process.exit(1);
+      break;
+    case "EADDRINUSE":
+      console.error(bind + " is already in use");
+      process.exit(1);
+      break;
+    default:
+      throw error;
+  }
 }
 
 function onListening() {
-    const addr = server.address();
-    if (!addr) return;
-    const bind = typeof addr === "string" ? "pipe " + addr : "port " + addr.port;
-    console.log("Listening on " + bind);
+  const addr = server.address();
+  if (!addr) return;
+  const bind = typeof addr === "string" ? "pipe " + addr : "port " + addr.port;
+  console.log("Listening on " + bind);
 }

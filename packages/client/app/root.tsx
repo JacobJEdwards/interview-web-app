@@ -7,11 +7,15 @@ import {
   ScrollRestoration,
   useRouteError,
   isRouteErrorResponse,
+  useLoaderData,
 } from "@remix-run/react";
 
-import type { PropsWithChildren } from "react";
+import { json, redirect } from "@remix-run/node";
+import { getUser } from "./utils/session.server";
 
+import type { PropsWithChildren } from "react";
 import type { LinksFunction, V2_MetaFunction } from "@remix-run/node";
+import type { LoaderFunction, LoaderArgs } from "@remix-run/node";
 
 import tailwindURL from "./styles/app.css";
 
@@ -23,26 +27,30 @@ export const meta: V2_MetaFunction = () => {
   return [{ description: "Interview Web App" }];
 };
 
+
 const Layout = ({
   children,
   title = "Interview Web App",
-}: PropsWithChildren<{ title?: string }>) => (
-  <html lang="en">
-    <head>
-      <meta charSet="utf-8" />
-      <meta name="viewport" content="width=device-width,initial-scale=1" />
-      <Meta />
-      <Links />
-      <title>{title}</title>
-    </head>
-    <body>
-      {children}
-      <ScrollRestoration />
-      <Scripts />
-      <LiveReload />
-    </body>
-  </html>
-);
+}: PropsWithChildren<{ title?: string }>) => {
+  const data = useLoaderData();
+  return (
+    <html lang="en">
+      <head>
+        <meta charSet="utf-8" />
+        <meta name="viewport" content="width=device-width,initial-scale=1" />
+        <Meta />
+        <Links />
+        <title>{title}</title>
+      </head>
+      <body>
+        {children}
+        <ScrollRestoration />
+        <Scripts />
+        <LiveReload />
+      </body>
+    </html>
+  );
+};
 
 export default function App() {
   return (
