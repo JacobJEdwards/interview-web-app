@@ -8,11 +8,11 @@ datasource db {
 }
 
 model Student {
-    id           Int       @id @default(autoincrement())
-    email        String    @unique
-    name         String
-    modules      Module[]
-    projects     Project[]
+    id       Int       @id @default(autoincrement())
+    email    String    @unique
+    name     String
+    modules  Module[]
+    projects Project[]
 }
 
 model Teacher {
@@ -21,6 +21,12 @@ model Teacher {
     name     String
     modules  Module[]
     projects Project[]
+}
+
+model Admin {
+    id    Int    @id @default(autoincrement())
+    email String @unique
+    name  String
 }
 
 model Project {
