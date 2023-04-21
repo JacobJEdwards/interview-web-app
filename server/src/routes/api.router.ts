@@ -3,6 +3,7 @@ import ProjectController from "../controllers/projects.controller";
 import ModulesController from "../controllers/modules.controller";
 import StudentController from "../controllers/students.controller";
 import TeacherController from "../controllers/teachers.controller";
+import AdminController from "../controllers/admins.controller";
 
 const router = express.Router();
 
@@ -42,6 +43,16 @@ router.post("/teachers", TeacherController.createTeacher);
 router.put("/teachers/:id", TeacherController.updateTeacher);
 router.delete("/teachers/:id", TeacherController.deleteTeacher);
 
+// Admin route
+router.get("/admins", AdminController.getAdmins);
+router.get("/admins/:id", AdminController.getAdmin);
+router.post("/admins", AdminController.createAdmin);
+router.put("/admins/:id", AdminController.updateAdmin);
+router.delete("/admins/:id", AdminController.deleteAdmin);
+
+// Additional route for getting all projects for a module
+router.get("/modules/:id/projects", ModulesController.getProjects);
+
 // Assignment routes (not CRUD)
 // Possibly some of these are not needed -> need to think!!!!
 // Assign project to module
@@ -49,8 +60,5 @@ router.delete("/teachers/:id", TeacherController.deleteTeacher);
 //
 // Assign project to student
 // router.post("/students/:id/project/:projectId", StudentController.assignProjectToStudent);
-//
-// Assign teacher to module
-// router.post("/modules/:id/teacher/:teacherId", ModulesController.assignTeacherToModule);
 
 export default router;

@@ -24,6 +24,11 @@ interface IModuleController {
     res: Response,
     next: NextFunction
   ) => Promise<void>;
+  getProjects: (
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ) => Promise<void>;
 }
 
 // path: modules.ts
@@ -85,6 +90,18 @@ class ModulesController implements IModuleController {
         },
       });
       res.status(200).json(module);
+    } catch (err) {
+      next(err);
+    }
+  }
+  public async getProjects(req: Request, res: Response, next: NextFunction) {
+    try {
+      const projects = await prisma.project.findMany({
+        where: {
+          moduleId: Number(req.params.id),
+        },
+      });
+      res.status(200).json(projects);
     } catch (err) {
       next(err);
     }

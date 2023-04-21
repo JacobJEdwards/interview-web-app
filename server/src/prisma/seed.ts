@@ -2,50 +2,35 @@ import { PrismaClient } from "@prisma/client";
 const db = new PrismaClient();
 
 async function seed() {
-    await Promise.all(
-        getModules().map(async (module) => {
-            await db.module.create({
-                data: module,
-            });
-        })
-    );
-    await Promise.all(
-        getTeachers().map(async (teacher) => {
-            await db.teacher.create({
-                data: teacher,
-            });
-        })
-    );
-    await Promise.all(
-        getStudents().map(async (student) => {
-            await db.student.create({
-                data: student,
-            });
-        })
-    );
-    await Promise.all(
-        getProjects().map(async (project) => {
-            await db.project.create({
-                data: project,
-            });
-        })
-    );
+    const teacher = await db.teacher.create({
+        data: {
+            name: "Teacher 1",
+            email: "test@test.com",
+            password: "password",
+        },
+    });
+    const module = await db.module.create({
+        data: {
+            name: "Module 1",
+            teacherId: teacher.id,
+        },
+    });
+    const project = await db.project.create({
+        data: {
+            name: "Project 1",
+            description: "Project 1 description",
+            moduleId: module.id,
+            teacherId: teacher.id,
+        },
+    });
 }
 
-seed();
-
-function getModules() {
-    return [];
-}
-
-function getTeachers() {
-    return [];
-}
-
-function getStudents() {
-    return [];
-}
-
-function getProjects() {
-    return [];
-}
+seed()
+    .then(async () => {
+        await db.$disconnect();
+    })
+    .catch(async (e) => {
+        console.error(e);
+        await db.$disconnect();
+        process.exit(1);
+    });

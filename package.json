@@ -6,7 +6,8 @@
     "author": "JacobJEdwards <jvt22fbu@uea.ac.uk>",
     "private": true,
     "prisma": {
-        "schema": "server/src/prisma/schema.prisma"
+        "schema": "server/src/prisma/schema.prisma",
+        "seed": "ts-node server/src/prisma/seed.ts"
     },
     "workspaces": [
         "client",
