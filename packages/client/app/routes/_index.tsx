@@ -1,16 +1,17 @@
 import type { V2_MetaFunction, LoaderFunction } from "@remix-run/node";
 import { redirect } from "@remix-run/node";
 import { useLoaderData } from "@remix-run/react";
-import { getUser } from "../utils/session.server";
+import { getUserId } from "../utils/session.server";
 import type { LoaderArgs } from "@remix-run/node";
 
 export const loader: LoaderFunction = async ({ request }: LoaderArgs) => {
-  const user = await getUser(request);
+  const user = await getUserId(request);
+
   if (!user) {
     return redirect("/login");
+  } else {
+    return redirect("/dashboard");
   }
-
-  return redirect("/dashboard");
 };
 
 export const meta: V2_MetaFunction = () => {

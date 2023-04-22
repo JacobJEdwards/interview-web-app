@@ -8,8 +8,8 @@ type LoginForm = {
 };
 
 export interface UserSessionData extends SessionData {
-    userId?: string;
-    userRole?: Role;
+    userId: string;
+    userRole: Role;
 }
 
 export async function login({
@@ -28,7 +28,7 @@ export async function login({
         throw new Error("Invalid username or password");
     }
     const json = await response.json();
-    const user = json.user;
+    const user = await json.user;
     return { userId: user.id, userRole: user.role };
 }
 
@@ -104,7 +104,6 @@ export async function getUserId(request: Request): Promise<UserSessionData> {
 
     const userId = session.get("userId") as string;
     const userRole = session.get("userRole") as Role;
-    console.log(userId, userRole);
 
     return { userId, userRole };
 }
@@ -152,8 +151,9 @@ export async function getUser(request: Request) {
     }
 
     try {
-        const user = await fetch(`http://localhost:6060/auth/users/${userId}`);
-        return user.json();
+        const user = await fetch(`http://localhost:6060/api/users/${userId}`);
+        const json = await user.json();
+        return { id: json.id, role: json.role, name: json.name };
     } catch (error) {
         throw logout(request);
     }
@@ -177,6 +177,7 @@ export async function createUserSession(
     const session = await storage.getSession();
     session.set("userId", userId);
     session.set("userRole", userRole);
+
     return redirect(redirectTo, {
         headers: {
             "Set-Cookie": await storage.commitSession(session),

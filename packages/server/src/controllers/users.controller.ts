@@ -17,6 +17,7 @@ class UserController {
       const user = await prisma.user.findUnique({
         where: { id: Number(id) },
       });
+      console.log(user);
       return user;
     } catch (error) {
       next(error);
