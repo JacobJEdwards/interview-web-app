@@ -1,19 +1,38 @@
 import { PrismaClient } from "../../types/generated/client";
+import { Role } from "../../types/generated/client";
 const db = new PrismaClient();
 
 async function seed() {
-  const student = await db.student.create({
-    data: {
+  const student = await db.user.upsert({
+    where: {
+      email: "student@test.com",
+    },
+    update: {},
+    create: {
       name: "Student 1",
       email: "student@test.com",
       password: "password",
+      role: Role.STUDENT,
+    },
+    include: {
+      modules: true,
+      projects: true,
     },
   });
-  const teacher = await db.teacher.create({
-    data: {
+  const teacher = await db.user.upsert({
+    where: {
+      email: "teacher@test.com",
+    },
+    update: {},
+    create: {
       name: "Teacher 1",
-      email: "test@test.com",
+      email: "teacher@test.com",
       password: "password",
+      role: Role.TEACHER,
+    },
+    include: {
+      modules: true,
+      projects: true,
     },
   });
   const module = await db.module.create({
@@ -22,12 +41,23 @@ async function seed() {
       teacherId: teacher.id,
     },
   });
+
   const project = await db.project.create({
     data: {
       name: "Project 1",
       description: "Project 1 description",
       moduleId: module.id,
       teacherId: teacher.id,
+    },
+  });
+  const addModuletoStudent = await db.student.update({
+    where: {
+      id: student.id,
+    },
+    data: {
+      modules: {
+        push: module,
+      },
     },
   });
 }

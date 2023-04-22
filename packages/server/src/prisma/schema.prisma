@@ -4,26 +4,24 @@ generator client {
 }
 
 datasource db {
-    provider = "sqlite"
+    provider = "postgresql"
     url      = env("DATABASE_URL")
 }
 
-model Student {
-    id       Int       @id @default(autoincrement())
-    email    String    @unique
-    name     String
-    modules  Module[]
-    projects Project[]
-    password String
+enum Role {
+    STUDENT
+    TEACHER
+    ADMIN
 }
 
-model Teacher {
+model User {
     id       Int       @id @default(autoincrement())
     email    String    @unique
     name     String
+    role     Role
+    password String
     modules  Module[]
     projects Project[]
-    password String
 }
 
 model Admin {
@@ -33,13 +31,12 @@ model Admin {
 }
 
 model Project {
-    id          Int       @id @default(autoincrement())
+    id          Int    @id @default(autoincrement())
     name        String
     description String
-    module      Module    @relation(fields: [moduleId], references: [id])
+    module      Module @relation(fields: [moduleId], references: [id])
     moduleId    Int
-    students    Student[]
-    teacher     Teacher   @relation(fields: [teacherId], references: [id])
+    teacher     User   @relation(fields: [teacherId], references: [id])
     teacherId   Int
 }
 
@@ -47,7 +44,6 @@ model Module {
     id        Int       @id @default(autoincrement())
     name      String
     Projects  Project[]
-    Students  Student[]
-    Teacher   Teacher   @relation(fields: [teacherId], references: [id])
+    Teacher   User      @relation(fields: [teacherId], references: [id])
     teacherId Int
 }

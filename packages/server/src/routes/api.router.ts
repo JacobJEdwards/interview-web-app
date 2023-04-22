@@ -1,9 +1,10 @@
 import express from "express";
 import ProjectController from "../controllers/projects.controller";
 import ModulesController from "../controllers/modules.controller";
-import StudentController from "../controllers/students.controller";
-import TeacherController from "../controllers/teachers.controller";
-import AdminController from "../controllers/admins.controller";
+//import StudentController from "../controllers/students.controller";
+//import TeacherController from "../controllers/teachers.controller";
+//import AdminController from "../controllers/admins.controller";
+import UserController from "../controllers/users.controller";
 
 const router = express.Router();
 
@@ -30,25 +31,34 @@ router.put("/modules/:id", ModulesController.updateModule);
 router.delete("/modules/:id", ModulesController.deleteModule);
 
 // Student route
-router.get("/students", StudentController.getStudents);
-router.get("/students/:id", StudentController.getStudent);
-router.post("/students", StudentController.createStudent);
-router.put("/students/:id", StudentController.updateStudent);
-router.delete("/students/:id", StudentController.deleteStudent);
+// router.get("/students", StudentController.getStudents);
+// router.get("/students/:id", StudentController.getStudent);
+// router.post("/students", StudentController.createStudent);
+// router.put("/students/:id", StudentController.updateStudent);
+// router.delete("/students/:id", StudentController.deleteStudent);
 
 // Teacher route
-router.get("/teachers", TeacherController.getTeachers);
-router.get("/teachers/:id", TeacherController.getTeacher);
-router.post("/teachers", TeacherController.createTeacher);
-router.put("/teachers/:id", TeacherController.updateTeacher);
-router.delete("/teachers/:id", TeacherController.deleteTeacher);
+// router.get("/teachers", TeacherController.getTeachers);
+// router.get("/teachers/:id", TeacherController.getTeacher);
+// router.post("/teachers", TeacherController.createTeacher);
+// router.put("/teachers/:id", TeacherController.updateTeacher);
+// router.delete("/teachers/:id", TeacherController.deleteTeacher);
 
 // Admin route
-router.get("/admins", AdminController.getAdmins);
-router.get("/admins/:id", AdminController.getAdmin);
-router.post("/admins", AdminController.createAdmin);
-router.put("/admins/:id", AdminController.updateAdmin);
-router.delete("/admins/:id", AdminController.deleteAdmin);
+// router.get("/admins", AdminController.getAdmins);
+// router.get("/admins/:id", AdminController.getAdmin);
+// router.post("/admins", AdminController.createAdmin);
+// router.put("/admins/:id", AdminController.updateAdmin);
+// router.delete("/admins/:id", AdminController.deleteAdmin);
+
+// User route
+router.get("/users", UserController.getUsers);
+router.get("/users/:id", UserController.getUser);
+router.post("/users", UserController.createUser);
+router.put("/users/:id", UserController.updateUser);
+router.delete("/users/:id", UserController.deleteUser);
+router.get("/users/students", UserController.getStudents);
+router.get("/users/teachers", UserController.getTeachers);
 
 // Additional route for getting all projects for a module
 router.get("/modules/:id/projects", ModulesController.getProjects);
