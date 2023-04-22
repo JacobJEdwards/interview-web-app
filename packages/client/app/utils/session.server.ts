@@ -1,6 +1,7 @@
 import { createCookieSessionStorage, redirect } from "@remix-run/node";
 import type { Request, SessionData } from "@remix-run/node";
 import { Role } from "server/types/generated/client";
+import type { Module, User, Project } from "server/types/generated/client";
 
 type LoginForm = {
     email: string;
@@ -8,8 +9,9 @@ type LoginForm = {
 };
 
 export interface UserSessionData extends SessionData {
-    userId: string;
+    userId: number;
     userRole: Role;
+    userName: string;
 }
 
 export async function login({
@@ -28,50 +30,9 @@ export async function login({
         throw new Error("Invalid username or password");
     }
     const json = await response.json();
-    const user = await json.user;
-    return { userId: user.id, userRole: user.role };
+    const user: User = await json.user;
+    return { userId: user.id, userRole: user.role, userName: user.name };
 }
-
-// separate login functions for student and teacher due to database structure
-// export async function studentLogin({
-//     email,
-//     password,
-// }: LoginForm): Promise<string> {
-//     const response = await fetch("http://localhost:6060/auth/studentLogin", {
-//         method: "POST",
-//         headers: {
-//             "Content-Type": "application/json",
-//         },
-//         body: JSON.stringify({ email, password }),
-//     });
-//
-//     if (response.status !== 200) {
-//         throw new Error("Invalid username or password");
-//     }
-//     const json = await response.json();
-//     const user = json.user;
-//     return user.id;
-// }
-//
-// export async function teacherLogin({
-//     email,
-//     password,
-// }: LoginForm): Promise<string> {
-//     const user = await fetch("http://localhost:6060/auth/teacherLogin", {
-//         method: "POST",
-//         headers: {
-//             "Content-Type": "application/json",
-//         },
-//         body: JSON.stringify({ email, password }),
-//     });
-//
-//     if (user.status === 401) {
-//         throw new Error("Invalid username or password");
-//     }
-//
-//     const { id } = await user.json();
-//     return id;
-// }
 
 // session storage
 const sessionSecret = process.env.SECRET || "secret";
@@ -102,16 +63,17 @@ function getUserSession(
 export async function getUserId(request: Request): Promise<UserSessionData> {
     const session = await getUserSession(request);
 
-    const userId = session.get("userId") as string;
+    const userId = session.get("userId") as number;
     const userRole = session.get("userRole") as Role;
+    const userName = session.get("userName") as string;
 
-    return { userId, userRole };
+    return { userId, userRole, userName };
 }
 
 export async function requireUserId(
     request: Request,
     redirectTo: string = new URL(request.url).pathname
-): Promise<string> {
+): Promise<number> {
     const { userId, userRole } = await getUserId(request);
 
     if (!userId || !userRole) {
@@ -151,7 +113,8 @@ export async function getUser(request: Request) {
     } else {
         try {
             const user = await fetch(`http://localhost:6060/api/users/${userId}`);
-            const json = await user.json();
+            const json: User = await user.json();
+            // not returning password
             return {
                 id: json.id,
                 role: json.role,
@@ -174,7 +137,7 @@ export async function getUserModules(request: Request) {
             const modules = await fetch(
                 `http://localhost:6060/api/users/${userId}/modules`
             );
-            const json = await modules.json();
+            const json: Module[] = await modules.json();
             return json;
         } catch (error) {
             return null;
@@ -193,13 +156,15 @@ export async function logout(request: Request): Promise<Response> {
 }
 
 export async function createUserSession(
-    userId: string,
+    userId: number,
     userRole: Role,
+    userName: string,
     redirectTo: string
 ): Promise<Response> {
     const session = await storage.getSession();
     session.set("userId", userId);
     session.set("userRole", userRole);
+    session.set("userName", userName);
 
     return redirect(redirectTo, {
         headers: {
