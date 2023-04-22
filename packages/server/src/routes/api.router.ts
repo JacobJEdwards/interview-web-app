@@ -59,6 +59,7 @@ router.put("/users/:id", UserController.updateUser);
 router.delete("/users/:id", UserController.deleteUser);
 router.get("/users/students", UserController.getStudents);
 router.get("/users/teachers", UserController.getTeachers);
+router.get("/users/:id/modules", UserController.getModules);
 
 // Additional route for getting all projects for a module
 router.get("/modules/:id/projects", ModulesController.getProjects);

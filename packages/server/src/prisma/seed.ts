@@ -50,16 +50,18 @@ async function seed() {
       teacherId: teacher.id,
     },
   });
-  // const addModuleToUser = await db.user.update({
-  //   where: {
-  //     id: student.id,
-  //   },
-  //   data: {
-  //     modules: {
-  //       push: module,
-  //     },
-  //   },
-  // });
+  const addModuleToUser = await db.user.update({
+    where: {
+      id: student.id,
+    },
+    data: {
+      modules: {
+        connect: {
+          id: module.id,
+        },
+      },
+    },
+  });
 }
 
 seed()
