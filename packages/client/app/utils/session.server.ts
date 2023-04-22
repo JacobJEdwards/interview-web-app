@@ -99,7 +99,9 @@ function getUserSession(
 }
 
 // get user id and type from session
-export async function getUserId(request: Request): Promise<UserSessionData> {
+export async function getUserId(
+    request: Request
+): Promise<UserSessionData> {
     const session = await getUserSession(request);
 
     const userId = session.get("userId") as string;
@@ -148,14 +150,14 @@ export async function getUser(request: Request) {
 
     if (!userId) {
         return null;
-    }
-
-    try {
-        const user = await fetch(`http://localhost:6060/api/users/${userId}`);
-        const json = await user.json();
-        return { id: json.id, role: json.role, name: json.name };
-    } catch (error) {
-        throw logout(request);
+    } else {
+        try {
+            const user = await fetch(`http://localhost:6060/api/users/${userId}`);
+            const json = await user.json();
+            return { id: json.id, role: json.role, name: json.name };
+        } catch (error) {
+            throw logout(request);
+        }
     }
 }
 
