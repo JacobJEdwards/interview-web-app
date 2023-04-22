@@ -6,7 +6,7 @@ class UserController {
     public async getUsers(req: Request, res: Response, next: NextFunction) {
         try {
             const users = await prisma.user.findMany();
-            return users;
+            res.status(200).json(users);
         } catch (error) {
             next(error);
         }
@@ -17,7 +17,7 @@ class UserController {
             const user = await prisma.user.findUnique({
                 where: { id: Number(id) },
             });
-            return user;
+            res.status(200).json(user);
         } catch (error) {
             next(error);
         }
@@ -33,7 +33,7 @@ class UserController {
                     password,
                 },
             });
-            return user;
+            res.status(201).json(user);
         } catch (error) {
             next(error);
         }
@@ -50,7 +50,7 @@ class UserController {
                     role: role as Role,
                 },
             });
-            return user;
+            res.status(200).json(user);
         } catch (error) {
             next(error);
         }
@@ -61,7 +61,7 @@ class UserController {
             const user = await prisma.user.delete({
                 where: { id: Number(id) },
             });
-            return user;
+            res.status(200).json(user);
         } catch (error) {
             next(error);
         }
@@ -71,7 +71,7 @@ class UserController {
             const students = await prisma.user.findMany({
                 where: { role: Role.STUDENT },
             });
-            return students;
+            res.status(200).json(students);
         } catch (error) {
             next(error);
         }
@@ -81,7 +81,7 @@ class UserController {
             const teachers = await prisma.user.findMany({
                 where: { role: Role.TEACHER },
             });
-            return teachers;
+            res.status(200).json(teachers);
         } catch (error) {
             next(error);
         }
@@ -94,7 +94,7 @@ class UserController {
                     where: { id: Number(id) },
                 })
                 .modules();
-            return modules;
+            res.status(200).json(modules);
         } catch (error) {
             next(error);
         }
@@ -107,7 +107,7 @@ class UserController {
                     where: { id: Number(id) },
                 })
                 .projects();
-            return projects;
+            res.status(200).json(projects);
         } catch (error) {
             next(error);
         }

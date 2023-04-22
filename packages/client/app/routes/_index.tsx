@@ -10,7 +10,6 @@ export const loader: LoaderFunction = async ({ request }: LoaderArgs) => {
   if (!userId) {
     return redirect('/login')
   } else {
-    console.log('here')
     return redirect('/dashboard')
   }
 }

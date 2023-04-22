@@ -6,12 +6,13 @@ import type { UserSessionData } from "../utils/session.server";
 import { redirect } from "@remix-run/node";
 
 export async function loader({ request }: LoaderArgs) {
-    await requireUser(request);
+  await requireUser(request);
 
-    const user = await getUserId(request);
-    return null;
+  const user = await getUser(request);
+  console.log(user);
+  return null;
 }
 
 export default function Dashboard() {
-    return <div></div>;
+  return <div></div>;
 }
