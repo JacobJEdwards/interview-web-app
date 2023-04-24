@@ -1,14 +1,8 @@
-import {
-  getUserId,
-  getUser,
-  getUserModules,
-  requireUser,
-} from "../utils/session.server";
+import { getUser, requireUser } from "../utils/session.server";
+import { getUserModules } from "../utils/modules.service";
 import type { LoaderArgs } from "@remix-run/node";
 import { useLoaderData } from "@remix-run/react";
 import { Role, type Module as ModuleType } from "server/types/generated/client";
-import type { UserSessionData } from "../utils/session.server";
-import { redirect } from "@remix-run/node";
 
 import Module from "../components/Module";
 

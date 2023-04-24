@@ -37,3 +37,24 @@ export const deleteProject = async (id: string) => {
     const data = await response.json();
     return data;
 };
+
+export const newProject = async (
+    name: string,
+    description: string,
+    moduleId: number,
+    teacherId: number
+): Promise<Project | null> => {
+    try {
+        const response = await fetch(
+            `http://localhost:6060/api/modules/${moduleId}/projects/new`,
+            {
+                method: "POST",
+                body: JSON.stringify({ name, description, teacherId }),
+            }
+        );
+        const data = await response.json();
+        return data;
+    } catch (error) {
+        return null;
+    }
+};

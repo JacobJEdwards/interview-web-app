@@ -63,6 +63,7 @@ router.get("/users/:id/modules", UserController.getModules);
 
 // Additional route for getting all projects for a module
 router.get("/modules/:id/projects", ModulesController.getProjects);
+router.post("/modules/:id/projects/new", ModulesController.createProject);
 
 // Assignment routes (not CRUD)
 // Possibly some of these are not needed -> need to think!!!!

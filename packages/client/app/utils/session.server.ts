@@ -14,10 +14,19 @@ export interface UserSessionData extends SessionData {
     userName: string;
 }
 
+function isUser(user: any): user is User {
+    return (
+        user &&
+        typeof user.id === "number" &&
+        typeof user.role === "string" &&
+        typeof user.name === "string"
+    );
+}
+
 export async function login({
     email,
     password,
-}: LoginForm): Promise<UserSessionData> {
+}: LoginForm): Promise<UserSessionData | null> {
     const response = await fetch("http://localhost:6060/auth/login", {
         method: "POST",
         headers: {
@@ -27,15 +36,18 @@ export async function login({
     });
 
     if (response.status !== 200) {
-        throw new Error("Invalid username or password");
+        return null;
     }
-    const json = await response.json();
-    const user: User = await json.user;
+    const { user } = await response.json();
+    if (!isUser(user)) {
+        return null;
+    }
     return { userId: user.id, userRole: user.role, userName: user.name };
 }
 
 // session storage
 const sessionSecret = process.env.SECRET || "secret";
+
 if (!sessionSecret) {
     throw new Error("You must set a session secret");
 }
@@ -85,13 +97,14 @@ export async function requireUserId(
 
 export async function requireUserType(
     request: Request,
+    userType: Role,
     redirectTo: string = new URL(request.url).pathname
 ): Promise<string> {
     const { userRole } = await getUserId(request);
 
-    if (!userRole) {
+    if (userRole !== userType) {
         const searchParams = new URLSearchParams([["redirectTo", redirectTo]]);
-        throw redirect(`/login?${searchParams.toString()}`);
+        throw redirect(`/dashboard?${searchParams.toString()}`);
     }
     return userRole;
 }
@@ -102,7 +115,6 @@ export async function requireUser(
     redirectTo: string = new URL(request.url).pathname
 ): Promise<void> {
     await requireUserId(request, redirectTo);
-    await requireUserType(request, redirectTo);
 }
 
 export async function getUser(request: Request) {
@@ -112,8 +124,11 @@ export async function getUser(request: Request) {
         return null;
     } else {
         try {
-            const user = await fetch(`http://localhost:6060/api/users/${userId}`);
-            const json: User = await user.json();
+            const response = await fetch(`http://localhost:6060/api/users/${userId}`);
+            if (response.status !== 200) {
+                throw logout(request);
+            }
+            const json: User = await response.json();
             // not returning password
             return {
                 id: json.id,
@@ -123,24 +138,6 @@ export async function getUser(request: Request) {
             };
         } catch (error) {
             throw logout(request);
-        }
-    }
-}
-
-export async function getUserModules(request: Request) {
-    const { userId } = await getUserId(request);
-
-    if (!userId) {
-        return null;
-    } else {
-        try {
-            const modules = await fetch(
-                `http://localhost:6060/api/users/${userId}/modules`
-            );
-            const json: Module[] = await modules.json();
-            return json;
-        } catch (error) {
-            return null;
         }
     }
 }

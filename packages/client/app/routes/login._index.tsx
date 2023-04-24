@@ -4,6 +4,8 @@ import { useActionData, useSearchParams } from "@remix-run/react";
 import { redirect } from "@remix-run/node";
 import { createUserSession, login } from "~/utils/session.server";
 import { getUserId } from "~/utils/session.server";
+import { json } from "@remix-run/node";
+import { badRequest } from "~/utils/request.server";
 
 const validateUrl = (url: string) => {
     const urls = ["/dashboard", "/profile", "/settings"];
@@ -31,16 +33,24 @@ export const action = async ({ request }: ActionArgs) => {
         (formData.get("redirectTo") as string) || "/dashboard"
     );
 
-    const { userId, userRole, userName } = await login({ email, password });
+    const user = await login({ email, password });
+
+    if (!user) {
+        const values = Object.fromEntries(formData.entries());
+        return json({ values, message: "Invalid email or password" });
+    }
+
+    const { userId, userRole, userName } = user;
 
     if (userId) {
         return createUserSession(userId, userRole, userName, redirectTo);
     } else {
-        return redirect("/login");
+        const values = Object.fromEntries(formData.entries());
+        return json({ values, message: "Invalid email or password" });
     }
 };
 
-const StudentLogin = () => {
+const Login = () => {
     // to implement errors
     const actionData = useActionData<typeof action>();
     const [searchParams] = useSearchParams();
@@ -50,14 +60,14 @@ const StudentLogin = () => {
                 <h1 className="text-3xl font-semibold text-center text-purple-700">
                     Login
                 </h1>
-                <Form className="space-y-4" method="POST">
+                <Form className="space-y-4" method="POST" reloadDocument>
                     <input
                         type="hidden"
                         name="redirectTo"
                         value={searchParams.get("redirectTo") ?? undefined}
                     />
                     <div>
-                        <label className="label">
+                        <label className="label" htmlFor="email">
                             <span className="text-base label-text">Email</span>
                         </label>
                         <input
@@ -65,10 +75,11 @@ const StudentLogin = () => {
                             type="text"
                             placeholder="Email Address"
                             className="w-full input input-bordered input-primary"
+                            defaultValue={actionData?.values.email}
                         />
                     </div>
                     <div>
-                        <label className="label">
+                        <label className="label" htmlFor="password">
                             <span className="text-base label-text">Password</span>
                         </label>
                         <input
@@ -76,15 +87,27 @@ const StudentLogin = () => {
                             type="password"
                             placeholder="Enter Password"
                             className="w-full input input-bordered input-primary"
+                            defaultValue={actionData?.values.password}
                         />
                     </div>
                     <div>
                         <button className="btn btn-block btn-primary">Login</button>
                     </div>
+                    {actionData?.message && (
+                        <div className="alert alert-error">
+                            <div className="flex-1">
+                                <label className="label">
+                                    <span className="text-base label-text">
+                                        {actionData.message}
+                                    </span>
+                                </label>
+                            </div>
+                        </div>
+                    )}
                 </Form>
             </div>
         </div>
     );
 };
 
-export default StudentLogin;
+export default Login;
