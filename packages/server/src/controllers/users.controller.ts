@@ -108,6 +108,17 @@ class UserController {
             next(error);
         }
     }
+    public async getTeacherModules(req: Request, res: Response, next: NextFunction) {
+        try {
+            const { id } = req.params;
+            const modules = await prisma.user.findUnique({
+                where: { id: Number(id) },
+            }).ownedModules();
+            res.status(200).json(modules);
+        } catch (error) {
+            next(error);
+        }
+    }
     public async getProjects(req: Request, res: Response, next: NextFunction) {
         try {
             const { id } = req.params;

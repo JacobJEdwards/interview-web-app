@@ -51,6 +51,24 @@ export async function getUserModules(request: Request) {
     }
 }
 
+export async function getTeacherModules(request: Request) {
+    const { userId } = await getUserId(request);
+
+    if (!userId) {
+        return null;
+    } else {
+        try {
+            const modules = await fetch(
+                `http://localhost:6060/api/teachers/${userId}/modules`
+            );
+            const json: Module[] = await modules.json();
+            return json;
+        } catch (error) {
+            return null;
+        }
+    }
+}
+
 export async function getModuleProjects(moduleId: number) {
     try {
         const projects = await fetch(

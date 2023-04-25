@@ -113,8 +113,6 @@ class ModulesController implements IModuleController {
                 data: {
                     name: req.body.name as string,
                     description: req.body.description as string,
-                    //teacherId: Number(req.body.teacherId),
-                    //moduleId: Number(req.params.id),
                     teacher: {
                         connect: {
                             id: Number(req.body.teacherId),

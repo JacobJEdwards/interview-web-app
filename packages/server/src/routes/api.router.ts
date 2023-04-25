@@ -67,6 +67,7 @@ router.get(
 );
 router.post("/users/:userId/:projectId/select", UserController.selectProject);
 router.get("/users/:userId/:projectId/verify", UserController.isProjectSelected);
+router.get("/teachers/:id/modules", UserController.getTeacherModules);
 
 // Additional route for getting all projects for a module
 router.get("/modules/:id/projects", ModulesController.getProjects);
