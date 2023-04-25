@@ -60,6 +60,13 @@ router.delete("/users/:id", UserController.deleteUser);
 router.get("/users/students", UserController.getStudents);
 router.get("/users/teachers", UserController.getTeachers);
 router.get("/users/:id/modules", UserController.getModules);
+router.get("/users/:id/projects", UserController.getProjects);
+router.get(
+  "/users/:userId/:moduleId/projects",
+  UserController.getStudentModuleProjects
+);
+router.post("/users/:userId/:projectId/select", UserController.selectProject);
+router.get("/users/:userId/:projectId/verify", UserController.isProjectSelected);
 
 // Additional route for getting all projects for a module
 router.get("/modules/:id/projects", ModulesController.getProjects);

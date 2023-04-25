@@ -6,7 +6,7 @@ Consists of an Express RESTful API written in TypeScript, and a Remix.run react 
 
 TODO: Finish
 
-- Modules should not be able to be added to or changed from this site
-- A student should be able to just view projects (currently)
-- A teacher should be able to preform crud operations on the projects (associated with a module)
-- Each module could be a link -> dynamic routes per project
+- A student should be able to select a project
+- Might need to add endpoints -> student id module id -> projetcs (might already be added)
+- sort out the typing
+- eventually submission

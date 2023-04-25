@@ -20,7 +20,8 @@ model User {
     name     String
     role     Role
     password String
-    modules  Module[]
+    ownedModules Module[] @relation("TeacherModules")
+    modules Module[] @relation("StudentModules")
     projects Project[]
 }
 
@@ -44,6 +45,7 @@ model Module {
     id        Int       @id @default(autoincrement())
     name      String
     Projects  Project[]
-    Teacher   User      @relation(fields: [teacherId], references: [id])
+    teacher   User      @relation("TeacherModules", fields: [teacherId], references: [id])
     teacherId Int
+    Students  User[]   @relation("StudentModules")
 }
