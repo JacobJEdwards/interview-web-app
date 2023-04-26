@@ -24,6 +24,7 @@ export const loader = async ({ params, request }: LoaderArgs) => {
   }
 
   const { userId, userRole } = await getUserId(request);
+
   let isProjectSelectedByUser = false;
 
   if (userRole === Role.STUDENT) {

@@ -45,6 +45,7 @@ export const isProjectSelected = async (userId: number, projectId: number): Prom
       },
     });
     const data = await response.json();
+    console.log(data)
     return data;
   } catch (error) {
     return false;

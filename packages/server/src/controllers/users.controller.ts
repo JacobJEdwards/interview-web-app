@@ -194,7 +194,7 @@ class UserController {
                     },
                 },
             });
-            if (project) {
+            if (project && project?.projects?.length > 0) {
                 return res.status(200).json(true);
             } else {
                 return res.status(200).json(false);
