@@ -9,6 +9,8 @@ import {
   isRouteErrorResponse,
 } from "@remix-run/react";
 
+import Footer from "./components/Footer";
+
 import type { PropsWithChildren } from "react";
 import type { LinksFunction, V2_MetaFunction } from "@remix-run/node";
 
@@ -41,6 +43,7 @@ const Layout = ({
         <Scripts />
         <LiveReload />
       </body>
+      <Footer />
     </html>
   );
 };

@@ -12,6 +12,7 @@ import { Outlet } from "@remix-run/react";
 import { Role } from "server/types/generated/client";
 import Project from "../components/Project";
 import { getUserInfo } from "../utils/user.service";
+import Breadcrumbs, { type RouteData } from "~/components/Breadcrumbs";
 
 export const loader = async ({ params, request }: LoaderArgs) => {
     await requireUser(request);
@@ -30,15 +31,27 @@ export const loader = async ({ params, request }: LoaderArgs) => {
     const { teacherId } = module;
     const teacher = await getUserInfo(teacherId);
 
-    return { projects, module, userRole, userId, teacher };
+    const crumbs: RouteData[] = [
+        {
+            name: "Dashboard",
+            url: "/dashboard",
+        },
+        {
+            name: module.name,
+            url: `/dashboard/${module.id}`,
+        },
+    ];
+
+    return { projects, module, userRole, userId, teacher, crumbs };
 };
 
 export default function DashboardModule() {
-    const { projects, module, userRole, teacher } = useLoaderData();
+    const { projects, module, userRole, teacher, crumbs } = useLoaderData();
     return (
         <div>
-            <h1 className="text-3xl">{module.name}</h1>
-            <hr className="h-px my-8 bg-gray-200 border-0 dark:bg-gray-700" />
+            <Breadcrumbs crumbs={crumbs} />
+            <h1 className="text-3xl font-semibold">{module.name}</h1>
+            <div className="divider"></div>
 
             {projects.length !== 0 ? (
                 <ul className="list-disc">

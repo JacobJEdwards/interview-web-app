@@ -3,15 +3,43 @@ import { getUserId, requireUserType } from "~/utils/session.server";
 import { Role } from "server/types/generated/client";
 import { Form } from "@remix-run/react";
 import { newProject } from "~/utils/projects.service";
+import { useLoaderData } from "@remix-run/react";
+import Breadcrumbs, { RouteData } from "~/components/Breadcrumbs";
 
-export const loader = async ({ request }: LoaderArgs) => {
+export const loader = async ({ request, params }: LoaderArgs) => {
     await requireUserType(request, Role.TEACHER);
+    const { module, project } = params;
     const { userId, userRole } = await getUserId(request);
-    return null;
+    if (!module) {
+        return null;
+    }
+
+    const crumbs = [
+        {
+            name: "Dashboard",
+            url: "/dashboard",
+        },
+        {
+            name: module,
+            url: `/dashboard/${module}`,
+        },
+        {
+            name: "New Project",
+            url: `/dashboard/${module}/new`,
+        },
+    ] as RouteData[];
+
+    return {
+        module,
+        userId,
+        userRole,
+        crumbs
+    };
 };
 
 export const action = async ({ request, params }: LoaderArgs) => {
     const { userId, userRole } = await getUserId(request);
+    console.log(params);
     const { module } = params;
     if (!module) {
         return { status: 404 };
@@ -27,10 +55,14 @@ export const action = async ({ request, params }: LoaderArgs) => {
 };
 
 const NewProject = () => {
+    const { module: moduleId, crumbs } = useLoaderData();
     return (
         <div>
-            <h1 className="text-3xl font-bold">New Project</h1>
-            <hr className="h-px my-8 bg-gray-200 border-0 dark:bg-gray-700" />
+            <Breadcrumbs crumbs={crumbs}/>
+            <h1 className="text-3xl font-bold">
+                Module ID: {moduleId} - New Project
+            </h1>
+            <div className="divider"></div>
             <div className="flex flex-col items-center justify-center">
                 <Form method="post" reloadDocument className="w-full form-control">
                     <div className="mb-6 w-full">
