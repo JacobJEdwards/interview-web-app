@@ -45,7 +45,7 @@ export const loader = async ({ params, request }: LoaderArgs) => {
     isProjectSelectedByUser = true
   }
 
-  const crumbs: RouteData[] = [
+  const crumbs = [
     {
       name: 'Dashboard',
       url: '/dashboard',
@@ -58,7 +58,7 @@ export const loader = async ({ params, request }: LoaderArgs) => {
       name: actualProject.name,
       url: `/dashboard/${module}/${project}`,
     },
-  ]
+  ] as RouteData[]
 
   return {
     project: actualProject,
