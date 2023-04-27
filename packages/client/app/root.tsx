@@ -29,7 +29,7 @@ const Layout = ({
   title = "Interview Web App",
 }: PropsWithChildren<{ title?: string; loadUser?: boolean }>) => {
   return (
-    <html lang="en">
+    <html lang="en" data-theme="dark">
       <head>
         <meta charSet="utf-8" />
         <meta name="viewport" content="width=device-width,initial-scale=1" />
@@ -37,7 +37,7 @@ const Layout = ({
         <Links />
         <title>{title}</title>
       </head>
-      <body>
+      <body className="font-sans">
         {children}
         <ScrollRestoration />
         <Scripts />

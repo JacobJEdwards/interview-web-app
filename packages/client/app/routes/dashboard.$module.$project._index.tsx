@@ -93,7 +93,7 @@ export default function ProjectRoute() {
   return (
     <main>
       <Breadcrumbs crumbs={crumbs} />
-      <div className='prose max-w-none'>
+      <section className='prose max-w-none'>
         <h1 className='text-3xl'>{name}</h1>
         <div className='divider'></div>
         <p>{description}</p>
@@ -106,7 +106,7 @@ export default function ProjectRoute() {
             </button>
           </Form>
         )}
-      </div>
+      </section>
     </main>
   )
 }
