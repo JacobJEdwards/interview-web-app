@@ -14,9 +14,9 @@ import type { LinksFunction, V2_MetaFunction } from "@remix-run/node";
 
 import tailwindURL from "./styles/app.css";
 
-// export const links: LinksFunction = () => {
-//     return [{ rel: "stylesheet", href: tailwindURL }];
-// };
+export const links: LinksFunction = () => {
+  return [{ rel: "stylesheet", href: tailwindURL }];
+};
 
 export const meta: V2_MetaFunction = () => {
   return [{ description: "Interview Web App" }];
@@ -32,6 +32,7 @@ const Layout = ({
         <meta charSet="utf-8" />
         <meta name="viewport" content="width=device-width,initial-scale=1" />
         <Meta />
+        <Links />
         <title>{title}</title>
       </head>
       <body>

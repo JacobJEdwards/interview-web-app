@@ -108,12 +108,18 @@ class UserController {
             next(error);
         }
     }
-    public async getTeacherModules(req: Request, res: Response, next: NextFunction) {
+    public async getTeacherModules(
+        req: Request,
+        res: Response,
+        next: NextFunction
+    ) {
         try {
             const { id } = req.params;
-            const modules = await prisma.user.findUnique({
-                where: { id: Number(id) },
-            }).ownedModules();
+            const modules = await prisma.user
+                .findUnique({
+                    where: { id: Number(id) },
+                })
+                .ownedModules();
             res.status(200).json(modules);
         } catch (error) {
             next(error);
@@ -203,6 +209,33 @@ class UserController {
             next(error);
         }
     }
+    public async getSelectedProject(
+        req: Request,
+        res: Response,
+        next: NextFunction
+    ) {
+        try {
+            const { userId, moduleId } = req.params;
+            const project = await prisma.user.findUnique({
+                where: {
+                    id: Number(userId),
+                },
+                select: {
+                    projects: {
+                        where: {
+                            module: {
+                                id: Number(moduleId),
+                            },
+                        },
+                    },
+                },
+            });
+            res.status(200).json(project);
+        } catch (error) {
+            next(error);
+        }
+    }
+
     // public async assignProjectToUser(
     //   req: Request,
     //   res: Response,

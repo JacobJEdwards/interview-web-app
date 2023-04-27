@@ -55,12 +55,12 @@ const Login = () => {
     const actionData = useActionData<typeof action>();
     const [searchParams] = useSearchParams();
     return (
-        <div className="relative flex flex-col justify-center h-screen overflow-hidden">
-            <div className="w-full p-6 m-auto bg-white rounded-md shadow-md lg:max-w-xl">
-                <h1 className="text-3xl font-semibold text-center text-purple-700">
+        <div className="relative flex flex-col items-center justify-center h-screen overflow-hidden">
+            <div className="w-full p-6 bg-white border-t-4 border-gray-600  rounded-md shadow-md border-top lg:max-w-lg">
+                <h1 className="test-3xl font-semibold text-center text-gray-700">
                     Login
                 </h1>
-                <Form className="space-y-4" method="POST" reloadDocument>
+                <Form method="POST" reloadDocument className="space-y-4">
                     <input
                         type="hidden"
                         name="redirectTo"
@@ -74,8 +74,8 @@ const Login = () => {
                             name="email"
                             type="text"
                             placeholder="Email Address"
-                            className="w-full input input-bordered input-primary"
                             defaultValue={actionData?.values.email}
+                            className="w-full input input-bordered"
                         />
                     </div>
                     <div>
@@ -86,20 +86,18 @@ const Login = () => {
                             name="password"
                             type="password"
                             placeholder="Enter Password"
-                            className="w-full input input-bordered input-primary"
                             defaultValue={actionData?.values.password}
+                            className="w-full input input-bordered"
                         />
                     </div>
                     <div>
-                        <button className="btn btn-block btn-primary">Login</button>
+                        <button className="btn btn-block">Login</button>
                     </div>
                     {actionData?.message && (
-                        <div className="alert alert-error">
-                            <div className="flex-1">
-                                <label className="label">
-                                    <span className="text-base label-text">
-                                        {actionData.message}
-                                    </span>
+                        <div>
+                            <div>
+                                <label>
+                                    <span>{actionData.message}</span>
                                 </label>
                             </div>
                         </div>

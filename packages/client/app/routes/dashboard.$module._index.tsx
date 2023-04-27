@@ -37,9 +37,11 @@ export default function DashboardModule() {
     const { projects, module, userRole, teacher } = useLoaderData();
     return (
         <div>
-            <h1>{module.name}</h1>
-            {projects ? (
-                <ul>
+            <h1 className="text-3xl">{module.name}</h1>
+            <hr className="h-px my-8 bg-gray-200 border-0 dark:bg-gray-700" />
+
+            {projects.length !== 0 ? (
+                <ul className="list-disc">
                     {projects.map((project: ProjectType) => (
                         <li key={project.id}>
                             <Project
@@ -52,10 +54,12 @@ export default function DashboardModule() {
                     ))}
                 </ul>
             ) : (
-                <p>No projects</p>
+                <p className="text-center text-2xl">No projects!</p>
             )}
             {userRole === Role.TEACHER && (
-                <Link to={`/dashboard/${module.id}/new`}>New Project</Link>
+                <Link className="btn mt-10" to={`/dashboard/${module.id}/new`}>
+                    New Project
+                </Link>
             )}
             <Outlet />
         </div>

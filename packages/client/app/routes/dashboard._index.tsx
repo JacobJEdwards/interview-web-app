@@ -26,18 +26,21 @@ export default function Dashboard() {
 
   return (
     <div>
-      <h1>{user?.role === Role.STUDENT ? "Student" : "Teacher"} Dashboard</h1>
-      {modules ? (
-        <ul>
-          {modules.map((module: ModuleType) => (
-            <li key={module.id}>
-              <Module key={module.id} name={module.name} id={module.id} />
-            </li>
-          ))}
-        </ul>
-      ) : (
-        <p>No modules found</p>
-      )}
+      <h1 className="text-3xl">
+        {user?.role === Role.STUDENT ? "Student" : "Teacher"} Dashboard
+      </h1>
+      <hr className="h-px my-8 bg-gray-200 border-0 dark:bg-gray-700" />
+      <div className="prose max-w-none">
+        <p>
+          "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
+          eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad
+          minim veniam, quis nostrud exercitation ullamco laboris nisi ut
+          aliquip ex ea commodo consequat. Duis aute irure dolor in
+          reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla
+          pariatur. Excepteur sint occaecat cupidatat non proident, sunt in
+          culpa qui officia deserunt mollit anim id est laborum."
+        </p>
+      </div>
     </div>
   );
 }

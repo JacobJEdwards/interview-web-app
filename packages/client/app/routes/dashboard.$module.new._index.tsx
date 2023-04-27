@@ -28,13 +28,55 @@ export const action = async ({ request, params }: LoaderArgs) => {
 
 const NewProject = () => {
     return (
-        <Form method="post" reloadDocument>
-            <label htmlFor="name">Name</label>
-            <input type="text" name="name" id="name" />
-            <label htmlFor="description">Description</label>
-            <input type="text" name="description" id="description" />
-            <button type="submit">Create</button>
-        </Form>
+        <div>
+            <h1 className="text-3xl font-bold">New Project</h1>
+            <hr className="h-px my-8 bg-gray-200 border-0 dark:bg-gray-700" />
+            <div className="flex flex-col items-center justify-center">
+                <Form method="post" reloadDocument className="w-full form-control">
+                    <div className="mb-6 w-full">
+                        <label htmlFor="name" className="label">
+                            <span className="label-text font-semibold">Project name</span>
+                        </label>
+                        <input
+                            type="text"
+                            name="name"
+                            id="name"
+                            className="input input-bordered w-full bg-gray-800"
+                            required
+                        />
+                    </div>
+                    <div className="mb-6 w-full">
+                        <label className="label" htmlFor="description">
+                            <span className="label-text font-semibold">
+                                Project description
+                            </span>
+                        </label>
+                        <textarea
+                            rows={5}
+                            placeholder="Enter project description..."
+                            name="description"
+                            id="description"
+                            className="textarea textarea-bordered w-full h-24 bg-gray-800"
+                            required
+                        />
+                    </div>
+                    <div className="w-full mb-6">
+                        <label className="label" htmlFor="fileupload">
+                            <span className="label-text font-semibold">Files upload</span>
+                        </label>
+                        <input
+                            type="file"
+                            className="file-input file-input-bordered w-full"
+                            id="fileupload"
+                            name="fileupload"
+                        />
+                    </div>
+                    <button className="btn btn-block mt-8" type="submit">
+                        Create
+                    </button>
+                </Form>
+            </div>
+        </div>
     );
 };
 
