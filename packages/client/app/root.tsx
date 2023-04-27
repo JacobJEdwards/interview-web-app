@@ -16,10 +16,12 @@ import type { LinksFunction, V2_MetaFunction } from "@remix-run/node";
 
 import tailwindURL from "./styles/app.css";
 
+// linking css
 export const links: LinksFunction = () => {
   return [{ rel: "stylesheet", href: tailwindURL }];
 };
 
+// site wide meta tags
 export const meta: V2_MetaFunction = () => {
   return [{ description: "Interview Web App" }];
 };
@@ -42,8 +44,8 @@ const Layout = ({
         <ScrollRestoration />
         <Scripts />
         <LiveReload />
+        <Footer />
       </body>
-      <Footer />
     </html>
   );
 };
@@ -73,10 +75,8 @@ export function ErrorBoundary() {
     );
   }
 
-  let errorMessage = "An unknown error occurred";
-  if (error instanceof Error) {
-    errorMessage = error.message;
-  }
+  const errorMessage =
+    error instanceof Error ? error.message : "An unknown error occurred";
 
   return (
     <Layout title="Oops!" loadUser={false}>
