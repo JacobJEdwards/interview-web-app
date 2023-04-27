@@ -65,7 +65,8 @@ router.get(
   "/users/:userId/:moduleId/projects",
   UserController.getStudentModuleProjects
 );
-router.post("/users/:userId/:projectId/select", UserController.selectProject);
+
+router.post("/users/:userId/:moduleId/:projectId/select", UserController.selectProject);
 router.get("/users/:userId/:projectId/verify", UserController.isProjectSelected);
 router.get("/teachers/:id/modules", UserController.getTeacherModules);
 

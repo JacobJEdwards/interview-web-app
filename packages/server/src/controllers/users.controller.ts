@@ -163,7 +163,38 @@ class UserController {
     }
     public async selectProject(req: Request, res: Response, next: NextFunction) {
         try {
-            const { userId, projectId } = req.params;
+            const { userId, projectId, moduleId } = req.params;
+            const previousProject = await prisma.user.findUnique({
+                where: {
+                    id: Number(userId),
+                },
+                select: {
+                    projects: {
+                        where: {
+                            module: {
+                                id: Number(moduleId),
+                            },
+                        },
+                    },
+                },
+            });
+
+            if (previousProject && previousProject?.projects?.length > 0) {
+                const previousProjectId = previousProject.projects[0].id;
+                await prisma.user.update({
+                    where: {
+                        id: Number(userId),
+                    },
+                    data: {
+                        projects: {
+                            disconnect: {
+                                id: Number(previousProjectId),
+                            },
+                        },
+                    },
+                });
+            }
+
             const project = await prisma.user.update({
                 where: {
                     id: Number(userId),
