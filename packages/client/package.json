@@ -3,9 +3,9 @@
   "sideEffects": false,
   "scripts": {
     "build": "npm run build:css && remix build",
-    "build:css": "tailwindcss -m -i ./css/tailwind.css -o app/styles/app.css",
+    "build:css": "postcss ./css/tailwind.css -o app/styles/app.css",
     "dev": "concurrently --kill-others \"remix dev\" \"npm run dev:css\"",
-    "dev:css": "tailwindcss -w -i ./css/tailwind.css -o app/styles/app.css",
+    "dev:css": "postcss -w ./css/tailwind.css -o app/styles/app.css",
     "start": "remix-serve build",
     "typecheck": "tsc"
   },
