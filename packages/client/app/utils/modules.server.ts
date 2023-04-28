@@ -3,34 +3,56 @@ import { getUserId } from "./session.server";
 
 export const getModules = async () => {
     try {
-        const modules = await fetch("http://localhost:6060/api/modules");
-        const data = await modules.json();
+        const response = await fetch("http://localhost:6060/api/modules");
+
+        if (!response.ok) {
+            return null;
+        }
+
+        const data = response.json();
         return data;
     } catch (error) {
+        console.error(error);
         return null;
     }
 };
 
 export const getModule = async (id: number) => {
     try {
-        const module = await fetch(`http://localhost:6060/api/modules/${id}`);
-        const data = await module.json();
+        const response = await fetch(`http://localhost:6060/api/modules/${id}`);
+
+        if (!response.ok) {
+            return null;
+        }
+
+        const data = await response.json();
         return data;
     } catch (error) {
+        console.error(error);
         return null;
     }
 };
 
 export const createModule = async (module: Module) => {
-    const response = await fetch("http://localhost:6060/api/modules", {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json",
-        },
-        body: JSON.stringify(module),
-    });
-    const data = await response.json();
-    return data;
+    try {
+        const response = await fetch("http://localhost:6060/api/modules", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(module),
+        });
+
+        if (!response.ok) {
+            return null;
+        }
+
+        const data = await response.json();
+        return data;
+    } catch (error) {
+        console.error(error);
+        return null;
+    }
 };
 
 export async function getUserModules(request: Request) {
@@ -38,16 +60,22 @@ export async function getUserModules(request: Request) {
 
     if (!userId) {
         return null;
-    } else {
-        try {
-            const modules = await fetch(
-                `http://localhost:6060/api/users/${userId}/modules`
-            );
-            const json: Module[] = await modules.json();
-            return json;
-        } catch (error) {
+    }
+
+    try {
+        const response = await fetch(
+            `http://localhost:6060/api/users/${userId}/modules`
+        );
+
+        if (!response.ok) {
             return null;
         }
+
+        const data: Module[] = await response.json();
+        return data;
+    } catch (error) {
+        console.error(error);
+        return null;
     }
 }
 
@@ -56,27 +84,39 @@ export async function getTeacherModules(request: Request) {
 
     if (!userId) {
         return null;
-    } else {
-        try {
-            const modules = await fetch(
-                `http://localhost:6060/api/teachers/${userId}/modules`
-            );
-            const json: Module[] = await modules.json();
-            return json;
-        } catch (error) {
+    }
+
+    try {
+        const response = await fetch(
+            `http://localhost:6060/api/modules?teacherId=${userId}`
+        );
+
+        if (!response.ok) {
             return null;
         }
+
+        const data: Module[] = await response.json();
+        return data;
+    } catch (error) {
+        console.error(error);
+        return null;
     }
 }
 
 export async function getModuleProjects(moduleId: number) {
     try {
-        const projects = await fetch(
+        const response = await fetch(
             `http://localhost:6060/api/modules/${moduleId}/projects`
         );
-        const json = await projects.json();
-        return json;
+
+        if (!response.ok) {
+            return null;
+        }
+
+        const data = await response.json();
+        return data;
     } catch (error) {
+        console.error(error);
         return null;
     }
 }

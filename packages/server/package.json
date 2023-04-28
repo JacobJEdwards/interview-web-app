@@ -5,6 +5,7 @@
   "license": "MIT",
   "scripts": {
     "start": "ts-node src/server.ts",
+    "dev": "nodemon src/server.ts",
     "build": "tsc",
     "lint": "eslint src --ext .ts",
     "lint:fix": "eslint src --ext .ts --fix"
@@ -38,6 +39,7 @@
     "dotenv": "^16.0.3",
     "esbuild-register": "^3.4.2",
     "eslint": "^8.38.0",
+    "nodemon": "^2.0.22",
     "typescript": "^5.0.4"
   }
 }

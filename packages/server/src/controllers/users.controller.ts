@@ -7,8 +7,11 @@ class UserController {
     public async getUsers(req: Request, res: Response, next: NextFunction) {
         try {
             const role = req.query.role ? (req.query.role as Role) : undefined;
+            const email = req.query.email ? String(req.query.email) : undefined;
+            const name = req.query.name ? String(req.query.name) : undefined;
+
             const users = await prisma.user.findMany({
-                where: { role },
+                where: { role, email, name },
                 select: {
                     id: true,
                     name: true,
@@ -115,29 +118,6 @@ class UserController {
                     where: { id: Number(req.params.userId) },
                 })
                 .modules();
-
-            if (!modules || modules.length === 0) {
-                return res.status(404).json({ message: "Modules not found" });
-            }
-
-            res.status(200).json(modules);
-        } catch (error) {
-            next(error);
-        }
-    }
-
-    // get a users owned modules
-    public async getTeacherModules(
-        req: Request,
-        res: Response,
-        next: NextFunction
-    ) {
-        try {
-            const modules = await prisma.user
-                .findUnique({
-                    where: { id: Number(req.params.userId) },
-                })
-                .ownedModules();
 
             if (!modules || modules.length === 0) {
                 return res.status(404).json({ message: "Modules not found" });

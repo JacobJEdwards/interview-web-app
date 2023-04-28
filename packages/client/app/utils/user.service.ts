@@ -14,6 +14,11 @@ export const getUserInfo = async (id: number): Promise<UserInfo | null> => {
                 "Content-Type": "application/json",
             },
         });
+
+        if (!response.ok) {
+            return null;
+        }
+
         const data = await response.json();
         return data;
     } catch (error) {
@@ -36,6 +41,11 @@ export const selectProject = async (
                 },
             }
         );
+
+        if (!response.ok) {
+            return null;
+        }
+
         const data = await response.json();
         return data;
     } catch (error) {
@@ -57,6 +67,11 @@ export const isProjectSelected = async (
                 },
             }
         );
+
+        if (!response.ok) {
+            return false;
+        }
+
         const data = await response.json();
         return data;
     } catch (error) {
@@ -78,6 +93,11 @@ export const moduleProjectSelected = async (
                 },
             }
         );
+
+        if (!response.ok) {
+            return null;
+        }
+
         const data = await response.json();
         return data;
     } catch (error) {
@@ -95,6 +115,11 @@ export const getUsersByRole = async (
                 "Content-Type": "application/json",
             },
         });
+
+        if (!response.ok) {
+            return null;
+        }
+
         const data = await response.json();
         return data;
     } catch (error) {

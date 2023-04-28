@@ -37,8 +37,6 @@ router.get("/users/:userId", UserController.getUser);
 router.post("/users", UserController.createUser);
 router.put("/users/:userId", UserController.updateUser);
 router.delete("/users/:userId", UserController.deleteUser);
-router.get("/users/students", UserController.getStudents);
-router.get("/users/teachers", UserController.getTeachers);
 router.get("/users/:userId/modules", UserController.getModules);
 router.get("/users/:userId/projects", UserController.getProjects);
 router.get(
@@ -54,6 +52,5 @@ router.get(
     "/users/:userId/:projectId/verify",
     UserController.isProjectSelected
 );
-router.get("/teachers/:userId/modules", UserController.getTeacherModules);
 
 export default router;
