@@ -6,16 +6,6 @@ import * as dotenv from 'dotenv';
 
 dotenv.config();
 
-const errorHandler = (err: Error, req: Request, res: Response, next: NextFunction) => {
-    if (res.headersSent) {
-        return next(err)
-    }
-    res.status(500).json({ error: err })
-}
-
-const notFound = (req: Request, res: Response, next: NextFunction) => {
-    res.status(404).json({ message: 'Not Found' })
-}
 
 const middleware = [
     express.json(),
@@ -23,8 +13,6 @@ const middleware = [
     Cors(),
     Morgan('dev'),
     Helmet(),
-    errorHandler,
-    notFound
 ]
 
 

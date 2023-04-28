@@ -10,6 +10,7 @@ export default class App {
         middleware: any[],
         apiRoutes: Array<Router>,
         authRoutes: Array<Router>,
+        otherRoutes: any[],
         private apiPath: string = "/api",
         private authPath: string = "/auth"
     ) {
@@ -20,6 +21,7 @@ export default class App {
         this.middlewares(middleware);
         this.apiRoutes(apiRoutes);
         this.authRoutes(authRoutes);
+        this.otherRoutes(otherRoutes);
     }
 
     private middlewares(middleware: any[]) {
@@ -41,6 +43,12 @@ export default class App {
     private authRoutes(routes: Array<Router>) {
         routes.forEach((r) => {
             this.app.use(this.authPath, r);
+        });
+    }
+
+    private otherRoutes(routes: any[]) {
+        routes.forEach((r) => {
+            this.app.use(r);
         });
     }
 

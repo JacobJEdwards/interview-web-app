@@ -1,4 +1,5 @@
 import middleware from "./middleware";
+import errorHandler from "./errorRoutes"
 
 import App from "./application";
 
@@ -7,6 +8,6 @@ import AuthRoutes from "./routes/auth.router";
 
 const port: number | string = process.env.PORT || 6060;
 
-const app = new App(port, middleware, [APIRoutes], [AuthRoutes]);
+const app = new App(port, middleware, [APIRoutes], [AuthRoutes], errorHandler);
 
 app.listen();
