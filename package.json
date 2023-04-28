@@ -19,6 +19,10 @@
     },
     "devDependencies": {
         "concurrently": "^8.0.1",
-        "esbuild": "^0.17.17"
+        "esbuild": "^0.17.17",
+        "eslint": "^8.39.0"
+    },
+    "dependencies": {
+        "typescript": "^5.0.4"
     }
 }

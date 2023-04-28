@@ -42,18 +42,18 @@ router.get("/users/teachers", UserController.getTeachers);
 router.get("/users/:userId/modules", UserController.getModules);
 router.get("/users/:userId/projects", UserController.getProjects);
 router.get(
-  "/users/:userId/:moduleId/projects",
-  UserController.getStudentModuleProjects
+    "/users/:userId/:moduleId/projects",
+    UserController.getStudentModuleProjects
 ); // is this ok?
 
 router.post(
-  "/users/:userId/:moduleId/:projectId/select",
-  UserController.selectProject
+    "/users/:userId/:moduleId/:projectId/select",
+    UserController.selectProject
 );
 router.get(
-  "/users/:userId/:projectId/verify",
-  UserController.isProjectSelected
+    "/users/:userId/:projectId/verify",
+    UserController.isProjectSelected
 );
-router.get("/teachers/:id/modules", UserController.getTeacherModules);
+router.get("/teachers/:userId/modules", UserController.getTeacherModules);
 
 export default router;

@@ -22,7 +22,7 @@ export const getModule = async (id: number) => {
 };
 
 export const createModule = async (module: Module) => {
-    const response = await fetch("/api/modules", {
+    const response = await fetch("http://localhost:6060/api/modules", {
         method: "POST",
         headers: {
             "Content-Type": "application/json",

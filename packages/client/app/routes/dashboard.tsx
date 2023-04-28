@@ -1,4 +1,4 @@
-import { NavLink, Outlet } from "@remix-run/react";
+import { Outlet } from "@remix-run/react";
 import { Module as ModuleType } from "server/types/generated/client";
 import Module from "~/components/Module";
 import { Link } from "@remix-run/react";
@@ -7,7 +7,6 @@ import { useLoaderData } from "@remix-run/react";
 import { getUser, requireUser } from "~/utils/session.server";
 import { getTeacherModules, getUserModules } from "~/utils/modules.server";
 import { Role } from "server/types/generated/client";
-import Sidebar from "~/components/Sidebar";
 
 export async function loader({ request }: LoaderArgs) {
   await requireUser(request);
@@ -53,11 +52,12 @@ export default function Dashboard() {
             </Link>
           </li>
           <div className="divider"></div>
-          {modules.map((module: ModuleType) => (
-            <li key={module.id} className="mb-4">
-              <Module {...module} />
-            </li>
-          ))}
+          {modules &&
+            modules.map((module: ModuleType) => (
+              <li key={module.id} className="mb-4">
+                <Module {...module} />
+              </li>
+            ))}
         </ul>
       </nav>
     </div>
