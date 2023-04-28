@@ -1,7 +1,7 @@
 import { createCookieSessionStorage, redirect } from "@remix-run/node";
 import type { Request, SessionData } from "@remix-run/node";
 import { Role } from "server/types/generated/client";
-import type { Module, User, Project } from "server/types/generated/client";
+import type { User } from "server/types/generated/client";
 
 type LoginForm = {
     email: string;
@@ -35,13 +35,16 @@ export async function login({
         body: JSON.stringify({ email, password }),
     });
 
-    if (response.status !== 200) {
+    if (!response.ok) {
         return null;
     }
+
     const { user } = await response.json();
+
     if (!isUser(user)) {
         return null;
     }
+
     return { userId: user.id, userRole: user.role, userName: user.name };
 }
 
@@ -84,6 +87,7 @@ export async function getUserId(request: Request): Promise<UserSessionData> {
 
 export async function requireUserId(
     request: Request,
+    id: number,
     redirectTo: string = new URL(request.url).pathname
 ): Promise<number> {
     const { userId, userRole } = await getUserId(request);
@@ -92,6 +96,12 @@ export async function requireUserId(
         const searchParams = new URLSearchParams([["redirectTo", redirectTo]]);
         throw redirect(`/login?${searchParams.toString()}`);
     }
+
+    if (userId !== id) {
+        const searchParams = new URLSearchParams([["redirectTo", redirectTo]]);
+        throw redirect(`/dashboard?${searchParams.toString()}`);
+    }
+
     return userId;
 }
 
@@ -106,6 +116,7 @@ export async function requireUserType(
         const searchParams = new URLSearchParams([["redirectTo", redirectTo]]);
         throw redirect(`/dashboard?${searchParams.toString()}`);
     }
+
     return userRole;
 }
 
@@ -114,7 +125,12 @@ export async function requireUser(
     request: Request,
     redirectTo: string = new URL(request.url).pathname
 ): Promise<void> {
-    await requireUserId(request, redirectTo);
+    const { userId } = await getUserId(request);
+
+    if (!userId) {
+        const searchParams = new URLSearchParams([["redirectTo", redirectTo]]);
+        throw redirect(`/login?${searchParams.toString()}`);
+    }
 }
 
 export async function getUser(request: Request) {
@@ -125,9 +141,10 @@ export async function getUser(request: Request) {
     } else {
         try {
             const response = await fetch(`http://localhost:6060/api/users/${userId}`);
-            if (response.status !== 200) {
+            if (!response.ok) {
                 throw logout(request);
             }
+
             const json: User = await response.json();
             // not returning password
             return {

@@ -8,7 +8,7 @@ const errorHandler = (err: Error, req: Request, res: Response, next: NextFunctio
 }
 
 const notFound = (req: Request, res: Response, next: NextFunction) => {
-    res.status(404).json({ message: 'Not Found' })
+    res.status(404).json({ message: 'Endpoint does not exist' })
 }
 
 export default [errorHandler, notFound]

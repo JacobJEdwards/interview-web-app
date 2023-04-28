@@ -33,26 +33,26 @@ router.post("/modules/:moduleId/projects/new", ModulesController.createProject);
 
 // User routes
 router.get("/users", UserController.getUsers);
-router.get("/users/:id", UserController.getUser);
+router.get("/users/:userId", UserController.getUser);
 router.post("/users", UserController.createUser);
-router.put("/users/:id", UserController.updateUser);
-router.delete("/users/:id", UserController.deleteUser);
+router.put("/users/:userId", UserController.updateUser);
+router.delete("/users/:userId", UserController.deleteUser);
 router.get("/users/students", UserController.getStudents);
 router.get("/users/teachers", UserController.getTeachers);
-router.get("/users/:id/modules", UserController.getModules);
-router.get("/users/:id/projects", UserController.getProjects);
+router.get("/users/:userId/modules", UserController.getModules);
+router.get("/users/:userId/projects", UserController.getProjects);
 router.get(
-    "/users/:userId/:moduleId/projects",
-    UserController.getStudentModuleProjects
+  "/users/:userId/:moduleId/projects",
+  UserController.getStudentModuleProjects
 ); // is this ok?
 
 router.post(
-    "/users/:userId/:moduleId/:projectId/select",
-    UserController.selectProject
+  "/users/:userId/:moduleId/:projectId/select",
+  UserController.selectProject
 );
 router.get(
-    "/users/:userId/:projectId/verify",
-    UserController.isProjectSelected
+  "/users/:userId/:projectId/verify",
+  UserController.isProjectSelected
 );
 router.get("/teachers/:id/modules", UserController.getTeacherModules);
 
