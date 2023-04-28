@@ -3,11 +3,24 @@ import { Role } from "../../types/generated/client/";
 import prisma from "../utils/db";
 
 class UserController {
-
     // get all users
     public async getUsers(req: Request, res: Response, next: NextFunction) {
         try {
-            const users = await prisma.user.findMany();
+            const role = req.query.role ? (req.query.role as Role) : undefined;
+            const users = await prisma.user.findMany({
+                where: { role },
+                select: {
+                    id: true,
+                    name: true,
+                    email: true,
+                    role: true,
+                },
+            });
+
+            if (!users || users.length === 0) {
+                return res.status(404).json({ message: "Users not found" });
+            }
+
             res.status(200).json(users);
         } catch (error) {
             next(error);
@@ -34,7 +47,6 @@ class UserController {
             }
 
             res.status(200).json(user);
-
         } catch (error) {
             next(error);
         }
@@ -54,7 +66,6 @@ class UserController {
             });
 
             res.status(201).json(user);
-
         } catch (error) {
             next(error);
         }
@@ -78,7 +89,6 @@ class UserController {
             }
 
             res.status(200).json(user);
-
         } catch (error) {
             next(error);
         }
@@ -92,43 +102,6 @@ class UserController {
             });
 
             res.status(200).json(user);
-
-        } catch (error) {
-            next(error);
-        }
-    }
-
-    // get all students
-    public async getStudents(req: Request, res: Response, next: NextFunction) {
-        try {
-            const students = await prisma.user.findMany({
-                where: { role: Role.STUDENT },
-            });
-
-            if (!students || students.length === 0) {
-                return res.status(404).json({ message: "Students not found" });
-            }
-
-            res.status(200).json(students);
-
-        } catch (error) {
-            next(error);
-        }
-    }
-
-    // get all teachers
-    public async getTeachers(req: Request, res: Response, next: NextFunction) {
-        try {
-            const teachers = await prisma.user.findMany({
-                where: { role: Role.TEACHER },
-            });
-
-            if (!teachers || teachers.length === 0) {
-                return res.status(404).json({ message: "Teachers not found" });
-            }
-
-            res.status(200).json(teachers);
-
         } catch (error) {
             next(error);
         }
@@ -148,7 +121,6 @@ class UserController {
             }
 
             res.status(200).json(modules);
-
         } catch (error) {
             next(error);
         }
@@ -172,7 +144,6 @@ class UserController {
             }
 
             res.status(200).json(modules);
-
         } catch (error) {
             next(error);
         }
@@ -192,7 +163,6 @@ class UserController {
             }
 
             res.status(200).json(projects);
-
         } catch (error) {
             next(error);
         }
@@ -223,7 +193,6 @@ class UserController {
             }
 
             res.status(200).json(projects);
-
         } catch (error) {
             next(error);
         }
@@ -278,7 +247,6 @@ class UserController {
             });
 
             res.status(200).json(project);
-
         } catch (error) {
             next(error);
         }
@@ -338,7 +306,6 @@ class UserController {
             }
 
             res.status(200).json(user.projects);
-
         } catch (error) {
             next(error);
         }

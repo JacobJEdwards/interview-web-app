@@ -84,3 +84,20 @@ export const moduleProjectSelected = async (
         return null;
     }
 };
+
+export const getUsersByRole = async (
+    role: Role
+): Promise<UserInfo[] | null> => {
+    try {
+        const response = await fetch(`http:localhost:6060/api/users?role=${role}`, {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json",
+            },
+        });
+        const data = await response.json();
+        return data;
+    } catch (error) {
+        return null;
+    }
+};
