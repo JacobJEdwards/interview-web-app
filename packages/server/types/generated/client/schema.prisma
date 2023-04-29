@@ -8,21 +8,15 @@ datasource db {
     url      = env("DATABASE_URL")
 }
 
-enum Role {
-    STUDENT
-    TEACHER
-    ADMIN
-}
-
 model User {
-    id       Int       @id @default(autoincrement())
-    email    String    @unique
-    name     String
-    role     Role
-    password String
-    ownedModules Module[] @relation("TeacherModules")
-    modules Module[] @relation("StudentModules")
-    projects Project[]
+    id           Int       @id @default(autoincrement())
+    email        String    @unique
+    name         String
+    role         Role
+    password     String
+    ownedModules Module[]  @relation("TeacherModules")
+    projects     Project[]
+    modules      Module[]  @relation("StudentModules")
 }
 
 model Admin {
@@ -35,17 +29,24 @@ model Project {
     id          Int    @id @default(autoincrement())
     name        String
     description String
-    module      Module @relation(fields: [moduleId], references: [id])
     moduleId    Int
-    teacher     User   @relation(fields: [teacherId], references: [id])
     teacherId   Int
+    module      Module @relation(fields: [moduleId], references: [id])
+    teacher     User   @relation(fields: [teacherId], references: [id])
 }
 
 model Module {
-    id        Int       @id @default(autoincrement())
-    name      String
-    Projects  Project[]
-    teacher   User      @relation("TeacherModules", fields: [teacherId], references: [id])
-    teacherId Int
-    Students  User[]   @relation("StudentModules")
+    id          Int       @id @default(autoincrement())
+    name        String
+    description String
+    teacherId   Int
+    teacher     User      @relation("TeacherModules", fields: [teacherId], references: [id])
+    Projects    Project[]
+    Students    User[]    @relation("StudentModules")
+}
+
+enum Role {
+    STUDENT
+    TEACHER
+    ADMIN
 }

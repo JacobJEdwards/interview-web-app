@@ -53,6 +53,7 @@ export type Project = {
 export type Module = {
   id: number
   name: string
+  description: string
   teacherId: number
 }
 
@@ -869,14 +870,14 @@ export namespace Prisma {
 
   export type UserCountOutputType = {
     ownedModules: number
-    modules: number
     projects: number
+    modules: number
   }
 
   export type UserCountOutputTypeSelect = {
     ownedModules?: boolean
-    modules?: boolean
     projects?: boolean
+    modules?: boolean
   }
 
   export type UserCountOutputTypeGetPayload<S extends boolean | null | undefined | UserCountOutputTypeArgs> =
@@ -1159,16 +1160,16 @@ export namespace Prisma {
     role?: boolean
     password?: boolean
     ownedModules?: boolean | User$ownedModulesArgs
-    modules?: boolean | User$modulesArgs
     projects?: boolean | User$projectsArgs
+    modules?: boolean | User$modulesArgs
     _count?: boolean | UserCountOutputTypeArgs
   }
 
 
   export type UserInclude = {
     ownedModules?: boolean | User$ownedModulesArgs
-    modules?: boolean | User$modulesArgs
     projects?: boolean | User$projectsArgs
+    modules?: boolean | User$modulesArgs
     _count?: boolean | UserCountOutputTypeArgs
   }
 
@@ -1180,16 +1181,16 @@ export namespace Prisma {
     ? User  & {
     [P in TruthyKeys<S['include']>]:
         P extends 'ownedModules' ? Array < ModuleGetPayload<S['include'][P]>>  :
-        P extends 'modules' ? Array < ModuleGetPayload<S['include'][P]>>  :
         P extends 'projects' ? Array < ProjectGetPayload<S['include'][P]>>  :
+        P extends 'modules' ? Array < ModuleGetPayload<S['include'][P]>>  :
         P extends '_count' ? UserCountOutputTypeGetPayload<S['include'][P]> :  never
   } 
     : S extends { select: any } & (UserArgs | UserFindManyArgs)
       ? {
     [P in TruthyKeys<S['select']>]:
         P extends 'ownedModules' ? Array < ModuleGetPayload<S['select'][P]>>  :
-        P extends 'modules' ? Array < ModuleGetPayload<S['select'][P]>>  :
         P extends 'projects' ? Array < ProjectGetPayload<S['select'][P]>>  :
+        P extends 'modules' ? Array < ModuleGetPayload<S['select'][P]>>  :
         P extends '_count' ? UserCountOutputTypeGetPayload<S['select'][P]> :  P extends keyof User ? User[P] : never
   } 
       : User
@@ -1564,9 +1565,9 @@ export namespace Prisma {
 
     ownedModules<T extends User$ownedModulesArgs= {}>(args?: Subset<T, User$ownedModulesArgs>): Prisma.PrismaPromise<Array<ModuleGetPayload<T>>| Null>;
 
-    modules<T extends User$modulesArgs= {}>(args?: Subset<T, User$modulesArgs>): Prisma.PrismaPromise<Array<ModuleGetPayload<T>>| Null>;
-
     projects<T extends User$projectsArgs= {}>(args?: Subset<T, User$projectsArgs>): Prisma.PrismaPromise<Array<ProjectGetPayload<T>>| Null>;
+
+    modules<T extends User$modulesArgs= {}>(args?: Subset<T, User$modulesArgs>): Prisma.PrismaPromise<Array<ModuleGetPayload<T>>| Null>;
 
     private get _document();
     /**
@@ -1945,27 +1946,6 @@ export namespace Prisma {
 
 
   /**
-   * User.modules
-   */
-  export type User$modulesArgs = {
-    /**
-     * Select specific fields to fetch from the Module
-     */
-    select?: ModuleSelect | null
-    /**
-     * Choose, which related nodes to fetch as well.
-     */
-    include?: ModuleInclude | null
-    where?: ModuleWhereInput
-    orderBy?: Enumerable<ModuleOrderByWithRelationInput>
-    cursor?: ModuleWhereUniqueInput
-    take?: number
-    skip?: number
-    distinct?: Enumerable<ModuleScalarFieldEnum>
-  }
-
-
-  /**
    * User.projects
    */
   export type User$projectsArgs = {
@@ -1983,6 +1963,27 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: Enumerable<ProjectScalarFieldEnum>
+  }
+
+
+  /**
+   * User.modules
+   */
+  export type User$modulesArgs = {
+    /**
+     * Select specific fields to fetch from the Module
+     */
+    select?: ModuleSelect | null
+    /**
+     * Choose, which related nodes to fetch as well.
+     */
+    include?: ModuleInclude | null
+    where?: ModuleWhereInput
+    orderBy?: Enumerable<ModuleOrderByWithRelationInput>
+    cursor?: ModuleWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: Enumerable<ModuleScalarFieldEnum>
   }
 
 
@@ -3907,18 +3908,21 @@ export namespace Prisma {
   export type ModuleMinAggregateOutputType = {
     id: number | null
     name: string | null
+    description: string | null
     teacherId: number | null
   }
 
   export type ModuleMaxAggregateOutputType = {
     id: number | null
     name: string | null
+    description: string | null
     teacherId: number | null
   }
 
   export type ModuleCountAggregateOutputType = {
     id: number
     name: number
+    description: number
     teacherId: number
     _all: number
   }
@@ -3937,18 +3941,21 @@ export namespace Prisma {
   export type ModuleMinAggregateInputType = {
     id?: true
     name?: true
+    description?: true
     teacherId?: true
   }
 
   export type ModuleMaxAggregateInputType = {
     id?: true
     name?: true
+    description?: true
     teacherId?: true
   }
 
   export type ModuleCountAggregateInputType = {
     id?: true
     name?: true
+    description?: true
     teacherId?: true
     _all?: true
   }
@@ -4043,6 +4050,7 @@ export namespace Prisma {
   export type ModuleGroupByOutputType = {
     id: number
     name: string
+    description: string
     teacherId: number
     _count: ModuleCountAggregateOutputType | null
     _avg: ModuleAvgAggregateOutputType | null
@@ -4068,17 +4076,18 @@ export namespace Prisma {
   export type ModuleSelect = {
     id?: boolean
     name?: boolean
+    description?: boolean
     teacherId?: boolean
-    Projects?: boolean | Module$ProjectsArgs
     teacher?: boolean | UserArgs
+    Projects?: boolean | Module$ProjectsArgs
     Students?: boolean | Module$StudentsArgs
     _count?: boolean | ModuleCountOutputTypeArgs
   }
 
 
   export type ModuleInclude = {
-    Projects?: boolean | Module$ProjectsArgs
     teacher?: boolean | UserArgs
+    Projects?: boolean | Module$ProjectsArgs
     Students?: boolean | Module$StudentsArgs
     _count?: boolean | ModuleCountOutputTypeArgs
   }
@@ -4090,16 +4099,16 @@ export namespace Prisma {
     S extends { include: any } & (ModuleArgs | ModuleFindManyArgs)
     ? Module  & {
     [P in TruthyKeys<S['include']>]:
-        P extends 'Projects' ? Array < ProjectGetPayload<S['include'][P]>>  :
         P extends 'teacher' ? UserGetPayload<S['include'][P]> :
+        P extends 'Projects' ? Array < ProjectGetPayload<S['include'][P]>>  :
         P extends 'Students' ? Array < UserGetPayload<S['include'][P]>>  :
         P extends '_count' ? ModuleCountOutputTypeGetPayload<S['include'][P]> :  never
   } 
     : S extends { select: any } & (ModuleArgs | ModuleFindManyArgs)
       ? {
     [P in TruthyKeys<S['select']>]:
-        P extends 'Projects' ? Array < ProjectGetPayload<S['select'][P]>>  :
         P extends 'teacher' ? UserGetPayload<S['select'][P]> :
+        P extends 'Projects' ? Array < ProjectGetPayload<S['select'][P]>>  :
         P extends 'Students' ? Array < UserGetPayload<S['select'][P]>>  :
         P extends '_count' ? ModuleCountOutputTypeGetPayload<S['select'][P]> :  P extends keyof Module ? Module[P] : never
   } 
@@ -4473,9 +4482,9 @@ export namespace Prisma {
     readonly [Symbol.toStringTag]: 'PrismaPromise';
     constructor(_dmmf: runtime.DMMFClass, _queryType: 'query' | 'mutation', _rootField: string, _clientMethod: string, _args: any, _dataPath: string[], _errorFormat: ErrorFormat, _measurePerformance?: boolean | undefined, _isList?: boolean);
 
-    Projects<T extends Module$ProjectsArgs= {}>(args?: Subset<T, Module$ProjectsArgs>): Prisma.PrismaPromise<Array<ProjectGetPayload<T>>| Null>;
-
     teacher<T extends UserArgs= {}>(args?: Subset<T, UserArgs>): Prisma__UserClient<UserGetPayload<T> | Null>;
+
+    Projects<T extends Module$ProjectsArgs= {}>(args?: Subset<T, Module$ProjectsArgs>): Prisma.PrismaPromise<Array<ProjectGetPayload<T>>| Null>;
 
     Students<T extends Module$StudentsArgs= {}>(args?: Subset<T, Module$StudentsArgs>): Prisma.PrismaPromise<Array<UserGetPayload<T>>| Null>;
 
@@ -4911,6 +4920,7 @@ export namespace Prisma {
   export const ModuleScalarFieldEnum: {
     id: 'id',
     name: 'name',
+    description: 'description',
     teacherId: 'teacherId'
   };
 
@@ -4980,8 +4990,8 @@ export namespace Prisma {
     role?: EnumRoleFilter | Role
     password?: StringFilter | string
     ownedModules?: ModuleListRelationFilter
-    modules?: ModuleListRelationFilter
     projects?: ProjectListRelationFilter
+    modules?: ModuleListRelationFilter
   }
 
   export type UserOrderByWithRelationInput = {
@@ -4991,8 +5001,8 @@ export namespace Prisma {
     role?: SortOrder
     password?: SortOrder
     ownedModules?: ModuleOrderByRelationAggregateInput
-    modules?: ModuleOrderByRelationAggregateInput
     projects?: ProjectOrderByRelationAggregateInput
+    modules?: ModuleOrderByRelationAggregateInput
   }
 
   export type UserWhereUniqueInput = {
@@ -5121,18 +5131,20 @@ export namespace Prisma {
     NOT?: Enumerable<ModuleWhereInput>
     id?: IntFilter | number
     name?: StringFilter | string
+    description?: StringFilter | string
     teacherId?: IntFilter | number
-    Projects?: ProjectListRelationFilter
     teacher?: XOR<UserRelationFilter, UserWhereInput>
+    Projects?: ProjectListRelationFilter
     Students?: UserListRelationFilter
   }
 
   export type ModuleOrderByWithRelationInput = {
     id?: SortOrder
     name?: SortOrder
+    description?: SortOrder
     teacherId?: SortOrder
-    Projects?: ProjectOrderByRelationAggregateInput
     teacher?: UserOrderByWithRelationInput
+    Projects?: ProjectOrderByRelationAggregateInput
     Students?: UserOrderByRelationAggregateInput
   }
 
@@ -5143,6 +5155,7 @@ export namespace Prisma {
   export type ModuleOrderByWithAggregationInput = {
     id?: SortOrder
     name?: SortOrder
+    description?: SortOrder
     teacherId?: SortOrder
     _count?: ModuleCountOrderByAggregateInput
     _avg?: ModuleAvgOrderByAggregateInput
@@ -5157,6 +5170,7 @@ export namespace Prisma {
     NOT?: Enumerable<ModuleScalarWhereWithAggregatesInput>
     id?: IntWithAggregatesFilter | number
     name?: StringWithAggregatesFilter | string
+    description?: StringWithAggregatesFilter | string
     teacherId?: IntWithAggregatesFilter | number
   }
 
@@ -5166,8 +5180,8 @@ export namespace Prisma {
     role: Role
     password: string
     ownedModules?: ModuleCreateNestedManyWithoutTeacherInput
-    modules?: ModuleCreateNestedManyWithoutStudentsInput
     projects?: ProjectCreateNestedManyWithoutTeacherInput
+    modules?: ModuleCreateNestedManyWithoutStudentsInput
   }
 
   export type UserUncheckedCreateInput = {
@@ -5177,8 +5191,8 @@ export namespace Prisma {
     role: Role
     password: string
     ownedModules?: ModuleUncheckedCreateNestedManyWithoutTeacherInput
-    modules?: ModuleUncheckedCreateNestedManyWithoutStudentsInput
     projects?: ProjectUncheckedCreateNestedManyWithoutTeacherInput
+    modules?: ModuleUncheckedCreateNestedManyWithoutStudentsInput
   }
 
   export type UserUpdateInput = {
@@ -5187,8 +5201,8 @@ export namespace Prisma {
     role?: EnumRoleFieldUpdateOperationsInput | Role
     password?: StringFieldUpdateOperationsInput | string
     ownedModules?: ModuleUpdateManyWithoutTeacherNestedInput
-    modules?: ModuleUpdateManyWithoutStudentsNestedInput
     projects?: ProjectUpdateManyWithoutTeacherNestedInput
+    modules?: ModuleUpdateManyWithoutStudentsNestedInput
   }
 
   export type UserUncheckedUpdateInput = {
@@ -5198,8 +5212,8 @@ export namespace Prisma {
     role?: EnumRoleFieldUpdateOperationsInput | Role
     password?: StringFieldUpdateOperationsInput | string
     ownedModules?: ModuleUncheckedUpdateManyWithoutTeacherNestedInput
-    modules?: ModuleUncheckedUpdateManyWithoutStudentsNestedInput
     projects?: ProjectUncheckedUpdateManyWithoutTeacherNestedInput
+    modules?: ModuleUncheckedUpdateManyWithoutStudentsNestedInput
   }
 
   export type UserCreateManyInput = {
@@ -5317,14 +5331,16 @@ export namespace Prisma {
 
   export type ModuleCreateInput = {
     name: string
-    Projects?: ProjectCreateNestedManyWithoutModuleInput
+    description: string
     teacher: UserCreateNestedOneWithoutOwnedModulesInput
+    Projects?: ProjectCreateNestedManyWithoutModuleInput
     Students?: UserCreateNestedManyWithoutModulesInput
   }
 
   export type ModuleUncheckedCreateInput = {
     id?: number
     name: string
+    description: string
     teacherId: number
     Projects?: ProjectUncheckedCreateNestedManyWithoutModuleInput
     Students?: UserUncheckedCreateNestedManyWithoutModulesInput
@@ -5332,14 +5348,16 @@ export namespace Prisma {
 
   export type ModuleUpdateInput = {
     name?: StringFieldUpdateOperationsInput | string
-    Projects?: ProjectUpdateManyWithoutModuleNestedInput
+    description?: StringFieldUpdateOperationsInput | string
     teacher?: UserUpdateOneRequiredWithoutOwnedModulesNestedInput
+    Projects?: ProjectUpdateManyWithoutModuleNestedInput
     Students?: UserUpdateManyWithoutModulesNestedInput
   }
 
   export type ModuleUncheckedUpdateInput = {
     id?: IntFieldUpdateOperationsInput | number
     name?: StringFieldUpdateOperationsInput | string
+    description?: StringFieldUpdateOperationsInput | string
     teacherId?: IntFieldUpdateOperationsInput | number
     Projects?: ProjectUncheckedUpdateManyWithoutModuleNestedInput
     Students?: UserUncheckedUpdateManyWithoutModulesNestedInput
@@ -5348,16 +5366,19 @@ export namespace Prisma {
   export type ModuleCreateManyInput = {
     id?: number
     name: string
+    description: string
     teacherId: number
   }
 
   export type ModuleUpdateManyMutationInput = {
     name?: StringFieldUpdateOperationsInput | string
+    description?: StringFieldUpdateOperationsInput | string
   }
 
   export type ModuleUncheckedUpdateManyInput = {
     id?: IntFieldUpdateOperationsInput | number
     name?: StringFieldUpdateOperationsInput | string
+    description?: StringFieldUpdateOperationsInput | string
     teacherId?: IntFieldUpdateOperationsInput | number
   }
 
@@ -5575,6 +5596,7 @@ export namespace Prisma {
   export type ModuleCountOrderByAggregateInput = {
     id?: SortOrder
     name?: SortOrder
+    description?: SortOrder
     teacherId?: SortOrder
   }
 
@@ -5586,12 +5608,14 @@ export namespace Prisma {
   export type ModuleMaxOrderByAggregateInput = {
     id?: SortOrder
     name?: SortOrder
+    description?: SortOrder
     teacherId?: SortOrder
   }
 
   export type ModuleMinOrderByAggregateInput = {
     id?: SortOrder
     name?: SortOrder
+    description?: SortOrder
     teacherId?: SortOrder
   }
 
@@ -5607,17 +5631,17 @@ export namespace Prisma {
     connect?: Enumerable<ModuleWhereUniqueInput>
   }
 
-  export type ModuleCreateNestedManyWithoutStudentsInput = {
-    create?: XOR<Enumerable<ModuleCreateWithoutStudentsInput>, Enumerable<ModuleUncheckedCreateWithoutStudentsInput>>
-    connectOrCreate?: Enumerable<ModuleCreateOrConnectWithoutStudentsInput>
-    connect?: Enumerable<ModuleWhereUniqueInput>
-  }
-
   export type ProjectCreateNestedManyWithoutTeacherInput = {
     create?: XOR<Enumerable<ProjectCreateWithoutTeacherInput>, Enumerable<ProjectUncheckedCreateWithoutTeacherInput>>
     connectOrCreate?: Enumerable<ProjectCreateOrConnectWithoutTeacherInput>
     createMany?: ProjectCreateManyTeacherInputEnvelope
     connect?: Enumerable<ProjectWhereUniqueInput>
+  }
+
+  export type ModuleCreateNestedManyWithoutStudentsInput = {
+    create?: XOR<Enumerable<ModuleCreateWithoutStudentsInput>, Enumerable<ModuleUncheckedCreateWithoutStudentsInput>>
+    connectOrCreate?: Enumerable<ModuleCreateOrConnectWithoutStudentsInput>
+    connect?: Enumerable<ModuleWhereUniqueInput>
   }
 
   export type ModuleUncheckedCreateNestedManyWithoutTeacherInput = {
@@ -5627,17 +5651,17 @@ export namespace Prisma {
     connect?: Enumerable<ModuleWhereUniqueInput>
   }
 
-  export type ModuleUncheckedCreateNestedManyWithoutStudentsInput = {
-    create?: XOR<Enumerable<ModuleCreateWithoutStudentsInput>, Enumerable<ModuleUncheckedCreateWithoutStudentsInput>>
-    connectOrCreate?: Enumerable<ModuleCreateOrConnectWithoutStudentsInput>
-    connect?: Enumerable<ModuleWhereUniqueInput>
-  }
-
   export type ProjectUncheckedCreateNestedManyWithoutTeacherInput = {
     create?: XOR<Enumerable<ProjectCreateWithoutTeacherInput>, Enumerable<ProjectUncheckedCreateWithoutTeacherInput>>
     connectOrCreate?: Enumerable<ProjectCreateOrConnectWithoutTeacherInput>
     createMany?: ProjectCreateManyTeacherInputEnvelope
     connect?: Enumerable<ProjectWhereUniqueInput>
+  }
+
+  export type ModuleUncheckedCreateNestedManyWithoutStudentsInput = {
+    create?: XOR<Enumerable<ModuleCreateWithoutStudentsInput>, Enumerable<ModuleUncheckedCreateWithoutStudentsInput>>
+    connectOrCreate?: Enumerable<ModuleCreateOrConnectWithoutStudentsInput>
+    connect?: Enumerable<ModuleWhereUniqueInput>
   }
 
   export type StringFieldUpdateOperationsInput = {
@@ -5662,19 +5686,6 @@ export namespace Prisma {
     deleteMany?: Enumerable<ModuleScalarWhereInput>
   }
 
-  export type ModuleUpdateManyWithoutStudentsNestedInput = {
-    create?: XOR<Enumerable<ModuleCreateWithoutStudentsInput>, Enumerable<ModuleUncheckedCreateWithoutStudentsInput>>
-    connectOrCreate?: Enumerable<ModuleCreateOrConnectWithoutStudentsInput>
-    upsert?: Enumerable<ModuleUpsertWithWhereUniqueWithoutStudentsInput>
-    set?: Enumerable<ModuleWhereUniqueInput>
-    disconnect?: Enumerable<ModuleWhereUniqueInput>
-    delete?: Enumerable<ModuleWhereUniqueInput>
-    connect?: Enumerable<ModuleWhereUniqueInput>
-    update?: Enumerable<ModuleUpdateWithWhereUniqueWithoutStudentsInput>
-    updateMany?: Enumerable<ModuleUpdateManyWithWhereWithoutStudentsInput>
-    deleteMany?: Enumerable<ModuleScalarWhereInput>
-  }
-
   export type ProjectUpdateManyWithoutTeacherNestedInput = {
     create?: XOR<Enumerable<ProjectCreateWithoutTeacherInput>, Enumerable<ProjectUncheckedCreateWithoutTeacherInput>>
     connectOrCreate?: Enumerable<ProjectCreateOrConnectWithoutTeacherInput>
@@ -5687,6 +5698,19 @@ export namespace Prisma {
     update?: Enumerable<ProjectUpdateWithWhereUniqueWithoutTeacherInput>
     updateMany?: Enumerable<ProjectUpdateManyWithWhereWithoutTeacherInput>
     deleteMany?: Enumerable<ProjectScalarWhereInput>
+  }
+
+  export type ModuleUpdateManyWithoutStudentsNestedInput = {
+    create?: XOR<Enumerable<ModuleCreateWithoutStudentsInput>, Enumerable<ModuleUncheckedCreateWithoutStudentsInput>>
+    connectOrCreate?: Enumerable<ModuleCreateOrConnectWithoutStudentsInput>
+    upsert?: Enumerable<ModuleUpsertWithWhereUniqueWithoutStudentsInput>
+    set?: Enumerable<ModuleWhereUniqueInput>
+    disconnect?: Enumerable<ModuleWhereUniqueInput>
+    delete?: Enumerable<ModuleWhereUniqueInput>
+    connect?: Enumerable<ModuleWhereUniqueInput>
+    update?: Enumerable<ModuleUpdateWithWhereUniqueWithoutStudentsInput>
+    updateMany?: Enumerable<ModuleUpdateManyWithWhereWithoutStudentsInput>
+    deleteMany?: Enumerable<ModuleScalarWhereInput>
   }
 
   export type IntFieldUpdateOperationsInput = {
@@ -5711,19 +5735,6 @@ export namespace Prisma {
     deleteMany?: Enumerable<ModuleScalarWhereInput>
   }
 
-  export type ModuleUncheckedUpdateManyWithoutStudentsNestedInput = {
-    create?: XOR<Enumerable<ModuleCreateWithoutStudentsInput>, Enumerable<ModuleUncheckedCreateWithoutStudentsInput>>
-    connectOrCreate?: Enumerable<ModuleCreateOrConnectWithoutStudentsInput>
-    upsert?: Enumerable<ModuleUpsertWithWhereUniqueWithoutStudentsInput>
-    set?: Enumerable<ModuleWhereUniqueInput>
-    disconnect?: Enumerable<ModuleWhereUniqueInput>
-    delete?: Enumerable<ModuleWhereUniqueInput>
-    connect?: Enumerable<ModuleWhereUniqueInput>
-    update?: Enumerable<ModuleUpdateWithWhereUniqueWithoutStudentsInput>
-    updateMany?: Enumerable<ModuleUpdateManyWithWhereWithoutStudentsInput>
-    deleteMany?: Enumerable<ModuleScalarWhereInput>
-  }
-
   export type ProjectUncheckedUpdateManyWithoutTeacherNestedInput = {
     create?: XOR<Enumerable<ProjectCreateWithoutTeacherInput>, Enumerable<ProjectUncheckedCreateWithoutTeacherInput>>
     connectOrCreate?: Enumerable<ProjectCreateOrConnectWithoutTeacherInput>
@@ -5736,6 +5747,19 @@ export namespace Prisma {
     update?: Enumerable<ProjectUpdateWithWhereUniqueWithoutTeacherInput>
     updateMany?: Enumerable<ProjectUpdateManyWithWhereWithoutTeacherInput>
     deleteMany?: Enumerable<ProjectScalarWhereInput>
+  }
+
+  export type ModuleUncheckedUpdateManyWithoutStudentsNestedInput = {
+    create?: XOR<Enumerable<ModuleCreateWithoutStudentsInput>, Enumerable<ModuleUncheckedCreateWithoutStudentsInput>>
+    connectOrCreate?: Enumerable<ModuleCreateOrConnectWithoutStudentsInput>
+    upsert?: Enumerable<ModuleUpsertWithWhereUniqueWithoutStudentsInput>
+    set?: Enumerable<ModuleWhereUniqueInput>
+    disconnect?: Enumerable<ModuleWhereUniqueInput>
+    delete?: Enumerable<ModuleWhereUniqueInput>
+    connect?: Enumerable<ModuleWhereUniqueInput>
+    update?: Enumerable<ModuleUpdateWithWhereUniqueWithoutStudentsInput>
+    updateMany?: Enumerable<ModuleUpdateManyWithWhereWithoutStudentsInput>
+    deleteMany?: Enumerable<ModuleScalarWhereInput>
   }
 
   export type ModuleCreateNestedOneWithoutProjectsInput = {
@@ -5766,17 +5790,17 @@ export namespace Prisma {
     update?: XOR<UserUpdateWithoutProjectsInput, UserUncheckedUpdateWithoutProjectsInput>
   }
 
+  export type UserCreateNestedOneWithoutOwnedModulesInput = {
+    create?: XOR<UserCreateWithoutOwnedModulesInput, UserUncheckedCreateWithoutOwnedModulesInput>
+    connectOrCreate?: UserCreateOrConnectWithoutOwnedModulesInput
+    connect?: UserWhereUniqueInput
+  }
+
   export type ProjectCreateNestedManyWithoutModuleInput = {
     create?: XOR<Enumerable<ProjectCreateWithoutModuleInput>, Enumerable<ProjectUncheckedCreateWithoutModuleInput>>
     connectOrCreate?: Enumerable<ProjectCreateOrConnectWithoutModuleInput>
     createMany?: ProjectCreateManyModuleInputEnvelope
     connect?: Enumerable<ProjectWhereUniqueInput>
-  }
-
-  export type UserCreateNestedOneWithoutOwnedModulesInput = {
-    create?: XOR<UserCreateWithoutOwnedModulesInput, UserUncheckedCreateWithoutOwnedModulesInput>
-    connectOrCreate?: UserCreateOrConnectWithoutOwnedModulesInput
-    connect?: UserWhereUniqueInput
   }
 
   export type UserCreateNestedManyWithoutModulesInput = {
@@ -5798,6 +5822,14 @@ export namespace Prisma {
     connect?: Enumerable<UserWhereUniqueInput>
   }
 
+  export type UserUpdateOneRequiredWithoutOwnedModulesNestedInput = {
+    create?: XOR<UserCreateWithoutOwnedModulesInput, UserUncheckedCreateWithoutOwnedModulesInput>
+    connectOrCreate?: UserCreateOrConnectWithoutOwnedModulesInput
+    upsert?: UserUpsertWithoutOwnedModulesInput
+    connect?: UserWhereUniqueInput
+    update?: XOR<UserUpdateWithoutOwnedModulesInput, UserUncheckedUpdateWithoutOwnedModulesInput>
+  }
+
   export type ProjectUpdateManyWithoutModuleNestedInput = {
     create?: XOR<Enumerable<ProjectCreateWithoutModuleInput>, Enumerable<ProjectUncheckedCreateWithoutModuleInput>>
     connectOrCreate?: Enumerable<ProjectCreateOrConnectWithoutModuleInput>
@@ -5810,14 +5842,6 @@ export namespace Prisma {
     update?: Enumerable<ProjectUpdateWithWhereUniqueWithoutModuleInput>
     updateMany?: Enumerable<ProjectUpdateManyWithWhereWithoutModuleInput>
     deleteMany?: Enumerable<ProjectScalarWhereInput>
-  }
-
-  export type UserUpdateOneRequiredWithoutOwnedModulesNestedInput = {
-    create?: XOR<UserCreateWithoutOwnedModulesInput, UserUncheckedCreateWithoutOwnedModulesInput>
-    connectOrCreate?: UserCreateOrConnectWithoutOwnedModulesInput
-    upsert?: UserUpsertWithoutOwnedModulesInput
-    connect?: UserWhereUniqueInput
-    update?: XOR<UserUpdateWithoutOwnedModulesInput, UserUncheckedUpdateWithoutOwnedModulesInput>
   }
 
   export type UserUpdateManyWithoutModulesNestedInput = {
@@ -5948,6 +5972,7 @@ export namespace Prisma {
 
   export type ModuleCreateWithoutTeacherInput = {
     name: string
+    description: string
     Projects?: ProjectCreateNestedManyWithoutModuleInput
     Students?: UserCreateNestedManyWithoutModulesInput
   }
@@ -5955,6 +5980,7 @@ export namespace Prisma {
   export type ModuleUncheckedCreateWithoutTeacherInput = {
     id?: number
     name: string
+    description: string
     Projects?: ProjectUncheckedCreateNestedManyWithoutModuleInput
     Students?: UserUncheckedCreateNestedManyWithoutModulesInput
   }
@@ -5967,24 +5993,6 @@ export namespace Prisma {
   export type ModuleCreateManyTeacherInputEnvelope = {
     data: Enumerable<ModuleCreateManyTeacherInput>
     skipDuplicates?: boolean
-  }
-
-  export type ModuleCreateWithoutStudentsInput = {
-    name: string
-    Projects?: ProjectCreateNestedManyWithoutModuleInput
-    teacher: UserCreateNestedOneWithoutOwnedModulesInput
-  }
-
-  export type ModuleUncheckedCreateWithoutStudentsInput = {
-    id?: number
-    name: string
-    teacherId: number
-    Projects?: ProjectUncheckedCreateNestedManyWithoutModuleInput
-  }
-
-  export type ModuleCreateOrConnectWithoutStudentsInput = {
-    where: ModuleWhereUniqueInput
-    create: XOR<ModuleCreateWithoutStudentsInput, ModuleUncheckedCreateWithoutStudentsInput>
   }
 
   export type ProjectCreateWithoutTeacherInput = {
@@ -6010,6 +6018,26 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
+  export type ModuleCreateWithoutStudentsInput = {
+    name: string
+    description: string
+    teacher: UserCreateNestedOneWithoutOwnedModulesInput
+    Projects?: ProjectCreateNestedManyWithoutModuleInput
+  }
+
+  export type ModuleUncheckedCreateWithoutStudentsInput = {
+    id?: number
+    name: string
+    description: string
+    teacherId: number
+    Projects?: ProjectUncheckedCreateNestedManyWithoutModuleInput
+  }
+
+  export type ModuleCreateOrConnectWithoutStudentsInput = {
+    where: ModuleWhereUniqueInput
+    create: XOR<ModuleCreateWithoutStudentsInput, ModuleUncheckedCreateWithoutStudentsInput>
+  }
+
   export type ModuleUpsertWithWhereUniqueWithoutTeacherInput = {
     where: ModuleWhereUniqueInput
     update: XOR<ModuleUpdateWithoutTeacherInput, ModuleUncheckedUpdateWithoutTeacherInput>
@@ -6032,23 +6060,8 @@ export namespace Prisma {
     NOT?: Enumerable<ModuleScalarWhereInput>
     id?: IntFilter | number
     name?: StringFilter | string
+    description?: StringFilter | string
     teacherId?: IntFilter | number
-  }
-
-  export type ModuleUpsertWithWhereUniqueWithoutStudentsInput = {
-    where: ModuleWhereUniqueInput
-    update: XOR<ModuleUpdateWithoutStudentsInput, ModuleUncheckedUpdateWithoutStudentsInput>
-    create: XOR<ModuleCreateWithoutStudentsInput, ModuleUncheckedCreateWithoutStudentsInput>
-  }
-
-  export type ModuleUpdateWithWhereUniqueWithoutStudentsInput = {
-    where: ModuleWhereUniqueInput
-    data: XOR<ModuleUpdateWithoutStudentsInput, ModuleUncheckedUpdateWithoutStudentsInput>
-  }
-
-  export type ModuleUpdateManyWithWhereWithoutStudentsInput = {
-    where: ModuleScalarWhereInput
-    data: XOR<ModuleUpdateManyMutationInput, ModuleUncheckedUpdateManyWithoutModulesInput>
   }
 
   export type ProjectUpsertWithWhereUniqueWithoutTeacherInput = {
@@ -6078,8 +6091,25 @@ export namespace Prisma {
     teacherId?: IntFilter | number
   }
 
+  export type ModuleUpsertWithWhereUniqueWithoutStudentsInput = {
+    where: ModuleWhereUniqueInput
+    update: XOR<ModuleUpdateWithoutStudentsInput, ModuleUncheckedUpdateWithoutStudentsInput>
+    create: XOR<ModuleCreateWithoutStudentsInput, ModuleUncheckedCreateWithoutStudentsInput>
+  }
+
+  export type ModuleUpdateWithWhereUniqueWithoutStudentsInput = {
+    where: ModuleWhereUniqueInput
+    data: XOR<ModuleUpdateWithoutStudentsInput, ModuleUncheckedUpdateWithoutStudentsInput>
+  }
+
+  export type ModuleUpdateManyWithWhereWithoutStudentsInput = {
+    where: ModuleScalarWhereInput
+    data: XOR<ModuleUpdateManyMutationInput, ModuleUncheckedUpdateManyWithoutModulesInput>
+  }
+
   export type ModuleCreateWithoutProjectsInput = {
     name: string
+    description: string
     teacher: UserCreateNestedOneWithoutOwnedModulesInput
     Students?: UserCreateNestedManyWithoutModulesInput
   }
@@ -6087,6 +6117,7 @@ export namespace Prisma {
   export type ModuleUncheckedCreateWithoutProjectsInput = {
     id?: number
     name: string
+    description: string
     teacherId: number
     Students?: UserUncheckedCreateNestedManyWithoutModulesInput
   }
@@ -6127,6 +6158,7 @@ export namespace Prisma {
 
   export type ModuleUpdateWithoutProjectsInput = {
     name?: StringFieldUpdateOperationsInput | string
+    description?: StringFieldUpdateOperationsInput | string
     teacher?: UserUpdateOneRequiredWithoutOwnedModulesNestedInput
     Students?: UserUpdateManyWithoutModulesNestedInput
   }
@@ -6134,6 +6166,7 @@ export namespace Prisma {
   export type ModuleUncheckedUpdateWithoutProjectsInput = {
     id?: IntFieldUpdateOperationsInput | number
     name?: StringFieldUpdateOperationsInput | string
+    description?: StringFieldUpdateOperationsInput | string
     teacherId?: IntFieldUpdateOperationsInput | number
     Students?: UserUncheckedUpdateManyWithoutModulesNestedInput
   }
@@ -6162,6 +6195,30 @@ export namespace Prisma {
     modules?: ModuleUncheckedUpdateManyWithoutStudentsNestedInput
   }
 
+  export type UserCreateWithoutOwnedModulesInput = {
+    email: string
+    name: string
+    role: Role
+    password: string
+    projects?: ProjectCreateNestedManyWithoutTeacherInput
+    modules?: ModuleCreateNestedManyWithoutStudentsInput
+  }
+
+  export type UserUncheckedCreateWithoutOwnedModulesInput = {
+    id?: number
+    email: string
+    name: string
+    role: Role
+    password: string
+    projects?: ProjectUncheckedCreateNestedManyWithoutTeacherInput
+    modules?: ModuleUncheckedCreateNestedManyWithoutStudentsInput
+  }
+
+  export type UserCreateOrConnectWithoutOwnedModulesInput = {
+    where: UserWhereUniqueInput
+    create: XOR<UserCreateWithoutOwnedModulesInput, UserUncheckedCreateWithoutOwnedModulesInput>
+  }
+
   export type ProjectCreateWithoutModuleInput = {
     name: string
     description: string
@@ -6183,30 +6240,6 @@ export namespace Prisma {
   export type ProjectCreateManyModuleInputEnvelope = {
     data: Enumerable<ProjectCreateManyModuleInput>
     skipDuplicates?: boolean
-  }
-
-  export type UserCreateWithoutOwnedModulesInput = {
-    email: string
-    name: string
-    role: Role
-    password: string
-    modules?: ModuleCreateNestedManyWithoutStudentsInput
-    projects?: ProjectCreateNestedManyWithoutTeacherInput
-  }
-
-  export type UserUncheckedCreateWithoutOwnedModulesInput = {
-    id?: number
-    email: string
-    name: string
-    role: Role
-    password: string
-    modules?: ModuleUncheckedCreateNestedManyWithoutStudentsInput
-    projects?: ProjectUncheckedCreateNestedManyWithoutTeacherInput
-  }
-
-  export type UserCreateOrConnectWithoutOwnedModulesInput = {
-    where: UserWhereUniqueInput
-    create: XOR<UserCreateWithoutOwnedModulesInput, UserUncheckedCreateWithoutOwnedModulesInput>
   }
 
   export type UserCreateWithoutModulesInput = {
@@ -6233,6 +6266,30 @@ export namespace Prisma {
     create: XOR<UserCreateWithoutModulesInput, UserUncheckedCreateWithoutModulesInput>
   }
 
+  export type UserUpsertWithoutOwnedModulesInput = {
+    update: XOR<UserUpdateWithoutOwnedModulesInput, UserUncheckedUpdateWithoutOwnedModulesInput>
+    create: XOR<UserCreateWithoutOwnedModulesInput, UserUncheckedCreateWithoutOwnedModulesInput>
+  }
+
+  export type UserUpdateWithoutOwnedModulesInput = {
+    email?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    role?: EnumRoleFieldUpdateOperationsInput | Role
+    password?: StringFieldUpdateOperationsInput | string
+    projects?: ProjectUpdateManyWithoutTeacherNestedInput
+    modules?: ModuleUpdateManyWithoutStudentsNestedInput
+  }
+
+  export type UserUncheckedUpdateWithoutOwnedModulesInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    email?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    role?: EnumRoleFieldUpdateOperationsInput | Role
+    password?: StringFieldUpdateOperationsInput | string
+    projects?: ProjectUncheckedUpdateManyWithoutTeacherNestedInput
+    modules?: ModuleUncheckedUpdateManyWithoutStudentsNestedInput
+  }
+
   export type ProjectUpsertWithWhereUniqueWithoutModuleInput = {
     where: ProjectWhereUniqueInput
     update: XOR<ProjectUpdateWithoutModuleInput, ProjectUncheckedUpdateWithoutModuleInput>
@@ -6247,30 +6304,6 @@ export namespace Prisma {
   export type ProjectUpdateManyWithWhereWithoutModuleInput = {
     where: ProjectScalarWhereInput
     data: XOR<ProjectUpdateManyMutationInput, ProjectUncheckedUpdateManyWithoutProjectsInput>
-  }
-
-  export type UserUpsertWithoutOwnedModulesInput = {
-    update: XOR<UserUpdateWithoutOwnedModulesInput, UserUncheckedUpdateWithoutOwnedModulesInput>
-    create: XOR<UserCreateWithoutOwnedModulesInput, UserUncheckedCreateWithoutOwnedModulesInput>
-  }
-
-  export type UserUpdateWithoutOwnedModulesInput = {
-    email?: StringFieldUpdateOperationsInput | string
-    name?: StringFieldUpdateOperationsInput | string
-    role?: EnumRoleFieldUpdateOperationsInput | Role
-    password?: StringFieldUpdateOperationsInput | string
-    modules?: ModuleUpdateManyWithoutStudentsNestedInput
-    projects?: ProjectUpdateManyWithoutTeacherNestedInput
-  }
-
-  export type UserUncheckedUpdateWithoutOwnedModulesInput = {
-    id?: IntFieldUpdateOperationsInput | number
-    email?: StringFieldUpdateOperationsInput | string
-    name?: StringFieldUpdateOperationsInput | string
-    role?: EnumRoleFieldUpdateOperationsInput | Role
-    password?: StringFieldUpdateOperationsInput | string
-    modules?: ModuleUncheckedUpdateManyWithoutStudentsNestedInput
-    projects?: ProjectUncheckedUpdateManyWithoutTeacherNestedInput
   }
 
   export type UserUpsertWithWhereUniqueWithoutModulesInput = {
@@ -6303,6 +6336,7 @@ export namespace Prisma {
   export type ModuleCreateManyTeacherInput = {
     id?: number
     name: string
+    description: string
   }
 
   export type ProjectCreateManyTeacherInput = {
@@ -6314,6 +6348,7 @@ export namespace Prisma {
 
   export type ModuleUpdateWithoutTeacherInput = {
     name?: StringFieldUpdateOperationsInput | string
+    description?: StringFieldUpdateOperationsInput | string
     Projects?: ProjectUpdateManyWithoutModuleNestedInput
     Students?: UserUpdateManyWithoutModulesNestedInput
   }
@@ -6321,6 +6356,7 @@ export namespace Prisma {
   export type ModuleUncheckedUpdateWithoutTeacherInput = {
     id?: IntFieldUpdateOperationsInput | number
     name?: StringFieldUpdateOperationsInput | string
+    description?: StringFieldUpdateOperationsInput | string
     Projects?: ProjectUncheckedUpdateManyWithoutModuleNestedInput
     Students?: UserUncheckedUpdateManyWithoutModulesNestedInput
   }
@@ -6328,25 +6364,7 @@ export namespace Prisma {
   export type ModuleUncheckedUpdateManyWithoutOwnedModulesInput = {
     id?: IntFieldUpdateOperationsInput | number
     name?: StringFieldUpdateOperationsInput | string
-  }
-
-  export type ModuleUpdateWithoutStudentsInput = {
-    name?: StringFieldUpdateOperationsInput | string
-    Projects?: ProjectUpdateManyWithoutModuleNestedInput
-    teacher?: UserUpdateOneRequiredWithoutOwnedModulesNestedInput
-  }
-
-  export type ModuleUncheckedUpdateWithoutStudentsInput = {
-    id?: IntFieldUpdateOperationsInput | number
-    name?: StringFieldUpdateOperationsInput | string
-    teacherId?: IntFieldUpdateOperationsInput | number
-    Projects?: ProjectUncheckedUpdateManyWithoutModuleNestedInput
-  }
-
-  export type ModuleUncheckedUpdateManyWithoutModulesInput = {
-    id?: IntFieldUpdateOperationsInput | number
-    name?: StringFieldUpdateOperationsInput | string
-    teacherId?: IntFieldUpdateOperationsInput | number
+    description?: StringFieldUpdateOperationsInput | string
   }
 
   export type ProjectUpdateWithoutTeacherInput = {
@@ -6367,6 +6385,28 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     description?: StringFieldUpdateOperationsInput | string
     moduleId?: IntFieldUpdateOperationsInput | number
+  }
+
+  export type ModuleUpdateWithoutStudentsInput = {
+    name?: StringFieldUpdateOperationsInput | string
+    description?: StringFieldUpdateOperationsInput | string
+    teacher?: UserUpdateOneRequiredWithoutOwnedModulesNestedInput
+    Projects?: ProjectUpdateManyWithoutModuleNestedInput
+  }
+
+  export type ModuleUncheckedUpdateWithoutStudentsInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    name?: StringFieldUpdateOperationsInput | string
+    description?: StringFieldUpdateOperationsInput | string
+    teacherId?: IntFieldUpdateOperationsInput | number
+    Projects?: ProjectUncheckedUpdateManyWithoutModuleNestedInput
+  }
+
+  export type ModuleUncheckedUpdateManyWithoutModulesInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    name?: StringFieldUpdateOperationsInput | string
+    description?: StringFieldUpdateOperationsInput | string
+    teacherId?: IntFieldUpdateOperationsInput | number
   }
 
   export type ProjectCreateManyModuleInput = {

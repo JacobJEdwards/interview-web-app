@@ -95,6 +95,7 @@ exports.Prisma.AdminScalarFieldEnum = {
 exports.Prisma.ModuleScalarFieldEnum = {
   id: 'id',
   name: 'name',
+  description: 'description',
   teacherId: 'teacherId'
 };
 

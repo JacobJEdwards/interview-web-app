@@ -12,3 +12,5 @@ TODO: Finish
 - eventually submission
 
 - need to sort out selection logic look at the endpoints (query or params)
+
+- could check backend is running and throw error if not ? error should automatically be thrown via fetch -> func checkBackend -> await fetch(localhost:6060) -> will throw error if offline and redirect to error page **is this needed??** _maybe_
