@@ -10,3 +10,5 @@ TODO: Finish
 - Might need to add endpoints -> student id module id -> projetcs (might already be added)
 - sort out the typing
 - eventually submission
+
+- need to sort out selection logic look at the endpoints (query or params)
