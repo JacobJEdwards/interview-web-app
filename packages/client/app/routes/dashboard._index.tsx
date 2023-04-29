@@ -2,7 +2,7 @@ import { getUser, requireUser } from "../utils/session.server";
 import { getUserModules, getTeacherModules } from "../utils/modules.server";
 import type { LoaderArgs } from "@remix-run/node";
 import { useLoaderData } from "@remix-run/react";
-import { Role, type Module as ModuleType } from "server/types/generated/client";
+import { Role } from "server/types/generated/client";
 import Breadcrumbs from "~/components/Breadcrumbs";
 
 export async function loader({ request }: LoaderArgs) {

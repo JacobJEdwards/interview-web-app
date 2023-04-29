@@ -10,7 +10,7 @@ import type {
 } from "@prisma/client";
 import { Role } from "server/types/generated/client";
 import Project from "../components/Project";
-import { getUserInfo } from "../utils/user.service";
+import { getUserInfo } from "../utils/user.server";
 import Breadcrumbs, { type RouteData } from "~/components/Breadcrumbs";
 
 export const loader = async ({ params, request }: LoaderArgs) => {
