@@ -55,6 +55,7 @@ class ModulesController {
             const module = await prisma.module.create({
                 data: {
                     name: req.body.name,
+                    description: req.body.description,
                     teacherId: Number(req.body.teacherId),
                 },
             });
