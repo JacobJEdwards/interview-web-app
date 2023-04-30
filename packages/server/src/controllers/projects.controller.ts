@@ -44,12 +44,6 @@ class ProjectsController {
         try {
             const { projectId } = req.params;
 
-            const validation = idSchema.safeParse(projectId);
-
-            if (!validation.success) {
-                res.status(400).json({ message: validation.error });
-            }
-
             const project = await primsa.project.findUnique({
                 where: {
                     id: Number(projectId),

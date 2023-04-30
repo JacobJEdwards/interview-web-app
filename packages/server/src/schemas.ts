@@ -60,3 +60,17 @@ export const getProjectsSchema = z.object({
 //   updateModule: updateModuleSchema,
 //   createProject: createProjectSchema,
 // };);
+//
+const schemas = {
+  login: LoginSchema,
+  id: idSchema,
+  name: nameSchema,
+  description: descriptionSchema,
+  getModule: getModuleSchema,
+  createModule: createModuleSchema,
+  updateModule: updateModuleSchema,
+  getProjects: getProjectsSchema,
+  createProject: createProjectSchema,
+};
+
+export default schemas;

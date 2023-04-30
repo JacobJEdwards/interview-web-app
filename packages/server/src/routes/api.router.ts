@@ -1,4 +1,5 @@
 import express from "express";
+import { idParamValidation } from "../validation";
 
 import ProjectController from "../controllers/projects.controller";
 import ModulesController from "../controllers/modules.controller";
@@ -12,6 +13,12 @@ const router = express.Router();
  * TODO: Add authorization middle ware
  * TODO: Add validation middle ware
  */
+
+// type checking on params using zod
+router.param("userId", idParamValidation);
+router.param("moduleId", idParamValidation);
+router.param("projectId", idParamValidation);
+router.param("teacherId", idParamValidation);
 
 // Basic CRUD routes
 
@@ -40,17 +47,17 @@ router.delete("/users/:userId", UserController.deleteUser);
 router.get("/users/:userId/modules", UserController.getModules);
 router.get("/users/:userId/projects", UserController.getProjects);
 router.get(
-    "/users/:userId/:moduleId/projects",
-    UserController.getStudentModuleProjects
+  "/users/:userId/:moduleId/projects",
+  UserController.getStudentModuleProjects
 ); // is this ok?
 
 router.post(
-    "/users/:userId/:moduleId/:projectId/select",
-    UserController.selectProject
+  "/users/:userId/:moduleId/:projectId/select",
+  UserController.selectProject
 );
 router.get(
-    "/users/:userId/:projectId/verify",
-    UserController.isProjectSelected
+  "/users/:userId/:projectId/verify",
+  UserController.isProjectSelected
 );
 
 export default router;

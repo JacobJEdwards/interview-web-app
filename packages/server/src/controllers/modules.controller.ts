@@ -51,12 +51,6 @@ class ModulesController {
         try {
             const { moduleId } = req.params;
 
-            const validation = idSchema.safeParse(moduleId);
-
-            if (!validation.success) {
-                res.status(400).json({ message: validation.error });
-            }
-
             const module = await prisma.module.findUnique({
                 where: {
                     id: Number(moduleId),
