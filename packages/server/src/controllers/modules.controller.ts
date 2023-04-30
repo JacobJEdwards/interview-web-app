@@ -99,7 +99,14 @@ class ModulesController {
     // update module
     public async updateModule(req: Request, res: Response, next: NextFunction) {
         try {
-            const validation = updateModuleSchema.safeParse(req.body);
+            const { moduleId } = req.params;
+            const validation = updateModuleSchema.safeParse({
+                name: req.body.name,
+                moduleId: moduleId,
+                description: req.body.description,
+                teacherId: req.body.teacherId,
+            }
+            );
 
             if (!validation.success) {
                 res.status(400).json({ message: validation.error });
@@ -111,6 +118,8 @@ class ModulesController {
                 },
                 data: {
                     name: req.body.name,
+                    description: req.body.description,
+                    teacherId: Number(req.body.teacherId),
                 },
             });
 

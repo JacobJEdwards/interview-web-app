@@ -1,6 +1,7 @@
 import { Request, Response, NextFunction } from "express";
 import primsa from "../utils/db";
-import { z } from "zod";
+import { getProjectsSchema, idSchema, createProjectSchema } from "../schemas";
+
 
 class ProjectsController {
     // basic CRUD operations
@@ -8,7 +9,30 @@ class ProjectsController {
     // get all projects
     public async getProjects(req: Request, res: Response, next: NextFunction) {
         try {
-            const projects = await primsa.project.findMany();
+            const teacherId = req.query.teacherId
+                ? Number(req.query.teacherId)
+                : undefined;
+
+            const name = req.query.name ? String(req.query.name) : undefined;
+            const moduleId = req.query.moduleId ? Number(req.query.moduleId) : undefined;
+
+            const validation = getProjectsSchema.safeParse({
+                teacherId: teacherId,
+                name: name,
+                moduleId: moduleId,
+            });
+
+            if (!validation.success) {
+                res.status(400).json({ message: validation.error });
+            }
+
+            const projects = await primsa.project.findMany({
+                where: {
+                    teacherId: teacherId,
+                    name: name,
+                    moduleId: moduleId,
+                },
+            });
             res.status(200).json(projects);
         } catch (err) {
             next(err);
@@ -18,9 +42,17 @@ class ProjectsController {
     // get specific project
     public async getProject(req: Request, res: Response, next: NextFunction) {
         try {
+            const { projectId } = req.params;
+
+            const validation = idSchema.safeParse(projectId);
+
+            if (!validation.success) {
+                res.status(400).json({ message: validation.error });
+            }
+
             const project = await primsa.project.findUnique({
                 where: {
-                    id: Number(req.params.projectId),
+                    id: Number(projectId),
                 },
             });
 
@@ -36,6 +68,12 @@ class ProjectsController {
     // create new project
     public async createProject(req: Request, res: Response, next: NextFunction) {
         try {
+            const validation = createProjectSchema.safeParse(req.body);
+
+            if (!validation.success) {
+                res.status(400).json({ message: validation.error });
+            }
+
             const project = await primsa.project.create({
                 data: {
                     name: req.body.name,
@@ -76,6 +114,14 @@ class ProjectsController {
     // delete project
     public async deleteProject(req: Request, res: Response, next: NextFunction) {
         try {
+            const { projectId } = req.params;
+
+            const validation = idSchema.safeParse(projectId);
+
+            if (!validation.success) {
+                res.status(400).json({ message: validation.error });
+            }
+
             const project = await primsa.project.delete({
                 where: {
                     id: Number(req.params.projectId),

@@ -1,6 +1,7 @@
 import { Request, Response, NextFunction } from "express";
 import { Role } from "../../types/generated/client/";
 import prisma from "../utils/db";
+import { idSchema } from "../schemas";
 
 class UserController {
     // get all users
@@ -33,9 +34,17 @@ class UserController {
     // get user by id (no password)
     public async getUser(req: Request, res: Response, next: NextFunction) {
         try {
+            const { userId } = req.params;
+
+            const validation = idSchema.safeParse(userId);
+
+            if (!validation.success) {
+                return res.status(400).json({ message: validation.error });
+            }
+
             const user = await prisma.user.findUnique({
                 where: {
-                    id: Number(req.params.userId),
+                    id: Number(userId),
                 },
                 select: {
                     id: true,
@@ -113,6 +122,14 @@ class UserController {
     // get a users modules
     public async getModules(req: Request, res: Response, next: NextFunction) {
         try {
+            const { userId } = req.params;
+
+            const validation = idSchema.safeParse(userId);
+
+            if (!validation.success) {
+                return res.status(400).json({ message: validation.error });
+            }
+
             const modules = await prisma.user
                 .findUnique({
                     where: { id: Number(req.params.userId) },
@@ -132,6 +149,14 @@ class UserController {
     // get a users projects
     public async getProjects(req: Request, res: Response, next: NextFunction) {
         try {
+            const { userId } = req.params;
+
+            const validation = idSchema.safeParse(userId);
+
+            if (!validation.success) {
+                return res.status(400).json({ message: validation.error });
+            }
+
             const projects = await prisma.user
                 .findUnique({
                     where: { id: Number(req.params.userId) },
