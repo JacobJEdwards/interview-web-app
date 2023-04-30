@@ -16,3 +16,5 @@ TODO: Finish
 - could check backend is running and throw error if not ? error should automatically be thrown via fetch -> func checkBackend -> await fetch(localhost:6060) -> will throw error if offline and redirect to error page **is this needed??** _maybe_
 
 - ERROR!!! when a student selects a project they become the owner? need to look into the relation / how im connecting a student to a project
+
+- mMaybe encrypt password both sides? so that a plaintext password is never seen on the server??

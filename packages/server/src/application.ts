@@ -1,8 +1,6 @@
 import type { Application } from "express";
 import express, { Router } from "express";
 import { createServer, Server } from "http";
-import schemas from "./schemas";
-import type { Request, Response, NextFunction } from "express";
 
 export default class App {
   public app: Application;
@@ -21,12 +19,9 @@ export default class App {
     this.app.set("port", this.port);
 
     this.middlewares(middleware);
-    // id validation -> maybe extract to a middleware??
-    //
 
     this.apiRoutes(apiRoutes);
     this.authRoutes(authRoutes);
-
 
     this.otherRoutes(otherRoutes);
   }

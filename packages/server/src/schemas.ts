@@ -10,8 +10,8 @@ export const LoginSchema = z.object({
 
 export const idSchema = z.coerce.number().int().positive();
 
-export const nameSchema = z.string().min(1).max(255);
-export const descriptionSchema = z.string().min(1).max(255);
+export const nameSchema = z.string().trim().min(1).max(255);
+export const descriptionSchema = z.string().trim().min(1).max(255);
 
 export const getModuleSchema = z.object({
   name: nameSchema.optional(),
@@ -34,7 +34,6 @@ export const createProjectSchema = z.object({
   name: nameSchema,
   description: descriptionSchema,
   teacherId: idSchema,
-  moduleId: idSchema,
 });
 
 export const getProjectsSchema = z.object({

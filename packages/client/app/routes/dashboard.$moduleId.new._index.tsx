@@ -1,7 +1,7 @@
 import { LoaderArgs, redirect } from "@remix-run/node";
 import { getUserId, requireUserType } from "~/utils/session.server";
 import { Role } from "server/types/generated/client";
-import { Form } from "@remix-run/react";
+import { Form, useActionData } from "@remix-run/react";
 import { newProject } from "~/utils/projects.server";
 import { useLoaderData } from "@remix-run/react";
 import Breadcrumbs, { RouteData } from "~/components/Breadcrumbs";
@@ -51,15 +51,23 @@ export const action = async ({ request, params }: LoaderArgs) => {
     const name = formData.get("name") as string;
     const description = formData.get("description") as string;
 
-    const project = await newProject(name, description, Number(moduleId), userId);
+    const [error, project] = await newProject(
+        name,
+        description,
+        Number(moduleId),
+        userId
+    );
 
     if (project) {
         return redirect(`/dashboard/${moduleId}`);
     }
+    // look at logout see how to fix it
+    return error;
 };
 
 const NewProject = () => {
     const { moduleId, crumbs } = useLoaderData();
+    const actionData = useActionData<typeof action>();
     return (
         <main>
             <Breadcrumbs crumbs={crumbs} />
@@ -69,6 +77,24 @@ const NewProject = () => {
             <div className="divider"></div>
             <div className="flex flex-col items-center justify-center">
                 <Form method="post" reloadDocument className="w-full form-control">
+                    {actionData && (
+                        <div className="alert alert-error shadow-lg mt-4 mb-4 flex items-centre justify-center">
+                            <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                className="stroke-current flex-shrink-0 h-6 w-6"
+                                fill="none"
+                                viewBox="0 0 24 24"
+                            >
+                                <path
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
+                                    strokeWidth="2"
+                                    d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"
+                                />
+                            </svg>
+                            <span className="font-semibold">Invalid name or description</span>
+                        </div>
+                    )}
                     <div className="mb-6 w-full">
                         <label htmlFor="name" className="label">
                             <span className="label-text font-semibold">Project name</span>
