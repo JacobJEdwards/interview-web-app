@@ -1,5 +1,6 @@
 import type { Module } from "server/types/generated/client";
 import { getUserId } from "./session.server";
+import type { Request } from "@remix-run/node";
 
 export const getModules = async () => {
     try {

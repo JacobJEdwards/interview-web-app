@@ -1,4 +1,5 @@
 import type { Role, Project } from "server/types/generated/client";
+
 export interface UserInfo {
     id: number;
     name: string;
