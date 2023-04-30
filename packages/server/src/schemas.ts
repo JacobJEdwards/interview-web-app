@@ -2,13 +2,9 @@ import { z } from "zod";
 
 // auth
 export const LoginSchema = z.object({
-  email: z
-    .string()
-    .email({
-      message: "Invalidation email",
-    })
-    .trim()
-    .toLowerCase(),
+  email: z.string().trim().email({
+    message: "Invalidation email",
+  }),
   password: z.string(),
 });
 
@@ -29,10 +25,9 @@ export const createModuleSchema = z.object({
 });
 
 export const updateModuleSchema = z.object({
-  name: nameSchema,
-  moduleId: idSchema,
-  description: descriptionSchema,
-  teacherId: idSchema,
+  name: nameSchema.optional(),
+  description: descriptionSchema.optional(),
+  teacherId: idSchema.optional(),
 });
 
 export const createProjectSchema = z.object({
@@ -48,19 +43,6 @@ export const getProjectsSchema = z.object({
   moduleId: idSchema.optional(),
 });
 
-// could do like this then default export them schemas.login.parse etc
-// const schemas = {
-//   login: loginSchema,
-//   id: idSchema,
-//   name: nameSchema,
-//   description: descriptionSchema,
-//   email: emailSchema,
-//   getModule: getModuleSchema,
-//   createModule: createModuleSchema,
-//   updateModule: updateModuleSchema,
-//   createProject: createProjectSchema,
-// };);
-//
 const schemas = {
   login: LoginSchema,
   id: idSchema,

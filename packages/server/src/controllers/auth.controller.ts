@@ -2,6 +2,8 @@ import { Request, Response, NextFunction } from "express";
 import prisma from "../utils/db";
 import generateToken from "../utils/generateToken";
 
+import bcrypt from "bcryptjs";
+
 class AuthController {
   public async login(req: Request, res: Response, next: NextFunction) {
     try {
@@ -16,9 +18,13 @@ class AuthController {
       if (!user) {
         return res.status(404).json({ message: "User not found" });
       }
-      if (user.password !== password) {
-        return res.status(401).json({ message: "Incorrect password" });
+
+      const isMatch = await bcrypt.compare(password, user.password);
+
+      if (!isMatch) {
+        return res.status(400).json({ message: "Invalid credentials" });
       }
+
       const token = generateToken(user);
 
       res.status(200).json({ message: "Login successful", token, user });

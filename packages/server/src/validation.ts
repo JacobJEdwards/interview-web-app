@@ -16,27 +16,27 @@ import type { Request, Response, NextFunction } from "express";
 } */
 
 // gets the id from the params and validates it
-export const idParamValidation = async (
+export const idParamValidation = (
   req: Request,
   res: Response,
   next: NextFunction,
   value: string
 ) => {
   try {
-    const validation = await schemas.id.parseAsync(value);
+    const validation = schemas.id.parse(value);
     next();
   } catch (error: unknown) {
     res.status(400).json({ error: error });
   }
 };
 
-export const loginValidation = async (
+export const loginValidation = (
   req: Request,
   res: Response,
   next: NextFunction
 ) => {
   try {
-    const validation = await schemas.login.parseAsync(req.body);
+    const validation = schemas.login.parse(req.body);
     req.body = validation;
     next();
   } catch (error: unknown) {
