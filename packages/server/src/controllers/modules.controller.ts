@@ -1,5 +1,12 @@
 import { Request, Response, NextFunction } from "express";
 import prisma from "../utils/db";
+import {
+    getModuleSchema,
+    createModuleSchema,
+    updateModuleSchema,
+    createProjectSchema,
+    idSchema,
+} from "../schemas";
 
 class ModulesController {
     // basic CRUD operations
@@ -12,6 +19,15 @@ class ModulesController {
                 : undefined;
 
             const name = req.query.name ? String(req.query.name) : undefined;
+
+            const validation = getModuleSchema.safeParse({
+                name: name,
+                teacherId: teacherId,
+            });
+
+            if (!validation.success) {
+                res.status(400).json({ message: validation.error });
+            }
 
             const modules = await prisma.module.findMany({
                 where: {
@@ -33,9 +49,17 @@ class ModulesController {
     // get specific module
     public async getModule(req: Request, res: Response, next: NextFunction) {
         try {
+            const { moduleId } = req.params;
+
+            const validation = idSchema.safeParse(moduleId);
+
+            if (!validation.success) {
+                res.status(400).json({ message: validation.error });
+            }
+
             const module = await prisma.module.findUnique({
                 where: {
-                    id: Number(req.params.moduleId),
+                    id: Number(moduleId),
                 },
             });
 
@@ -52,6 +76,12 @@ class ModulesController {
     // create module
     public async createModule(req: Request, res: Response, next: NextFunction) {
         try {
+            const validation = createModuleSchema.safeParse(req.body);
+
+            if (!validation.success) {
+                res.status(400).json({ message: validation.error });
+            }
+
             const module = await prisma.module.create({
                 data: {
                     name: req.body.name,
@@ -69,6 +99,12 @@ class ModulesController {
     // update module
     public async updateModule(req: Request, res: Response, next: NextFunction) {
         try {
+            const validation = updateModuleSchema.safeParse(req.body);
+
+            if (!validation.success) {
+                res.status(400).json({ message: validation.error });
+            }
+
             const module = await prisma.module.update({
                 where: {
                     id: Number(req.params.moduleId),
@@ -91,9 +127,17 @@ class ModulesController {
     // delete module
     public async deleteModule(req: Request, res: Response, next: NextFunction) {
         try {
+            const { moduleId } = req.params;
+
+            const validation = idSchema.safeParse(moduleId);
+
+            if (!validation.success) {
+                res.status(400).json({ message: validation.error });
+            }
+
             const module = await prisma.module.delete({
                 where: {
-                    id: Number(req.params.id),
+                    id: Number(moduleId),
                 },
             });
 
@@ -106,9 +150,17 @@ class ModulesController {
     // get a module's projects
     public async getProjects(req: Request, res: Response, next: NextFunction) {
         try {
+            const { moduleId } = req.params;
+
+            const validation = idSchema.safeParse(moduleId);
+
+            if (!validation.success) {
+                res.status(400).json({ message: validation.error });
+            }
+
             const projects = await prisma.project.findMany({
                 where: {
-                    moduleId: Number(req.params.moduleId),
+                    moduleId: Number(moduleId),
                 },
             });
 
@@ -125,6 +177,12 @@ class ModulesController {
     // create and connect project to module
     public async createProject(req: Request, res: Response, next: NextFunction) {
         try {
+            const validation = createProjectSchema.safeParse(req.body);
+
+            if (!validation.success) {
+                res.status(400).json({ message: validation.error });
+            }
+
             const project = await prisma.project.create({
                 data: {
                     name: req.body.name as string,

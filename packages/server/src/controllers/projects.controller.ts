@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction } from "express";
 import primsa from "../utils/db";
+import { z } from "zod";
 
-// Path: projects.ts
 class ProjectsController {
     // basic CRUD operations
 
@@ -15,7 +15,7 @@ class ProjectsController {
         }
     }
 
-    // get specific project 
+    // get specific project
     public async getProject(req: Request, res: Response, next: NextFunction) {
         try {
             const project = await primsa.project.findUnique({

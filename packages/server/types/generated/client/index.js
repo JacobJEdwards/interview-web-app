@@ -80,8 +80,8 @@ const regularDirname = hasDirname && fs.existsSync(path.join(__dirname, 'schema.
 
 // if the client has been bundled, we need to look for the folders
 const foundDirname = !regularDirname && findSync(process.cwd(), [
-    "packages/server/types/generated/client",
-    "server/types/generated/client",
+    "../../server/types/generated/client",
+    "../server/types/generated/client",
 ], ['d'], ['d'], 1)[0]
 
 const dirname = regularDirname || foundDirname || __dirname
@@ -174,8 +174,7 @@ const config = {
     "isCustomOutput": true
   },
   "relativeEnvPaths": {
-    "rootEnvPath": null,
-    "schemaEnvPath": "../../../../../.env"
+    "rootEnvPath": null
   },
   "relativePath": "../../../src/prisma",
   "clientVersion": "4.13.0",
@@ -184,7 +183,8 @@ const config = {
     "db"
   ],
   "activeProvider": "postgresql",
-  "dataProxy": false
+  "dataProxy": false,
+  "postinstall": true
 }
 config.dirname = dirname
 config.document = dmmf
@@ -205,6 +205,6 @@ exports.PrismaClient = PrismaClient
 Object.assign(exports, Prisma)
 
 path.join(__dirname, "libquery_engine-darwin.dylib.node");
-path.join(process.cwd(), "packages/server/types/generated/client/libquery_engine-darwin.dylib.node")
+path.join(process.cwd(), "../../server/types/generated/client/libquery_engine-darwin.dylib.node")
 path.join(__dirname, "schema.prisma");
-path.join(process.cwd(), "packages/server/types/generated/client/schema.prisma")
+path.join(process.cwd(), "../../server/types/generated/client/schema.prisma")

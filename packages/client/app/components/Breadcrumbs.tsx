@@ -16,7 +16,16 @@ const Breadcrumbs: FC<Props> = ({ crumbs }) => {
       <ul>
         {crumbs.map((crumb: RouteData, index: number) => (
           <li key={index}>
-            <Link to={crumb.url}>{crumb.name}</Link>
+            <Link
+              className={
+                index === crumbs.length - 1
+                  ? "opacity-80 hover:opacity-90 font-semibold"
+                  : "opacity-60 hover:opacity-90 font-light"
+              }
+              to={crumb.url}
+            >
+              {crumb.name}
+            </Link>
           </li>
         ))}
       </ul>

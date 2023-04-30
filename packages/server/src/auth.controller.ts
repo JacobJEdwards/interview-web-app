@@ -16,14 +16,14 @@ class AuthController {
 
             const user = await prisma.user.findUnique({
                 where: {
-                    email: validation.data.email,
+                    email,
                 },
             });
 
             if (!user) {
                 return res.status(404).json({ message: "User not found" });
             }
-            if (user.password !== validation.data.password) {
+            if (user.password !== password) {
                 return res.status(401).json({ message: "Incorrect password" });
             }
             const token = generateToken(user);

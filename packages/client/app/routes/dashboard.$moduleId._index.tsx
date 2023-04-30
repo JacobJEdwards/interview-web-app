@@ -56,10 +56,12 @@ export default function DashboardModule() {
             {projects && projects?.length !== 0 ? (
                 <ul className="list-disc">
                     {projects.map((project: ProjectType) => (
-                        <li key={project.id} className="m-4">
-                            <Project {...project} />
+                        <>
+                            <li key={project.id} className="m-4">
+                                <Project {...project} />
+                            </li>
                             <div className="divider"></div>
-                        </li>
+                        </>
                     ))}
                 </ul>
             ) : (
