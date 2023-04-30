@@ -1,13 +1,15 @@
 {
+    "extends": "../../tsconfig.json",
     "compilerOptions": {
-        "forceConsistentCasingInFileNames": true,
-        "module": "commonjs",
-        "esModuleInterop": true,
-        "target": "es6",
+        "rootDir": ".",
         "outDir": "./dist",
-        "rootDir": "./src",
-        "strict": true,
-        "skipLibCheck": true
+        "baseUrl": ".",
+        "sourceMap": true,
+        "resolveJsonModule": true,
+        "composite": true,
+        "declaration": true,
+        "declarationMap": true,
+        "allowSyntheticDefaultImports": true
     },
     "include": [
         "src/**/*",
@@ -15,6 +17,7 @@
     ],
     "exclude": [
         "node_modules",
-        "**/*.spec.ts"
+        "**/*.spec.ts",
+        "dist"
     ]
 }
