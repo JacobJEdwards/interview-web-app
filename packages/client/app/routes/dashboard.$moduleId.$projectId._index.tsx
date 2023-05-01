@@ -4,21 +4,22 @@ import {
   selectProject,
   isProjectSelected,
 } from "~/utils/user.server";
-import {Form, useLoaderData} from "@remix-run/react";
-import {Role} from "server/types/generated/client";
-import {requireUser, getUserId} from "~/utils/session.server";
-import {getProject, deleteProject} from "~/utils/projects.server";
-import {redirect} from "@remix-run/node";
+import { Form, useLoaderData } from "@remix-run/react";
+import { Role } from "server/types/generated/client";
+import { requireUser, getUserId } from "~/utils/session.server";
+import { getProject, deleteProject } from "~/utils/projects.server";
+import { redirect } from "@remix-run/node";
 import Breadcrumbs, { type RouteData } from "~/components/Breadcrumbs";
+import invariant from "tiny-invariant";
 
 export const loader = async ({ params, request }: LoaderArgs) => {
-  await requireUser(request);
+  invariant(params.moduleId, "Expected moduleId to be defined");
+  invariant(params.projectId, "Expected projectId to be defined");
 
   const { moduleId, projectId } = params;
 
-  if (!module || !projectId) {
-    return redirect(`/dashboard/${moduleId}`);
-  }
+
+  await requireUser(request);
 
   const project = await getProject(projectId);
 

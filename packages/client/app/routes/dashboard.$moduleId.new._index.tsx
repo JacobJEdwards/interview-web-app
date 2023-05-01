@@ -4,11 +4,14 @@ import { Role } from "server/types/generated/client";
 import { Form, useActionData, useLoaderData } from "@remix-run/react";
 import { newProject } from "~/utils/projects.server";
 import Breadcrumbs, { RouteData } from "~/components/Breadcrumbs";
+import invariant from "tiny-invariant";
 
 export const loader = async ({ request, params }: LoaderArgs) => {
+    invariant(params.moduleId, "Expected moduleId to be defined");
+    const { moduleId } = params;
+
     await requireUserType(request, Role.TEACHER);
 
-    const { moduleId } = params;
     const { userId, userRole } = await getUserId(request);
 
     if (!moduleId) {

@@ -4,6 +4,7 @@ import Module from "~/components/Module";
 import { type LoaderArgs, json } from "@remix-run/node";
 import { getUser, requireUser } from "~/utils/session.server";
 import { getTeacherModules, getUserModules } from "~/utils/modules.server";
+import { redirect } from "@remix-run/node";
 
 export async function loader({ request }: LoaderArgs) {
     await requireUser(request);
@@ -60,3 +61,8 @@ export default function Dashboard() {
         </div>
     );
 }
+
+export function ErrorBoundary({ error }: { error: Error }) {
+    return redirect("/dashboard");
+}
+

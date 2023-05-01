@@ -12,12 +12,15 @@ import { Role } from "server/types/generated/client";
 import Project from "../components/Project";
 import { getUserInfo } from "../utils/user.server";
 import Breadcrumbs, { type RouteData } from "~/components/Breadcrumbs";
+import invariant from "tiny-invariant";
 
 export const loader = async ({ params, request }: LoaderArgs) => {
-    await requireUser(request);
-    const { userId, userRole } = await getUserId(request);
-
+    invariant(params.moduleId, "Expected moduleId to be defined");
     const { moduleId } = params;
+
+    await requireUser(request);
+
+    const { userId, userRole } = await getUserId(request);
     const module: ModuleType = await getModule(Number(moduleId));
     const projects: ProjectType[] | null = await getModuleProjects(
         Number(moduleId)
