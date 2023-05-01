@@ -30,8 +30,10 @@ class ProjectsController {
             const projects = await primsa.project.findMany({
                 where: {
                     teacherId,
-                    name,
                     moduleId,
+                    name: {
+                        contains: name,
+                    },
                 },
             });
             return res.status(200).json(projects);
