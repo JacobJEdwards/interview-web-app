@@ -1,9 +1,6 @@
-import { Form } from "@remix-run/react";
-import type { ActionArgs, LoaderArgs } from "@remix-run/node";
-import { useActionData, useSearchParams } from "@remix-run/react";
-import { redirect } from "@remix-run/node";
-import { createUserSession, login, getUserId } from "~/utils/session.server";
-import { json } from "@remix-run/node";
+import {Form, useActionData, useSearchParams} from "@remix-run/react";
+import {type ActionArgs, type LoaderArgs, json, redirect} from "@remix-run/node";
+import {createUserSession, login, getUserId} from "~/utils/session.server";
 
 const validateUrl = (url: string) => {
     const urls = ["/dashboard", "/profile", "/settings"];
@@ -14,7 +11,7 @@ const validateUrl = (url: string) => {
 };
 
 export const loader = async ({ request }: LoaderArgs) => {
-    // to check if user if logged in -> logout
+    // to check if user is logged in -> logout
     const { userId } = await getUserId(request);
     if (userId) {
         return redirect("/dashboard");

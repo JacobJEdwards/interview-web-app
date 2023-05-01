@@ -1,4 +1,4 @@
-import type { Role, Project } from "server/types/generated/client";
+import type {Project, Role} from "server/types/generated/client";
 
 export interface UserInfo {
     id: number;
@@ -20,8 +20,7 @@ export const getUserInfo = async (id: number): Promise<UserInfo | null> => {
             return null;
         }
 
-        const data = await response.json();
-        return data;
+        return await response.json();
     } catch (error) {
         return null;
     }
@@ -47,8 +46,7 @@ export const selectProject = async (
             return null;
         }
 
-        const data = await response.json();
-        return data;
+        return await response.json();
     } catch (error) {
         return null;
     }
@@ -73,8 +71,7 @@ export const isProjectSelected = async (
             return false;
         }
 
-        const data = await response.json();
-        return data;
+        return await response.json();
     } catch (error) {
         return false;
     }
@@ -99,8 +96,7 @@ export const moduleProjectSelected = async (
             return null;
         }
 
-        const data = await response.json();
-        return data;
+        return await response.json();
     } catch (error) {
         return null;
     }
@@ -121,8 +117,7 @@ export const getUsersByRole = async (
             return null;
         }
 
-        const data = await response.json();
-        return data;
+        return await response.json();
     } catch (error) {
         return null;
     }

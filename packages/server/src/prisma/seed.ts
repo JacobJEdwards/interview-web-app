@@ -1,18 +1,17 @@
-import { PrismaClient } from "../../types/generated/client";
-import { Role, User, Module } from "../../types/generated/client";
+import {PrismaClient, Role, User, Module} from "../../types/generated/client";
 const db = new PrismaClient();
 
-interface UserType extends Omit<User, "id"> { }
-interface ModuleType extends Omit<Module, "id" | "teacherId"> { }
+type UserType = Omit<User, "id">
+type ModuleType = Omit<Module, "id" | "teacherId">
 
 async function createUser(user: UserType) {
-    return await db.user.create({
+    return db.user.create({
         data: user,
     });
 }
 
 async function createModule(module: ModuleType, teacherId: number) {
-    return await db.module.create({
+    return db.module.create({
         data: {
             ...module,
             teacherId,
@@ -21,7 +20,7 @@ async function createModule(module: ModuleType, teacherId: number) {
 }
 
 async function addModuleToUser(userId: number, moduleId: number) {
-    return await db.user.update({
+    return db.user.update({
         where: {
             id: userId,
         },

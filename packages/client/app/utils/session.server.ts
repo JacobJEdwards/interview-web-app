@@ -142,7 +142,7 @@ export async function getUser(request: Request) {
         try {
             const response = await fetch(`http://localhost:6060/api/users/${userId}`);
             if (!response.ok) {
-                throw logout(request);
+                throw await logout(request);
             }
 
             const json: User = await response.json();
@@ -154,7 +154,7 @@ export async function getUser(request: Request) {
                 email: json.email,
             };
         } catch (error) {
-            throw logout(request);
+            throw await logout(request);
         }
     }
 }

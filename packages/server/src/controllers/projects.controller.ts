@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from "express";
 import primsa from "../utils/db";
-import { getProjectsSchema, idSchema, createProjectSchema } from "../schemas";
+import { getProjectsSchema, createProjectSchema } from "../schemas";
 
 
 class ProjectsController {
@@ -113,7 +113,7 @@ class ProjectsController {
 
             const project = await primsa.project.delete({
                 where: {
-                    id: Number(req.params.projectId),
+                    id: Number(projectId),
                 },
             });
             return res.status(200).json(project);

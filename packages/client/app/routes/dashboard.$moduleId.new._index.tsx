@@ -1,9 +1,8 @@
-import { LoaderArgs, redirect } from "@remix-run/node";
+import { type LoaderArgs, redirect, json } from "@remix-run/node";
 import { getUserId, requireUserType } from "~/utils/session.server";
 import { Role } from "server/types/generated/client";
-import { Form, useActionData } from "@remix-run/react";
+import { Form, useActionData, useLoaderData } from "@remix-run/react";
 import { newProject } from "~/utils/projects.server";
-import { useLoaderData } from "@remix-run/react";
 import Breadcrumbs, { RouteData } from "~/components/Breadcrumbs";
 
 export const loader = async ({ request, params }: LoaderArgs) => {
@@ -13,7 +12,7 @@ export const loader = async ({ request, params }: LoaderArgs) => {
     const { userId, userRole } = await getUserId(request);
 
     if (!moduleId) {
-        return null;
+        return redirect(`/dashboard`);
     }
 
     const crumbs = [
@@ -31,16 +30,16 @@ export const loader = async ({ request, params }: LoaderArgs) => {
         },
     ] as RouteData[];
 
-    return {
+    return json({
         moduleId,
         userId,
         userRole,
         crumbs,
-    };
+    });
 };
 
 export const action = async ({ request, params }: LoaderArgs) => {
-    const { userId, userRole } = await getUserId(request);
+    const { userId } = await getUserId(request);
     const { moduleId } = params;
 
     if (!moduleId) {
@@ -66,7 +65,7 @@ export const action = async ({ request, params }: LoaderArgs) => {
 };
 
 const NewProject = () => {
-    const { moduleId, crumbs } = useLoaderData();
+    const { moduleId, crumbs } = useLoaderData<typeof loader>();
     const actionData = useActionData<typeof action>();
     return (
         <main>

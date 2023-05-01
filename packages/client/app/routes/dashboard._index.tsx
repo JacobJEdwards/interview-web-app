@@ -1,6 +1,6 @@
-import { getUser, requireUser } from "../utils/session.server";
-import { getUserModules, getTeacherModules } from "../utils/modules.server";
-import type { LoaderArgs } from "@remix-run/node";
+import { getUser, requireUser } from "~/utils/session.server";
+import {getTeacherModules } from "~/utils/modules.server";
+import { type LoaderArgs, json } from "@remix-run/node";
 import { useLoaderData } from "@remix-run/react";
 import { Role } from "server/types/generated/client";
 import Breadcrumbs from "~/components/Breadcrumbs";
@@ -12,10 +12,10 @@ export async function loader({ request }: LoaderArgs) {
 
     if (user?.role === Role.TEACHER) {
         const modules = await getTeacherModules(request);
-        return { modules, user };
+        return json({ modules, user });
     }
 
-    return { user };
+    return json({ user });
 }
 
 export default function Dashboard() {

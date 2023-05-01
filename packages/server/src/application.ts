@@ -1,7 +1,6 @@
-import type { Application } from "express";
-import express, { Router } from "express";
-import { createServer, Server } from "http";
-import type { RequestHandler, ErrorRequestHandler } from "express";
+import type {Application, RequestHandler, ErrorRequestHandler} from "express";
+import express, {Router} from "express";
+import {createServer, Server} from "http";
 
 type Middleware = RequestHandler | ErrorRequestHandler;
 
@@ -9,7 +8,7 @@ export default class App {
   public app: Application;
 
   constructor(
-    private port: number | string,
+    readonly port: number | string,
     middleware: Middleware[],
     apiRoutes: Array<Router>,
     authRoutes: Array<Router>,
@@ -81,7 +80,7 @@ export default class App {
     const bind =
       typeof this.port === "string" ? "Pipe " + this.port : "Port " + this.port;
 
-    // handle specific liseners
+    // handle specific listeners
     switch (error.code) {
       case "EACCES":
         console.error(bind + " requires elevated privileges");

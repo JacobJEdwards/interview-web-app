@@ -1,16 +1,14 @@
-import type { LoaderArgs, ActionArgs } from "@remix-run/node";
+import { type LoaderArgs, type ActionArgs, json } from "@remix-run/node";
 import {
   moduleProjectSelected,
   selectProject,
   isProjectSelected,
 } from "~/utils/user.server";
-import { Form } from "@remix-run/react";
-import { Role } from "server/types/generated/client";
-import { requireUser, getUserId } from "~/utils/session.server";
-import { getProject } from "~/utils/projects.server";
-import { useLoaderData } from "@remix-run/react";
-import { redirect } from "@remix-run/node";
-import { deleteProject } from "~/utils/projects.server";
+import {Form, useLoaderData} from "@remix-run/react";
+import {Role} from "server/types/generated/client";
+import {requireUser, getUserId} from "~/utils/session.server";
+import {getProject, deleteProject} from "~/utils/projects.server";
+import {redirect} from "@remix-run/node";
 import Breadcrumbs, { type RouteData } from "~/components/Breadcrumbs";
 
 export const loader = async ({ params, request }: LoaderArgs) => {
@@ -39,12 +37,12 @@ export const loader = async ({ params, request }: LoaderArgs) => {
     );
   }
 
-  const seletedProject = await moduleProjectSelected(
+  const selectedProject = await moduleProjectSelected(
     Number(userId),
     Number(moduleId)
   );
 
-  if (seletedProject) {
+  if (selectedProject) {
     isProjectSelectedByUser = true;
   }
 
@@ -63,13 +61,13 @@ export const loader = async ({ params, request }: LoaderArgs) => {
     },
   ] as RouteData[];
 
-  return {
+  return json({
     project,
     userId,
     userRole,
     isProjectSelectedByUser,
     crumbs,
-  };
+  });
 };
 
 export const action = async ({ request, params }: ActionArgs) => {
@@ -90,8 +88,8 @@ export const action = async ({ request, params }: ActionArgs) => {
 };
 
 export default function ProjectRoute() {
-  const { project, userId, userRole, isProjectSelectedByUser, crumbs } =
-    useLoaderData();
+  const { project, userRole, isProjectSelectedByUser, crumbs } =
+    useLoaderData<typeof loader>();
   const { name, description } = project;
   return (
     <main>

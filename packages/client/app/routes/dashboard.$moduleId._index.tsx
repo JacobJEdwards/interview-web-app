@@ -1,4 +1,4 @@
-import { LoaderArgs } from "@remix-run/node";
+import { type LoaderArgs, json } from "@remix-run/node";
 import { getUserId, requireUser } from "~/utils/session.server";
 import { getModule } from "~/utils/modules.server";
 import { getModuleProjects } from "~/utils/modules.server";
@@ -7,7 +7,7 @@ import { Link, useLoaderData } from "@remix-run/react";
 import type {
     Module as ModuleType,
     Project as ProjectType,
-} from "@prisma/client";
+} from "server/types/generated/client";
 import { Role } from "server/types/generated/client";
 import Project from "../components/Project";
 import { getUserInfo } from "../utils/user.server";
@@ -41,11 +41,11 @@ export const loader = async ({ params, request }: LoaderArgs) => {
         },
     ] as RouteData[];
 
-    return { projects, module, userRole, userId, teacher, crumbs };
+    return json({ projects, module, userRole, userId, teacher, crumbs });
 };
 
 export default function DashboardModule() {
-    const { projects, module, userRole, teacher, crumbs } = useLoaderData();
+    const { projects, module, userRole, teacher, crumbs } = useLoaderData<typeof loader>();
     return (
         <main>
             <Breadcrumbs crumbs={crumbs} />

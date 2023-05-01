@@ -1,9 +1,11 @@
-import type { Module, Project } from "server/types/generated/client";
+import type {Project} from "server/types/generated/client";
 
 export const getProject = async (id: string) => {
     const response = await fetch(`http://localhost:6060/api/projects/${id}`);
-    const data = await response.json();
-    return data;
+    if (!response.ok) {
+        return null;
+    }
+    return await response.json();
 };
 
 export const getProjects = async () => {
@@ -13,8 +15,7 @@ export const getProjects = async () => {
             return null;
         }
 
-        const data = await response.json();
-        return data;
+        return await response.json();
     } catch (error) {
         return null;
     }
@@ -83,8 +84,7 @@ export const updateProject = async (project: Project) => {
             return null;
         }
 
-        const data = await response.json();
-        return data;
+        return await response.json();
     } catch (error) {
         console.error(error);
         return null;
@@ -101,8 +101,7 @@ export const deleteProject = async (id: string) => {
             return null;
         }
 
-        const data = await response.json();
-        return data;
+        return await response.json();
     } catch (error) {
         console.error(error);
         return null;

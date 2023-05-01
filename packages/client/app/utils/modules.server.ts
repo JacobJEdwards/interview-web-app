@@ -1,6 +1,6 @@
-import type { Module } from "server/types/generated/client";
-import { getUserId } from "./session.server";
-import type { Request } from "@remix-run/node";
+import type {Module} from "server/types/generated/client";
+import {getUserId} from "./session.server";
+import type {Request} from "@remix-run/node";
 
 export const getModules = async () => {
     try {
@@ -10,8 +10,7 @@ export const getModules = async () => {
             return null;
         }
 
-        const data = response.json();
-        return data;
+        return await response.json();
     } catch (error) {
         console.error(error);
         return null;
@@ -26,8 +25,7 @@ export const getModule = async (id: number) => {
             return null;
         }
 
-        const data = await response.json();
-        return data;
+        return await response.json();
     } catch (error) {
         console.error(error);
         return null;
@@ -48,8 +46,7 @@ export const createModule = async (module: Module) => {
             return null;
         }
 
-        const data = await response.json();
-        return data;
+        return await response.json();
     } catch (error) {
         console.error(error);
         return null;
@@ -114,8 +111,7 @@ export async function getModuleProjects(moduleId: number) {
             return null;
         }
 
-        const data = await response.json();
-        return data;
+        return await response.json();
     } catch (error) {
         console.error(error);
         return null;
