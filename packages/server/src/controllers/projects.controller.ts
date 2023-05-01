@@ -2,7 +2,6 @@ import { Request, Response, NextFunction } from "express";
 import primsa from "../utils/db";
 import { getProjectsSchema, createProjectSchema } from "../schemas";
 
-
 class ProjectsController {
     // basic CRUD operations
 
@@ -14,12 +13,14 @@ class ProjectsController {
                 : undefined;
 
             const name = req.query.name ? String(req.query.name) : undefined;
-            const moduleId = req.query.moduleId ? Number(req.query.moduleId) : undefined;
+            const moduleId = req.query.moduleId
+                ? Number(req.query.moduleId)
+                : undefined;
 
             const validation = getProjectsSchema.safeParse({
-                teacherId: teacherId,
-                name: name,
-                moduleId: moduleId,
+                teacherId,
+                name,
+                moduleId,
             });
 
             if (!validation.success) {
@@ -28,9 +29,9 @@ class ProjectsController {
 
             const projects = await primsa.project.findMany({
                 where: {
-                    teacherId: teacherId,
-                    name: name,
-                    moduleId: moduleId,
+                    teacherId,
+                    name,
+                    moduleId,
                 },
             });
             return res.status(200).json(projects);
