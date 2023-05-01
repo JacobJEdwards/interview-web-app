@@ -25,7 +25,7 @@ class UserController {
         return res.status(404).json({ message: "Users not found" });
       }
 
-      res.status(200).json(users);
+      return res.status(200).json(users);
     } catch (error) {
       next(error);
     }
@@ -52,7 +52,7 @@ class UserController {
         return res.status(404).json({ message: "User not found" });
       }
 
-      res.status(200).json(user);
+      return res.status(200).json(user);
     } catch (error) {
       next(error);
     }
@@ -71,7 +71,7 @@ class UserController {
         },
       });
 
-      res.status(201).json(user);
+      return res.status(201).json(user);
     } catch (error) {
       next(error);
     }

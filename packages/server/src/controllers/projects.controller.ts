@@ -23,7 +23,7 @@ class ProjectsController {
             });
 
             if (!validation.success) {
-                res.status(400).json({ message: validation.error });
+                return res.status(400).json({ message: validation.error });
             }
 
             const projects = await primsa.project.findMany({
@@ -33,7 +33,7 @@ class ProjectsController {
                     moduleId: moduleId,
                 },
             });
-            res.status(200).json(projects);
+            return res.status(200).json(projects);
         } catch (err) {
             next(err);
         }
@@ -51,9 +51,10 @@ class ProjectsController {
             });
 
             if (!project) {
-                res.status(404).json({ message: "Project not found" });
+                return res.status(404).json({ message: "Project not found" });
             }
-            res.status(200).json(project);
+
+            return res.status(200).json(project);
         } catch (err) {
             next(err);
         }
@@ -65,7 +66,7 @@ class ProjectsController {
             const validation = createProjectSchema.safeParse(req.body);
 
             if (!validation.success) {
-                res.status(400).json({ message: validation.error });
+                return res.status(400).json({ message: validation.error });
             }
 
             const project = await primsa.project.create({
@@ -76,7 +77,7 @@ class ProjectsController {
                     moduleId: Number(req.body.moduleId),
                 },
             });
-            res.status(201).json(project);
+            return res.status(201).json(project);
         } catch (err) {
             next(err);
         }
@@ -96,10 +97,10 @@ class ProjectsController {
             });
 
             if (!project) {
-                res.status(404).json({ message: "Project not found" });
+                return res.status(404).json({ message: "Project not found" });
             }
 
-            res.status(200).json(project);
+            return res.status(200).json(project);
         } catch (err) {
             next(err);
         }
@@ -110,18 +111,12 @@ class ProjectsController {
         try {
             const { projectId } = req.params;
 
-            const validation = idSchema.safeParse(projectId);
-
-            if (!validation.success) {
-                res.status(400).json({ message: validation.error });
-            }
-
             const project = await primsa.project.delete({
                 where: {
                     id: Number(req.params.projectId),
                 },
             });
-            res.status(200).json(project);
+            return res.status(200).json(project);
         } catch (err) {
             next(err);
         }

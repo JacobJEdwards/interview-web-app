@@ -1,16 +1,18 @@
-import { Request, Response, NextFunction } from "express";
+import type { Request, Response, NextFunction, ErrorRequestHandler, RequestHandler } from "express";
 
-const errorHandler = (
-    err: Error,
+const errorHandler: ErrorRequestHandler = (
+    err: unknown,
     req: Request,
     res: Response,
     next: NextFunction
 ) => {
-    console.log(err);
-    res.status(500).json({ error: err });
+
+    const statusCode = err instanceof Error ? 500 : 400;
+
+    res.status(statusCode).json({ error: err });
 };
 
-const notFound = (req: Request, res: Response, next: NextFunction) => {
+const notFound: RequestHandler = (req: Request, res: Response, next: NextFunction) => {
     res.status(404).json({ message: "Endpoint does not exist" });
 };
 

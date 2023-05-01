@@ -1,16 +1,19 @@
 import type { Application } from "express";
 import express, { Router } from "express";
 import { createServer, Server } from "http";
+import type { RequestHandler, ErrorRequestHandler } from "express";
+
+type Middleware = RequestHandler | ErrorRequestHandler;
 
 export default class App {
   public app: Application;
 
   constructor(
     private port: number | string,
-    middleware: any[],
+    middleware: Middleware[],
     apiRoutes: Array<Router>,
     authRoutes: Array<Router>,
-    otherRoutes: any[],
+    otherRoutes: Middleware[],
     private apiPath: string = "/api",
     private authPath: string = "/auth"
   ) {
@@ -26,13 +29,13 @@ export default class App {
     this.otherRoutes(otherRoutes);
   }
 
-  private middlewares(middleware: any[]) {
+  private middlewares(middleware: Middleware[]) {
     middleware.forEach((m) => {
       this.app.use(m);
     });
   }
 
-  public addMiddleware(middleware: any) {
+  public addMiddleware(middleware: Middleware) {
     this.app.use(middleware);
   }
 
@@ -48,7 +51,7 @@ export default class App {
     });
   }
 
-  private otherRoutes(routes: any[]) {
+  private otherRoutes(routes: Middleware[]) {
     routes.forEach((r) => {
       this.app.use(r);
     });
