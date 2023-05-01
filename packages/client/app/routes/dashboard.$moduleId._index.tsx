@@ -5,8 +5,8 @@ import { getModuleProjects } from "~/utils/modules.server";
 import { redirect } from "@remix-run/node";
 import { Link, useLoaderData } from "@remix-run/react";
 import type {
-    Module as ModuleType,
-    Project as ProjectType,
+  Module as ModuleType,
+  Project as ProjectType,
 } from "server/types/generated/client";
 import { Role } from "server/types/generated/client";
 import Project from "../components/Project";
@@ -15,64 +15,64 @@ import Breadcrumbs, { type RouteData } from "~/components/Breadcrumbs";
 import invariant from "tiny-invariant";
 
 export const loader = async ({ params, request }: LoaderArgs) => {
-    invariant(params.moduleId, "Expected moduleId to be defined");
-    const { moduleId } = params;
+  invariant(params.moduleId, "Expected moduleId to be defined");
+  const { moduleId } = params;
 
-    await requireUser(request);
+  await requireUser(request);
 
-    const { userId, userRole } = await getUserId(request);
-    const module: ModuleType = await getModule(Number(moduleId));
-    const projects: ProjectType[] | null = await getModuleProjects(
-        Number(moduleId)
-    );
+  const { userId, userRole } = await getUserId(request);
+  const module: ModuleType = await getModule(Number(moduleId));
+  const projects: ProjectType[] | null = await getModuleProjects(
+    Number(moduleId)
+  );
 
-    if (!module) {
-        return redirect("/dashboard");
-    }
+  if (!module) {
+    return redirect("/dashboard");
+  }
 
-    const { teacherId } = module;
-    const teacher = await getUserInfo(teacherId);
+  const { teacherId } = module;
+  const teacher = await getUserInfo(teacherId);
 
-    const crumbs = [
-        {
-            name: "Dashboard",
-            url: "/dashboard",
-        },
-        {
-            name: module.name,
-            url: `/dashboard/${moduleId}`,
-        },
-    ] as RouteData[];
+  const crumbs = [
+    {
+      name: "Dashboard",
+      url: "/dashboard",
+    },
+    {
+      name: module.name,
+      url: `/dashboard/${moduleId}`,
+    },
+  ] as RouteData[];
 
-    return json({ projects, module, userRole, userId, teacher, crumbs });
+  return json({ projects, module, userRole, userId, teacher, crumbs });
 };
 
 export default function DashboardModule() {
-    const { projects, module, userRole, teacher, crumbs } = useLoaderData<typeof loader>();
-    return (
-        <main>
-            <Breadcrumbs crumbs={crumbs} />
-            <h1 className="text-3xl font-semibold">{module.name}</h1>
-            <p className="text-xl mt-4">{module.description}</p>
-            <div className="divider font-semibold pt-4">Projects:</div>
+  const { projects, module, userRole, crumbs } = useLoaderData<typeof loader>();
+  return (
+    <main>
+      <Breadcrumbs crumbs={crumbs} />
+      <h1 className="text-3xl font-semibold">{module.name}</h1>
+      <p className="text-xl mt-4">{module.description}</p>
+      <div className="divider font-semibold pt-4">Projects:</div>
 
-            {projects && projects?.length !== 0 ? (
-                <ul className="list-disc">
-                    {projects.map((project: ProjectType) => (
-                            <li key={project.id} className="m-4">
-                                <Project {...project} />
-                                <div className="divider"></div>
-                            </li>
-                    ))}
-                </ul>
-            ) : (
-                <p className="text-center text-2xl">No projects!</p>
-            )}
-            {userRole === Role.TEACHER && (
-                <Link className="btn mt-10" to={`/dashboard/${module.id}/new`}>
-                    New Project
-                </Link>
-            )}
-        </main>
-    );
+      {projects && projects?.length !== 0 ? (
+        <ul className="list-disc">
+          {projects.map((project: ProjectType) => (
+            <li key={project.id} className="m-4">
+              <Project {...project} />
+              <div className="divider"></div>
+            </li>
+          ))}
+        </ul>
+      ) : (
+        <p className="text-center text-2xl">No projects!</p>
+      )}
+      {userRole === Role.TEACHER && (
+        <Link className="btn mt-10" to={`/dashboard/${module.id}/new`}>
+          New Project
+        </Link>
+      )}
+    </main>
+  );
 }

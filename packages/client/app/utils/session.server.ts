@@ -1,5 +1,5 @@
 import { createCookieSessionStorage, redirect } from "@remix-run/node";
-import type { Request, SessionData } from "@remix-run/node";
+import type { SessionData } from "@remix-run/node";
 import { Role } from "server/types/generated/client";
 import type { User } from "server/types/generated/client";
 
