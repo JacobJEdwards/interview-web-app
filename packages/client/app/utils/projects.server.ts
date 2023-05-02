@@ -1,4 +1,4 @@
-import type {Project} from "server/types/generated/client";
+import type { Project } from "server/types/generated/client";
 
 export const getProject = async (id: string) => {
     const response = await fetch(`http://localhost:6060/api/projects/${id}`);
@@ -25,6 +25,9 @@ export const createProject = async (project: Project) => {
     try {
         const response = await fetch("http://localhost:6060/api/projects", {
             method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
             body: JSON.stringify(project),
         });
 
@@ -70,24 +73,32 @@ export const newProject = async (
     }
 };
 
-export const updateProject = async (project: Project) => {
+export const updateProject = async (
+    name: string,
+    description: string,
+    projectId: number
+) => {
     try {
         const response = await fetch(
-            `http://localhost:6060/api/projects/${project.id}`,
+            `http://localhost:6060/api/projects/${projectId}`,
             {
                 method: "PUT",
-                body: JSON.stringify(project),
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({ name: name, description: description }),
             }
         );
 
+        const data = await response.json();
+
         if (!response.ok) {
-            return null;
+            return [data, null];
         }
 
-        return await response.json();
+        return [null, data];
     } catch (error) {
-        console.error(error);
-        return null;
+        return [error, null];
     }
 };
 
