@@ -1,4 +1,4 @@
-import type {Project, Role} from "server/types/generated/client";
+import type { Project, Role, User } from "server/types/generated/client";
 
 export interface UserInfo {
     id: number;
@@ -52,19 +52,38 @@ export const selectProject = async (
     }
 };
 
+export const unselectProject = async (
+    userId: number,
+    projectId: number
+): Promise<User | null> => {
+    try {
+        const response = await fetch(
+            `http:localhost:6060/api/users/${userId}/${projectId}/unselect`,
+            {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+            }
+        );
+
+        if (!response.ok) {
+            return null;
+        }
+
+        return await response.json();
+    } catch (error) {
+        return null;
+    }
+};
+
 export const isProjectSelected = async (
     userId: number,
     projectId: number
 ): Promise<boolean> => {
     try {
         const response = await fetch(
-            `http:localhost:6060/api/users/${userId}/${projectId}/verify`,
-            {
-                method: "GET",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-            }
+            `http:localhost:6060/api/users/${userId}/${projectId}/verify`
         );
 
         if (!response.ok) {
@@ -77,19 +96,13 @@ export const isProjectSelected = async (
     }
 };
 
-export const moduleProjectSelected = async (
+export const getSelectedProject = async (
     userId: number,
     moduleId: number
 ): Promise<Project | null> => {
     try {
         const response = await fetch(
-            `http:localhost:6060/api/users/${userId}/${moduleId}/selected`,
-            {
-                method: "GET",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-            }
+            `http:localhost:6060/api/users/${userId}/${moduleId}/selected`
         );
 
         if (!response.ok) {

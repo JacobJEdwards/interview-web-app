@@ -50,6 +50,10 @@ router.get(
   "/users/:userId/:moduleId/projects",
   UserController.getStudentModuleProjects
 ); // is this ok?
+router.get(
+  "/users/:userId/:moduleId/selected",
+  UserController.getSelectedProject
+);
 
 router.post(
   "/users/:userId/:moduleId/:projectId/select",
@@ -58,6 +62,10 @@ router.post(
 router.get(
   "/users/:userId/:projectId/verify",
   UserController.isProjectSelected
+);
+router.post(
+  "/users/:userId/:projectId/unselect",
+  UserController.unselectProject
 );
 
 export default router;
