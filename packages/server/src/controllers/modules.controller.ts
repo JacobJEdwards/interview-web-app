@@ -190,18 +190,7 @@ class ModulesController {
         data: {
           name: req.body.name as string,
           description: req.body.description as string,
-
-          teacher: {
-            connect: {
-              id: Number(req.body.teacherId),
-            },
-          },
-
-          module: {
-            connect: {
-              id: Number(req.params.moduleId),
-            },
-          },
+          moduleId: Number(req.params.moduleId),
         },
       });
 

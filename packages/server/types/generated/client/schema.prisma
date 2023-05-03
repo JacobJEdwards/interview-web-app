@@ -9,14 +9,15 @@ datasource db {
 }
 
 model User {
-    id           Int       @id @default(autoincrement())
-    email        String    @unique
-    name         String
-    role         Role
-    password     String
-    ownedModules Module[]  @relation("TeacherModules")
-    projects     Project[]
-    modules      Module[]  @relation("StudentModules")
+    id                Int                 @id @default(autoincrement())
+    email             String              @unique
+    name              String
+    role              Role
+    password          String
+    ownedModules      Module[]            @relation("TeacherModules")
+    modules           Module[]            @relation("StudentModules")
+    StudentSubmission StudentSubmission[]
+    studentProjects   Project[]           @relation("StudentProjects")
 }
 
 model Admin {
@@ -26,13 +27,23 @@ model Admin {
 }
 
 model Project {
-    id          Int    @id @default(autoincrement())
-    name        String
-    description String
-    moduleId    Int
-    teacherId   Int
-    module      Module @relation(fields: [moduleId], references: [id])
-    teacher     User   @relation(fields: [teacherId], references: [id])
+    id                Int                 @id @default(autoincrement())
+    name              String
+    description       String
+    moduleId          Int
+    module            Module              @relation(fields: [moduleId], references: [id])
+    students          User[]              @relation("StudentProjects")
+    filePath          String?
+    StudentSubmission StudentSubmission[]
+}
+
+model StudentSubmission {
+    id        Int     @id @default(autoincrement())
+    studentId Int
+    projectId Int
+    student   User    @relation(fields: [studentId], references: [id])
+    project   Project @relation(fields: [projectId], references: [id])
+    filePath  String
 }
 
 model Module {

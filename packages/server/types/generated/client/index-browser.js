@@ -104,7 +104,7 @@ exports.Prisma.ProjectScalarFieldEnum = {
   name: 'name',
   description: 'description',
   moduleId: 'moduleId',
-  teacherId: 'teacherId'
+  filePath: 'filePath'
 };
 
 exports.Prisma.QueryMode = {
@@ -115,6 +115,13 @@ exports.Prisma.QueryMode = {
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
+};
+
+exports.Prisma.StudentSubmissionScalarFieldEnum = {
+  id: 'id',
+  studentId: 'studentId',
+  projectId: 'projectId',
+  filePath: 'filePath'
 };
 
 exports.Prisma.TransactionIsolationLevel = makeStrictEnum({
@@ -141,6 +148,7 @@ exports.Prisma.ModelName = {
   User: 'User',
   Admin: 'Admin',
   Project: 'Project',
+  StudentSubmission: 'StudentSubmission',
   Module: 'Module'
 };
 

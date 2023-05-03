@@ -3,121 +3,117 @@ import primsa from "../utils/db";
 import { getProjectsSchema, createProjectSchema } from "../schemas";
 
 class ProjectsController {
-  // basic CRUD operations
+    // basic CRUD operations
 
-  // get all projects
-  public async getProjects(req: Request, res: Response, next: NextFunction) {
-    try {
-      const teacherId = Number(req.query.teacherId) ?? undefined;
-      const name = String(req.query.name) ?? undefined;
-      const moduleId = Number(req.query.moduleId) ?? undefined;
+    // get all projects
+    public async getProjects(req: Request, res: Response, next: NextFunction) {
+        try {
+            const name = String(req.query.name) ?? undefined;
+            const moduleId = Number(req.query.moduleId) ?? undefined;
 
-      const validation = getProjectsSchema.safeParse({
-        teacherId,
-        name,
-        moduleId,
-      });
+            const validation = getProjectsSchema.safeParse({
+                name,
+                moduleId,
+            });
 
-      if (!validation.success) {
-        return res.status(400).json({ message: validation.error });
-      }
+            if (!validation.success) {
+                return res.status(400).json({ message: validation.error });
+            }
 
-      const projects = await primsa.project.findMany({
-        where: {
-          teacherId,
-          moduleId,
-          name,
-        },
-      });
-      return res.status(200).json(projects);
-    } catch (err) {
-      next(err);
+            const projects = await primsa.project.findMany({
+                where: {
+                    moduleId,
+                    name,
+                },
+            });
+            return res.status(200).json(projects);
+        } catch (err) {
+            next(err);
+        }
     }
-  }
 
-  // get specific project
-  public async getProject(req: Request, res: Response, next: NextFunction) {
-    try {
-      const { projectId } = req.params;
+    // get specific project
+    public async getProject(req: Request, res: Response, next: NextFunction) {
+        try {
+            const { projectId } = req.params;
 
-      const project = await primsa.project.findUnique({
-        where: {
-          id: Number(projectId),
-        },
-      });
+            const project = await primsa.project.findUnique({
+                where: {
+                    id: Number(projectId),
+                },
+            });
 
-      if (!project) {
-        return res.status(404).json({ message: "Project not found" });
-      }
+            if (!project) {
+                return res.status(404).json({ message: "Project not found" });
+            }
 
-      return res.status(200).json(project);
-    } catch (err) {
-      next(err);
+            return res.status(200).json(project);
+        } catch (err) {
+            next(err);
+        }
     }
-  }
 
-  // create new project
-  public async createProject(req: Request, res: Response, next: NextFunction) {
-    try {
-      const validation = createProjectSchema.safeParse(req.body);
+    // create new project
+    public async createProject(req: Request, res: Response, next: NextFunction) {
+        try {
+            const validation = createProjectSchema.safeParse(req.body);
 
-      if (!validation.success) {
-        return res.status(400).json({ message: validation.error });
-      }
+            if (!validation.success) {
+                return res.status(400).json({ message: validation.error });
+            }
 
-      const project = await primsa.project.create({
-        data: {
-          name: req.body.name,
-          description: req.body.description,
-          teacherId: Number(req.body.teacherId),
-          moduleId: Number(req.body.moduleId),
-        },
-      });
-      return res.status(201).json(project);
-    } catch (err) {
-      next(err);
+            const project = await primsa.project.create({
+                data: {
+                    name: req.body.name,
+                    description: req.body.description,
+                    moduleId: Number(req.body.moduleId),
+                },
+            });
+            return res.status(201).json(project);
+        } catch (err) {
+            next(err);
+        }
     }
-  }
 
-  // update project
-  public async updateProject(req: Request, res: Response, next: NextFunction) {
-    try {
-      const { name, description } = req.body;
-      const project = await primsa.project.update({
-        where: {
-          id: Number(req.params.projectId),
-        },
-        data: {
-          name,
-          description,
-        },
-      });
+    // update project
+    public async updateProject(req: Request, res: Response, next: NextFunction) {
+        try {
+            const { name, description } = req.body;
+            const project = await primsa.project.update({
+                where: {
+                    id: Number(req.params.projectId),
+                },
+                data: {
+                    name,
+                    description,
+                },
+            });
 
-      if (!project) {
-        return res.status(404).json({ message: "Project not found" });
-      }
+            if (!project) {
+                return res.status(404).json({ message: "Project not found" });
+            }
 
-      return res.status(200).json(project);
-    } catch (err) {
-      next(err);
+            return res.status(200).json(project);
+        } catch (err) {
+            next(err);
+        }
     }
-  }
 
-  // delete project
-  public async deleteProject(req: Request, res: Response, next: NextFunction) {
-    try {
-      const { projectId } = req.params;
+    // delete project
+    public async deleteProject(req: Request, res: Response, next: NextFunction) {
+        try {
+            const { projectId } = req.params;
 
-      const project = await primsa.project.delete({
-        where: {
-          id: Number(projectId),
-        },
-      });
-      return res.status(200).json(project);
-    } catch (err) {
-      next(err);
+            const project = await primsa.project.delete({
+                where: {
+                    id: Number(projectId),
+                },
+            });
+            return res.status(200).json(project);
+        } catch (err) {
+            next(err);
+        }
     }
-  }
 }
 
 export default new ProjectsController();

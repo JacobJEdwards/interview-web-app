@@ -15,9 +15,9 @@ model User {
     role              Role
     password          String
     ownedModules      Module[]            @relation("TeacherModules")
-    projects          Project[]
     modules           Module[]            @relation("StudentModules")
     StudentSubmission StudentSubmission[]
+    studentProjects   Project[]           @relation("StudentProjects")
 }
 
 model Admin {
@@ -31,9 +31,8 @@ model Project {
     name              String
     description       String
     moduleId          Int
-    teacherId         Int
     module            Module              @relation(fields: [moduleId], references: [id])
-    teacher           User                @relation(fields: [teacherId], references: [id])
+    students          User[]              @relation("StudentProjects")
     filePath          String?
     StudentSubmission StudentSubmission[]
 }
