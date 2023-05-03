@@ -63,6 +63,9 @@ export default function Dashboard() {
 }
 
 export function ErrorBoundary({ error }: { error: Error }) {
-    return redirect("/dashboard");
+    <main>
+        <h1>Whoops</h1>
+        <p>There was an error</p>
+    </main>
 }
 

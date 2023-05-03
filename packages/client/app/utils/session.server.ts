@@ -149,8 +149,18 @@ export async function getUser(request: Request) {
   if (!userId) {
     return null;
   } else {
+    const token = await getUserToken(request);
     try {
-      const response = await fetch(`http://localhost:6060/api/users/${userId}`);
+      const response = await fetch(
+        `http://localhost:6060/api/users/${userId}`,
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: token,
+          },
+        }
+      );
       if (!response.ok) {
         throw await logout(request);
       }

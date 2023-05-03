@@ -21,14 +21,16 @@ export const loader = async ({ params, request }: LoaderArgs) => {
   await requireUser(request);
 
   const { userId, userRole } = await getUserId(request);
-  const module: ModuleType = await getModule(Number(moduleId));
+  const module: ModuleType = await getModule(Number(moduleId), request);
   let projects: ProjectType[] | null = await getModuleProjects(
-    Number(moduleId)
+    Number(moduleId),
+    request
   );
 
   const selectedProject: ProjectType | null = await getSelectedProject(
     userId,
-    Number(moduleId)
+    Number(moduleId),
+    request
   );
 
   if (selectedProject) {
@@ -40,7 +42,7 @@ export const loader = async ({ params, request }: LoaderArgs) => {
   }
 
   const { teacherId } = module;
-  const teacher = await getUserInfo(teacherId);
+  const teacher = await getUserInfo(teacherId, request);
 
   const crumbs = [
     {

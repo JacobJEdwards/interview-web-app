@@ -51,7 +51,8 @@ export const action = async ({ request, params }: LoaderArgs) => {
     name,
     description,
     Number(moduleId),
-    userId
+    userId,
+    request
   );
 
   if (project) {

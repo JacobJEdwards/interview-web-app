@@ -21,7 +21,7 @@ export const loader = async ({ request, params }: LoaderArgs) => {
 
   const { userId, userRole } = await getUserId(request);
 
-  const project = await getProject(params.projectId);
+  const project = await getProject(params.projectId, request);
   if (!project) {
     return redirect(`/dashboard/${params.moduleId}`);
   }
@@ -65,7 +65,8 @@ export const action = async ({ request, params }: ActionArgs) => {
   const [error, project] = await updateProject(
     name,
     description,
-    Number(params.projectId)
+    Number(params.projectId),
+    request
   );
 
   if (project) {

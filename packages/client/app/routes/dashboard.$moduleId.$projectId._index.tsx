@@ -29,7 +29,7 @@ export const loader = async ({ params, request }: LoaderArgs) => {
 
   await requireUser(request);
 
-  const project = await getProject(projectId);
+  const project = await getProject(projectId, request);
 
   if (!project) {
     return redirect(`/dashboard/${moduleId}`);
@@ -42,7 +42,8 @@ export const loader = async ({ params, request }: LoaderArgs) => {
   if (userRole === Role.STUDENT) {
     isProjectSelectedByUser = await isProjectSelected(
       Number(userId),
-      Number(projectId)
+      Number(projectId),
+      request
     );
   }
 
@@ -81,17 +82,17 @@ export const action = async ({ request, params }: ActionArgs) => {
   const action = formData.get("action");
 
   if (action === FormActions.SELECT) {
-    await selectProject(Number(userId), Number(projectId), Number(moduleId));
+    await selectProject(Number(userId), Number(projectId), Number(moduleId), request);
     return redirect(`/dashboard/${moduleId}/${projectId}`);
   }
 
   if (action === FormActions.DELETE) {
-    await deleteProject(projectId);
+    await deleteProject(projectId, request);
     return redirect(`/dashboard/${moduleId}`);
   }
 
   if (action === FormActions.UNSELECT) {
-    await unselectProject(Number(userId), Number(projectId));
+    await unselectProject(Number(userId), Number(projectId), request);
     return redirect(`/dashboard/${moduleId}/${projectId}`);
   }
 };
