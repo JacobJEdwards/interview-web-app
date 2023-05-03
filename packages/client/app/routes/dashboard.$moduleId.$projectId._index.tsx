@@ -7,7 +7,7 @@ import {
 import { Link } from "@remix-run/react";
 import { Form, useLoaderData } from "@remix-run/react";
 import { Role } from "server/types/generated/client";
-import { requireUser, getUserId } from "~/utils/session.server";
+import { requireUser, getUserId, getUserToken } from "~/utils/session.server";
 import { getProject, deleteProject } from "~/utils/projects.server";
 import { redirect } from "@remix-run/node";
 import Breadcrumbs, { type RouteData } from "~/components/Breadcrumbs";

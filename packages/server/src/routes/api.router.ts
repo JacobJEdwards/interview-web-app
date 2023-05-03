@@ -5,6 +5,8 @@ import ProjectController from "../controllers/projects.controller";
 import ModulesController from "../controllers/modules.controller";
 import UserController from "../controllers/users.controller";
 
+import validateToken from "../auth";
+
 // /api routes
 const router = express.Router();
 
@@ -44,7 +46,7 @@ router.get("/users/:userId", UserController.getUser);
 router.post("/users", UserController.createUser);
 router.put("/users/:userId", UserController.updateUser);
 router.delete("/users/:userId", UserController.deleteUser);
-router.get("/users/:userId/modules", UserController.getModules);
+router.get("/users/:userId/modules", validateToken, UserController.getModules);
 router.get("/users/:userId/projects", UserController.getProjects);
 router.get(
   "/users/:userId/:moduleId/projects",

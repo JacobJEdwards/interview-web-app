@@ -35,10 +35,10 @@ export const action = async ({ request }: ActionArgs) => {
         return json({ values, message: "Invalid email or password" });
     }
 
-    const { userId, userRole, userName } = user;
+    const { userId, userRole, userName, token } = user;
 
     if (userId) {
-        return createUserSession(userId, userRole, userName, redirectTo);
+        return createUserSession(userId, userRole, userName, redirectTo, token);
     } else {
         const values = Object.fromEntries(formData.entries());
         return json({ values, message: "Invalid email or password" });

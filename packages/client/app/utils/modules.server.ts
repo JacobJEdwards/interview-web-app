@@ -1,5 +1,5 @@
-import type {Module} from "server/types/generated/client";
-import {getUserId} from "./session.server";
+import type { Module } from "server/types/generated/client";
+import { getUserId, getUserToken } from "./session.server";
 
 export const getModules = async () => {
     try {
@@ -54,6 +54,7 @@ export const createModule = async (module: Module) => {
 
 export async function getUserModules(request: Request) {
     const { userId } = await getUserId(request);
+    const token = await getUserToken(request);
 
     if (!userId) {
         return null;
@@ -61,7 +62,12 @@ export async function getUserModules(request: Request) {
 
     try {
         const response = await fetch(
-            `http://localhost:6060/api/users/${userId}/modules`
+            `http://localhost:6060/api/users/${userId}/modules`,
+            {
+                headers: {
+                    Authorization: token,
+                },
+            }
         );
 
         if (!response.ok) {
@@ -78,6 +84,7 @@ export async function getUserModules(request: Request) {
 
 export async function getTeacherModules(request: Request) {
     const { userId } = await getUserId(request);
+    const token = await getUserToken(request);
 
     if (!userId) {
         return null;
@@ -85,7 +92,12 @@ export async function getTeacherModules(request: Request) {
 
     try {
         const response = await fetch(
-            `http://localhost:6060/api/modules?teacherId=${userId}`
+            `http://localhost:6060/api/modules?teacherId=${userId}`,
+            {
+                headers: {
+                    Authorization: token,
+                },
+            }
         );
 
         if (!response.ok) {

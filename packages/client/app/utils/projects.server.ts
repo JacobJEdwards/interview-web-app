@@ -1,4 +1,5 @@
 import type { Project } from "server/types/generated/client";
+import { getUserToken } from "./session.server";
 
 export const getProject = async (id: string) => {
     const response = await fetch(`http://localhost:6060/api/projects/${id}`);
