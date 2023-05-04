@@ -69,7 +69,7 @@ const ProjectForm: FC<ProjectFormProps> = ({ project, edit, actionData }) => {
                 />
             </div>
             <button className="btn btn-block mt-8" type="submit">
-                Create
+                {edit ? "Update" : "Create"}
             </button>
         </Form>
     );
