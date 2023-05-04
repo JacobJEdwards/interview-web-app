@@ -24,7 +24,7 @@ const validateToken = (req: Request, res: Response, next: NextFunction) => {
             });
         }
 
-        //req.user = decoded;
+        // req.user = decoded;
         // will give the req object user info for use in future from token (? could be useful -> would have to extend Request interface and change type of routes)
 
         next();
