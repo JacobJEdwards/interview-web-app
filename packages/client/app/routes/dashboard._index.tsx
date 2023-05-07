@@ -1,9 +1,13 @@
 import { getUser, requireUser } from "~/utils/session.server";
-import {getTeacherModules } from "~/utils/modules.server";
-import { type LoaderArgs, json } from "@remix-run/node";
+import { getTeacherModules } from "~/utils/modules.server";
+import { type LoaderArgs, type V2_MetaFunction, json } from "@remix-run/node";
 import { useLoaderData } from "@remix-run/react";
 import { Role } from "server/types/generated/client";
 import Breadcrumbs from "~/components/Breadcrumbs";
+
+export const meta: V2_MetaFunction = () => {
+    return [{ title: "Dashboard" }];
+};
 
 export async function loader({ request }: LoaderArgs) {
     await requireUser(request);

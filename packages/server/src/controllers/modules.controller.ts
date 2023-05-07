@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from "express";
-import prisma from "../utils/db";
+import db from "../utils/db";
 import {
   getModuleSchema,
   createModuleSchema,
@@ -7,6 +7,7 @@ import {
   createProjectSchema,
   idSchema,
 } from "../schemas";
+import { boundMethod } from "autobind-decorator";
 
 class ModulesController {
   // basic CRUD operations
@@ -28,7 +29,7 @@ class ModulesController {
         return res.status(400).json({ message: validation.error });
       }
 
-      const modules = await prisma.module.findMany({
+      const modules = await db.module.findMany({
         where: {
           teacherId,
           name: {
@@ -52,7 +53,7 @@ class ModulesController {
     try {
       const { moduleId } = req.params;
 
-      const module = await prisma.module.findUnique({
+      const module = await db.module.findUnique({
         where: {
           id: Number(moduleId),
         },
@@ -77,7 +78,7 @@ class ModulesController {
         return res.status(400).json({ message: validation.error });
       }
 
-      const module = await prisma.module.create({
+      const module = await db.module.create({
         data: {
           name: req.body.name,
           description: req.body.description,
@@ -106,7 +107,7 @@ class ModulesController {
         return res.status(400).json({ message: validation.error });
       }
 
-      const module = await prisma.module.update({
+      const module = await db.module.update({
         where: {
           id: Number(moduleId),
         },
@@ -138,7 +139,7 @@ class ModulesController {
         return res.status(400).json({ message: validation.error });
       }
 
-      const module = await prisma.module.delete({
+      const module = await db.module.delete({
         where: {
           id: Number(moduleId),
         },
@@ -161,7 +162,7 @@ class ModulesController {
         return res.status(400).json({ message: validation.error });
       }
 
-      const projects = await prisma.project.findMany({
+      const projects = await db.project.findMany({
         where: {
           moduleId: Number(moduleId),
         },
@@ -186,7 +187,7 @@ class ModulesController {
         return res.status(400).json({ message: validation.error });
       }
 
-      const project = await prisma.project.create({
+      const project = await db.project.create({
         data: {
           name: req.body.name as string,
           description: req.body.description as string,

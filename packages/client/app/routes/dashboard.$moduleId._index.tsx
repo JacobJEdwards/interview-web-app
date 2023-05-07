@@ -1,4 +1,4 @@
-import { type LoaderArgs, json } from "@remix-run/node";
+import { type LoaderArgs, json, V2_MetaFunction } from "@remix-run/node";
 import { getUserId, requireUser } from "~/utils/session.server";
 import { getModule } from "~/utils/modules.server";
 import { getModuleProjects } from "~/utils/modules.server";
@@ -64,6 +64,11 @@ export const loader = async ({ params, request }: LoaderArgs) => {
     crumbs,
     selectedProject,
   });
+};
+
+export const meta: V2_MetaFunction<typeof loader> = ({ data }) => {
+  const { module } = data;
+  return [{ title: module.name }];
 };
 
 export default function DashboardModule() {

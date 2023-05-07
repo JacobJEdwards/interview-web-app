@@ -28,7 +28,6 @@ export const meta: V2_MetaFunction = () => {
 
 const Layout = ({
   children,
-  title = "Interview Web App",
 }: PropsWithChildren<{ title?: string; loadUser?: boolean }>) => {
   return (
     <html lang="en" data-theme="dark">
@@ -37,7 +36,6 @@ const Layout = ({
         <meta name="viewport" content="width=device-width,initial-scale=1" />
         <Meta />
         <Links />
-        <title>{title}</title>
       </head>
       <body className="font-sans">
         {children}
@@ -52,7 +50,7 @@ const Layout = ({
 
 export default function App() {
   return (
-    <Layout title="Home">
+    <Layout>
       <Outlet />
     </Layout>
   );

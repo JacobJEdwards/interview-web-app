@@ -14,7 +14,7 @@
     ],
     "scripts": {
         "client": "yarn workspace client dev",
-        "server": "yarn workspace server start",
+        "server": "yarn workspace server dev",
         "dev": "concurrently --kill-others-on-fail \"yarn client\" \"yarn server\""
     },
     "devDependencies": {

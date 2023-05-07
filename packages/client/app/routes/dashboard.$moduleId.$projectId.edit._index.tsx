@@ -1,4 +1,4 @@
-import type { ActionArgs, LoaderArgs } from "@remix-run/node";
+import type { ActionArgs, LoaderArgs, V2_MetaFunction } from "@remix-run/node";
 import { json } from "@remix-run/node";
 import { useLoaderData, useActionData } from "@remix-run/react";
 import Breadcrumbs, { type RouteData } from "../components/Breadcrumbs";
@@ -8,6 +8,7 @@ import {
   requireUser,
   requireUserType,
 } from "../utils/session.server";
+import { getModule } from "../utils/modules.server";
 import { getProject, updateProject } from "../utils/projects.server";
 import invariant from "tiny-invariant";
 import { Role } from "server/types/generated/client";
@@ -19,12 +20,15 @@ export const loader = async ({ request, params }: LoaderArgs) => {
 
   await requireUserType(request, Role.TEACHER);
 
-  const { userId, userRole } = await getUserId(request);
+  const { userId } = await getUserId(request);
 
   const project = await getProject(params.projectId, request);
+
   if (!project) {
     return redirect(`/dashboard/${params.moduleId}`);
   }
+
+  const module = await getModule(Number(params.moduleId), request);
 
   const crumbs: RouteData[] = [
     {
@@ -32,7 +36,7 @@ export const loader = async ({ request, params }: LoaderArgs) => {
       url: "/dashboard",
     },
     {
-      name: params.moduleId,
+      name: module.name,
       url: `/dashboard/${params.moduleId}`,
     },
     {
@@ -50,6 +54,10 @@ export const loader = async ({ request, params }: LoaderArgs) => {
     crumbs,
     userId,
   });
+};
+
+export const meta: V2_MetaFunction = () => {
+  return [{ title: "Edit Project" }];
 };
 
 export const action = async ({ request, params }: ActionArgs) => {

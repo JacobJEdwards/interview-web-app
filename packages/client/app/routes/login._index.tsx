@@ -1,6 +1,20 @@
-import {Form, useActionData, useSearchParams} from "@remix-run/react";
-import {type ActionArgs, type LoaderArgs, json, redirect} from "@remix-run/node";
-import {createUserSession, login, getUserId} from "~/utils/session.server";
+import { Form, useActionData, useSearchParams } from "@remix-run/react";
+import {
+    type ActionArgs,
+    type LoaderArgs,
+    json,
+    redirect,
+} from "@remix-run/node";
+import { createUserSession, login, getUserId } from "~/utils/session.server";
+import type { V2_MetaFunction } from "@remix-run/node";
+
+export const meta: V2_MetaFunction = () => {
+    return [
+        {
+            title: "Login",
+        },
+    ];
+};
 
 const validateUrl = (url: string) => {
     const urls = ["/dashboard", "/profile", "/settings"];
