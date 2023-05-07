@@ -40,7 +40,7 @@ export const loader = async ({ request, params }: LoaderArgs) => {
 
 export const meta: V2_MetaFunction = () => {
     return [
-        { title: New Project },
+        { title: "New Project" },
     ]
 }
 
@@ -52,13 +52,16 @@ export const action = async ({ request, params }: LoaderArgs) => {
     const formData = await request.formData();
     const name = formData.get("name") as string;
     const description = formData.get("description") as string;
+    const file = formData.get("file") as File;
+
 
     const [error, project] = await newProject(
         name,
         description,
         Number(moduleId),
         userId,
-        request
+        request,
+        file
     );
 
     if (project) {

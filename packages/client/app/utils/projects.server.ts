@@ -62,7 +62,8 @@ export const newProject = async (
   description: string,
   moduleId: number,
   teacherId: number,
-  request: Request
+  request: Request,
+  file?: File,
 ): Promise<any[]> => {
   const token = await getUserToken(request);
   try {
@@ -79,6 +80,7 @@ export const newProject = async (
     );
 
     const data = await response.json();
+
 
     if (!response.ok) {
       return [data, null];
