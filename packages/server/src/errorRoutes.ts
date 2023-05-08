@@ -12,6 +12,7 @@ const errorHandler: ErrorRequestHandler = (
   res: Response,
   next: NextFunction
 ) => {
+  console.log(err);
 
   const statusCode = err instanceof Error ? 500 : 400;
 

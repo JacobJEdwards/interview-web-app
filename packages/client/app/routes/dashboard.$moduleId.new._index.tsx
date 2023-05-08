@@ -1,8 +1,9 @@
 import {
-    type LoaderArgs,
-    type V2_MetaFunction,
-    redirect,
-    json,
+  type LoaderArgs,
+  type V2_MetaFunction,
+  redirect,
+  json,
+  unstable_parseMultipartFormData,
 } from "@remix-run/node";
 import { getUserId, requireUserType } from "~/utils/session.server";
 import { Role } from "server/types/generated/client";
@@ -13,81 +14,81 @@ import ProjectForm from "~/components/ProjectForm";
 import invariant from "tiny-invariant";
 
 export const loader = async ({ request, params }: LoaderArgs) => {
-    invariant(params.moduleId, "Expected moduleId to be defined");
-    const { moduleId } = params;
+  invariant(params.moduleId, "Expected moduleId to be defined");
+  const { moduleId } = params;
 
-    await requireUserType(request, Role.TEACHER);
+  await requireUserType(request, Role.TEACHER);
 
-    const { userId, userRole } = await getUserId(request);
+  const { userId, userRole } = await getUserId(request);
 
-    const crumbs = [
-        {
-            name: "Dashboard",
-            url: "/dashboard",
-        },
-        {
-            name: moduleId,
-            url: `/dashboard/${moduleId}`,
-        },
-        {
-            name: "New Project",
-            url: `/dashboard/${moduleId}/new`,
-        },
-    ] as RouteData[];
+  const crumbs = [
+    {
+      name: "Dashboard",
+      url: "/dashboard",
+    },
+    {
+      name: moduleId,
+      url: `/dashboard/${moduleId}`,
+    },
+    {
+      name: "New Project",
+      url: `/dashboard/${moduleId}/new`,
+    },
+  ] as RouteData[];
 
-    return json({
-        moduleId,
-        userId,
-        userRole,
-        crumbs,
-    });
+  return json({
+    moduleId,
+    userId,
+    userRole,
+    crumbs,
+  });
 };
 
 export const meta: V2_MetaFunction = () => {
-    return [{ title: "New Project" }];
+  return [{ title: "New Project" }];
 };
 
 export const action = async ({ request, params }: LoaderArgs) => {
-    invariant(params.moduleId, "Expected moduleId to be defined");
-    const { userId } = await getUserId(request);
-    const { moduleId } = params;
+  invariant(params.moduleId, "Expected moduleId to be defined");
+  const { userId } = await getUserId(request);
+  const { moduleId } = params;
 
-    const formData = await request.formData();
-    const name = formData.get("name") as string;
-    const description = formData.get("description") as string;
-    const file = formData.get("fileupload") as File;
+  const formData = await request.formData();
+  const name = formData.get("name") as string;
+  const description = formData.get("description") as string;
+  const file = formData.get("fileupload") as File;
 
-    const [error, project] = await newProject(
-        name,
-        description,
-        Number(moduleId),
-        userId,
-        request,
-        file
-    );
+  const [error, project] = await newProject(
+    name,
+    description,
+    Number(moduleId),
+    userId,
+    request,
+    file
+  );
 
-    if (project) {
-        return redirect(`/dashboard/${moduleId}`);
-    }
-    // look at logout see how to fix it
-    return error;
+  if (project) {
+    return redirect(`/dashboard/${moduleId}`);
+  }
+  // look at logout see how to fix it
+  return error;
 };
 
 const NewProject = () => {
-    const { moduleId, crumbs } = useLoaderData<typeof loader>();
-    const actionData = useActionData<typeof action>();
-    return (
-        <main>
-            <Breadcrumbs crumbs={crumbs} />
-            <h1 className="text-3xl font-bold">
-                Module ID: {moduleId} - New Project
-            </h1>
-            <div className="divider"></div>
-            <div className="flex flex-col items-center justify-center">
-                <ProjectForm actionData={actionData} edit={false} />
-            </div>
-        </main>
-    );
+  const { moduleId, crumbs } = useLoaderData<typeof loader>();
+  const actionData = useActionData<typeof action>();
+  return (
+    <main>
+      <Breadcrumbs crumbs={crumbs} />
+      <h1 className="text-3xl font-bold">
+        Module ID: {moduleId} - New Project
+      </h1>
+      <div className="divider"></div>
+      <div className="flex flex-col items-center justify-center">
+        <ProjectForm actionData={actionData} edit={false} />
+      </div>
+    </main>
+  );
 };
 
 export default NewProject;

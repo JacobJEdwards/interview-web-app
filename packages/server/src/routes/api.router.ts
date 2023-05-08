@@ -5,8 +5,6 @@ import ProjectController from "../controllers/projects.controller";
 import ModulesController from "../controllers/modules.controller";
 import UserController from "../controllers/users.controller";
 
-import { storage } from "../utils/multer";
-import multer from "multer";
 
 // /api routes
 const router = express.Router();
@@ -41,7 +39,6 @@ router.delete("/modules/:moduleId", ModulesController.deleteModule);
 router.get("/modules/:moduleId/projects", ModulesController.getProjects);
 router.post(
     "/modules/:moduleId/projects/new",
-    multer({ storage: storage }).any(),
     ModulesController.createProject
 );
 
