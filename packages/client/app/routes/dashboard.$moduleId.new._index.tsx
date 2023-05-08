@@ -4,6 +4,7 @@ import {
   redirect,
   json,
   unstable_parseMultipartFormData,
+  unstable_createMemoryUploadHandler,
 } from "@remix-run/node";
 import { getUserId, requireUserType } from "~/utils/session.server";
 import { Role } from "server/types/generated/client";
@@ -53,7 +54,15 @@ export const action = async ({ request, params }: LoaderArgs) => {
   const { userId } = await getUserId(request);
   const { moduleId } = params;
 
-  const formData = await request.formData();
+  const uploadHandler = unstable_createMemoryUploadHandler({
+    maxPartSize: 10_000_000,
+  });
+
+  const formData = await unstable_parseMultipartFormData(
+    request,
+    uploadHandler
+  );
+
   const name = formData.get("name") as string;
   const description = formData.get("description") as string;
   const file = formData.get("fileupload") as File;

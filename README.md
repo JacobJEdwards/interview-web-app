@@ -18,3 +18,6 @@ TODO: Finish
 - ERROR!!! when a student selects a project they become the owner? need to look into the relation / how im connecting a student to a project
 
 - mMaybe encrypt password both sides? so that a plaintext password is never seen on the server??
+
+- currently file not working
+- i need to create an upload handler, uploadd to server (new route). route returns file name. after filename is recieved, add the filename to the project post.
