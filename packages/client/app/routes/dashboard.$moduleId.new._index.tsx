@@ -1,4 +1,9 @@
-import { type LoaderArgs, type V2_MetaFunction, redirect, json } from "@remix-run/node";
+import {
+    type LoaderArgs,
+    type V2_MetaFunction,
+    redirect,
+    json,
+} from "@remix-run/node";
 import { getUserId, requireUserType } from "~/utils/session.server";
 import { Role } from "server/types/generated/client";
 import { useActionData, useLoaderData } from "@remix-run/react";
@@ -39,10 +44,8 @@ export const loader = async ({ request, params }: LoaderArgs) => {
 };
 
 export const meta: V2_MetaFunction = () => {
-    return [
-        { title: "New Project" },
-    ]
-}
+    return [{ title: "New Project" }];
+};
 
 export const action = async ({ request, params }: LoaderArgs) => {
     invariant(params.moduleId, "Expected moduleId to be defined");
@@ -52,8 +55,7 @@ export const action = async ({ request, params }: LoaderArgs) => {
     const formData = await request.formData();
     const name = formData.get("name") as string;
     const description = formData.get("description") as string;
-    const file = formData.get("file") as File;
-
+    const file = formData.get("fileupload") as File;
 
     const [error, project] = await newProject(
         name,
