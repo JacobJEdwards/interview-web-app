@@ -17,26 +17,28 @@ export interface AppOptions {
 
 export default class App {
     public app: Application;
-    private authPath: string;
-    private apiPath: string;
+    public authPath: string;
+    public apiPath: string;
     private port: number | string;
 
-    constructor(
-        private options: AppOptions,
-    ) {
+    constructor(options: AppOptions) {
         this.app = express();
         this.port = this.normalizePort(options.port) as number;
         this.app.set("port", this.port);
 
-        this.middlewares(options.middleware);
-
-        this.apiRoutes(options.apiRoutes);
-        this.authRoutes(options.authRoutes);
-
-        this.otherRoutes(options.otherRoutes);
-
         this.apiPath = options.apiPath || "/api";
         this.authPath = options.authPath || "/auth";
+
+        this.middlewares(options.middleware);
+        console.log("Middleware added");
+
+        this.apiRoutes(options.apiRoutes);
+        console.log("API routes added");
+        this.authRoutes(options.authRoutes);
+        console.log("Auth routes added");
+
+        this.otherRoutes(options.otherRoutes);
+        console.log("Other routes added");
     }
 
     private middlewares(middleware: Middleware[]) {
