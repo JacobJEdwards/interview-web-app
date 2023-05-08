@@ -1,5 +1,5 @@
-import middleware from "./middleware";
-import errorHandler from "./errorRoutes"
+import middleware from "./middleware/middleware";
+import errorHandler from "./middleware/errorRoutes";
 
 import App, { type AppOptions } from "./application";
 

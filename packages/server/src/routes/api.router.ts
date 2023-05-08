@@ -1,5 +1,5 @@
-import express, { type Request } from "express";
-import { idParamValidation } from "../validation";
+import express from "express";
+import { idParamValidation } from "../middleware/validation";
 
 import ProjectController from "../controllers/projects.controller";
 import ModulesController from "../controllers/modules.controller";
@@ -9,8 +9,6 @@ import UserController from "../controllers/users.controller";
 const router = express.Router();
 
 /*
- * TODO: Add authentication middle ware
- * TODO: Add authorization middle ware
  * TODO: Add validation middle ware
  */
 

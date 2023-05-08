@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from "express";
-import primsa from "../utils/db";
-import { getProjectsSchema, createProjectSchema } from "../schemas";
+import prisma from "../utils/db";
+import { getProjectsSchema, createProjectSchema } from "../utils/schemas";
 import path from "path";
 import asyncHandler from "../utils/asyncHandler";
 
@@ -22,7 +22,7 @@ class ProjectsController {
       return res.status(400).json({ message: validation.error });
     }
 
-    const projects = await primsa.project.findMany({
+    const projects = await prisma.project.findMany({
       where: {
         moduleId,
         name,
@@ -36,7 +36,7 @@ class ProjectsController {
   public async getProject(req: Request, res: Response, next: NextFunction) {
     const { projectId } = req.params;
 
-    const project = await primsa.project.findUnique({
+    const project = await prisma.project.findUnique({
       where: {
         id: Number(projectId),
       },
@@ -58,7 +58,7 @@ class ProjectsController {
       return res.status(400).json({ message: validation.error });
     }
 
-    const project = await primsa.project.create({
+    const project = await prisma.project.create({
       data: {
         name: req.body.name,
         description: req.body.description,
@@ -73,7 +73,7 @@ class ProjectsController {
   public async updateProject(req: Request, res: Response, next: NextFunction) {
     const { name, description } = req.body;
     const filePath = req.file?.path ?? undefined;
-    const project = await primsa.project.update({
+    const project = await prisma.project.update({
       where: {
         id: Number(req.params.projectId),
       },
@@ -96,7 +96,7 @@ class ProjectsController {
   public async deleteProject(req: Request, res: Response, next: NextFunction) {
     const { projectId } = req.params;
 
-    const project = await primsa.project.delete({
+    const project = await prisma.project.delete({
       where: {
         id: Number(projectId),
       },
@@ -109,7 +109,7 @@ class ProjectsController {
   public async downloadFile(req: Request, res: Response, next: NextFunction) {
     const { projectId } = req.params;
 
-    const project = await primsa.project.findUnique({
+    const project = await prisma.project.findUnique({
       where: {
         id: Number(projectId),
       },

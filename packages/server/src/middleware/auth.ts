@@ -1,7 +1,7 @@
 import jwt from "jsonwebtoken";
 import { Request, Response, NextFunction } from "express";
 import * as dotenv from "dotenv";
-import schemas from "./schemas";
+import schemas from "../utils/schemas";
 
 dotenv.config();
 

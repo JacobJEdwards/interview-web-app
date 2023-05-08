@@ -1,7 +1,7 @@
-import { Request, Response, NextFunction } from "express";
-import { Role } from "../../types/generated/client/";
+import {NextFunction, Request, Response} from "express";
+import {Role} from "../../types/generated/client/";
 import prisma from "../utils/db";
-import { idSchema } from "../schemas";
+import {idSchema} from "../utils/schemas";
 import asyncHandler from "../utils/asyncHandler";
 
 class UserController {
@@ -232,7 +232,7 @@ class UserController {
             },
         });
 
-        res.status(200).json(project);
+        res.status(200).json(selectProject);
     }
 
     @asyncHandler

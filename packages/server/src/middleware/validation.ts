@@ -1,17 +1,17 @@
-import schemas from "./schemas";
-import type { Request, Response, NextFunction } from "express";
+import schemas from "../utils/schemas";
+import type {NextFunction, Request, Response} from "express";
 
 // validation middle ware
 
 /* export default (schemaName: string) => {    
     return (req: Request, res: Response, next: NextFunction) => {
-        const { error } = schemas[schemaName].validate(req.body);
-        const valid = error == null;
-        if (valid) {
+    try {
+        const  validation = schemas[schemaName].parse(req.body);
             next();
-        } else {
-            next(error);
-        }
+    }
+    catch (error: unknown) {
+        next(error);
+    }
     }
 } */
 
@@ -23,7 +23,7 @@ export const idParamValidation = (
   value: string
 ) => {
   try {
-    const validation = schemas.id.parse(value);
+    schemas.id.parse(value);
     next();
   } catch (error: unknown) {
     res.status(400).json({ error: error });
@@ -36,8 +36,7 @@ export const loginValidation = (
   next: NextFunction
 ) => {
   try {
-    const validation = schemas.login.parse(req.body);
-    req.body = validation;
+    req.body = schemas.login.parse(req.body);
     next();
   } catch (error: unknown) {
     res.status(400).json({ error: error });

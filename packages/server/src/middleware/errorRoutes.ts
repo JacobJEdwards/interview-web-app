@@ -10,7 +10,7 @@ const errorHandler: ErrorRequestHandler = (
   err: unknown,
   req: Request,
   res: Response,
-  next: NextFunction
+  _next: NextFunction
 ) => {
   console.log(err);
 
@@ -22,7 +22,7 @@ const errorHandler: ErrorRequestHandler = (
 const notFound: RequestHandler = (
   req: Request,
   res: Response,
-  next: NextFunction
+  _next: NextFunction
 ) => {
   res.status(404).json({ message: "Endpoint does not exist" });
 };

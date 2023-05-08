@@ -7,7 +7,7 @@ import {
   updateModuleSchema,
   createProjectSchema,
   idSchema,
-} from "../schemas";
+} from "../utils/schemas";
 import asyncHandler from "../utils/asyncHandler";
 
 class ModulesController {
@@ -48,7 +48,7 @@ class ModulesController {
 
   // get specific module
   @asyncHandler
-  public async getModule(req: Request, res: Response, next: NextFunction) {
+  public async getModule(req: Request, res: Response, _next: NextFunction) {
     const { moduleId } = req.params;
 
     const module = await db.module.findUnique({
@@ -66,7 +66,7 @@ class ModulesController {
 
   // create module
   @asyncHandler
-  public async createModule(req: Request, res: Response, next: NextFunction) {
+  public async createModule(req: Request, res: Response, _next: NextFunction) {
     const validation = createModuleSchema.safeParse(req.body);
 
     if (!validation.success) {
@@ -86,7 +86,7 @@ class ModulesController {
 
   // update module
   @asyncHandler
-  public async updateModule(req: Request, res: Response, next: NextFunction) {
+  public async updateModule(req: Request, res: Response, _next: NextFunction) {
     const { moduleId } = req.params;
     const validation = updateModuleSchema.safeParse({
       name: req.body.name,
@@ -119,7 +119,7 @@ class ModulesController {
 
   // delete module
   @asyncHandler
-  public async deleteModule(req: Request, res: Response, next: NextFunction) {
+  public async deleteModule(req: Request, res: Response, _next: NextFunction) {
     const { moduleId } = req.params;
 
     const validation = idSchema.safeParse(moduleId);
@@ -139,7 +139,7 @@ class ModulesController {
 
   // get a module's projects
   @asyncHandler
-  public async getProjects(req: Request, res: Response, next: NextFunction) {
+  public async getProjects(req: Request, res: Response, _next: NextFunction) {
     const { moduleId } = req.params;
 
     const validation = idSchema.safeParse(moduleId);
@@ -163,7 +163,7 @@ class ModulesController {
 
   // create and connect project to module
   @asyncHandler
-  public async createProject(req: Request, res: Response, next: NextFunction) {
+  public async createProject(req: Request, res: Response, _next: NextFunction) {
     const filePath = req.file ? req.file.path : undefined;
 
     const validation = createProjectSchema.safeParse(req.body);

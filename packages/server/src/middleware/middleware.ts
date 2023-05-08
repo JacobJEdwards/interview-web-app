@@ -1,9 +1,9 @@
-import express, { Request, Response, NextFunction } from "express";
+import express from "express";
 import Cors from "cors";
 import Morgan from "morgan";
 import Helmet from "helmet";
 import * as dotenv from "dotenv";
-import { storage } from "./utils/multer";
+import { storage } from "../utils/multer";
 import multer from "multer";
 import compression from "compression";
 

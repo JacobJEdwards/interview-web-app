@@ -1,7 +1,7 @@
 import type { Application, RequestHandler, ErrorRequestHandler } from "express";
 import express, { Router } from "express";
 import { createServer, Server } from "http";
-import validateToken from "./auth";
+import validateToken from "./middleware/auth";
 
 type Middleware = RequestHandler | ErrorRequestHandler;
 
@@ -30,15 +30,11 @@ export default class App {
         this.authPath = options.authPath || "/auth";
 
         this.middlewares(options.middleware);
-        console.log("Middleware added");
 
         this.apiRoutes(options.apiRoutes);
-        console.log("API routes added");
         this.authRoutes(options.authRoutes);
-        console.log("Auth routes added");
 
         this.otherRoutes(options.otherRoutes);
-        console.log("Other routes added");
     }
 
     private middlewares(middleware: Middleware[]) {

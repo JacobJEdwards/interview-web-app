@@ -4,6 +4,7 @@ import type { Request, Response, NextFunction } from "express";
  * Wraps an async request handler function and adds proper error handling.
  *
  * @param {function} fn - The async request handler function to wrap.
+ * @param _context
  * @returns {function} - The wrapped async request handler function.
  */
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
