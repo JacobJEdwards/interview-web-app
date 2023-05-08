@@ -21,3 +21,5 @@ TODO: Finish
 
 - currently file not working
 - i need to create an upload handler, uploadd to server (new route). route returns file name. after filename is recieved, add the filename to the project post.
+
+**Kind of wish id just used vite with react router instead of remix as i find it overcomplicates**
