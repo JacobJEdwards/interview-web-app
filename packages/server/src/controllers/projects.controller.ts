@@ -1,6 +1,7 @@
 import { Request, Response, NextFunction } from "express";
 import primsa from "../utils/db";
 import { getProjectsSchema, createProjectSchema } from "../schemas";
+import path from "path";
 
 class ProjectsController {
     // basic CRUD operations
@@ -79,6 +80,7 @@ class ProjectsController {
     public async updateProject(req: Request, res: Response, next: NextFunction) {
         try {
             const { name, description } = req.body;
+            const filePath = req.file?.path ?? undefined;
             const project = await primsa.project.update({
                 where: {
                     id: Number(req.params.projectId),
@@ -86,6 +88,7 @@ class ProjectsController {
                 data: {
                     name,
                     description,
+                    filePath,
                 },
             });
 
@@ -110,6 +113,32 @@ class ProjectsController {
                 },
             });
             return res.status(200).json(project);
+        } catch (err) {
+            next(err);
+        }
+    }
+
+    public async downloadFile(req: Request, res: Response, next: NextFunction) {
+        try {
+            const { projectId } = req.params;
+
+            const project = await primsa.project.findUnique({
+                where: {
+                    id: Number(projectId),
+                },
+            });
+
+            if (!project) {
+                return res.status(404).json({ message: "Project not found" });
+            }
+
+            if (!project.filePath) {
+                return res.status(404).json({ message: "File not found" });
+            }
+
+            return res.sendFile(project.filePath, {
+                root: path.join(__dirname, "../../"),
+            });
         } catch (err) {
             next(err);
         }

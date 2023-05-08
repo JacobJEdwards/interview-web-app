@@ -11,7 +11,8 @@ dotenv.config();
 const middleware = [
     express.json(),
     express.urlencoded({ extended: true }),
-    multer({ storage: storage }).any(),
+    multer({ storage: storage }).single("file"),
+    express.static("uploads"),
     Cors(),
     Morgan("dev"),
     Helmet(),

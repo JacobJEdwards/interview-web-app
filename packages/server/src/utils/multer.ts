@@ -1,5 +1,6 @@
 import type { Request } from "express";
 import multer, { FileFilterCallback } from "multer";
+import { v4 } from "uuid";
 
 type DestinationCallback = (error: Error | null, destination: string) => void;
 type FilenameCallback = (error: Error | null, filename: string) => void;
@@ -10,7 +11,6 @@ export const storage = multer.diskStorage({
     file: Express.Multer.File,
     cb: DestinationCallback
   ): void => {
-    console.log("file", file);
     cb(null, "uploads/");
   },
   filename: (
@@ -18,8 +18,7 @@ export const storage = multer.diskStorage({
     file: Express.Multer.File,
     cb: FilenameCallback
   ): void => {
-    console.log("file", file);
-    cb(null, file.originalname);
+    cb(null, v4());
   },
 });
 

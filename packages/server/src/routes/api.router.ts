@@ -5,7 +5,6 @@ import ProjectController from "../controllers/projects.controller";
 import ModulesController from "../controllers/modules.controller";
 import UserController from "../controllers/users.controller";
 
-
 // /api routes
 const router = express.Router();
 
@@ -29,6 +28,7 @@ router.get("/projects/:projectId", ProjectController.getProject);
 router.post("/projects", ProjectController.createProject);
 router.put("/projects/:projectId", ProjectController.updateProject);
 router.delete("/projects/:projectId", ProjectController.deleteProject);
+router.get("/projects/:projectId/download", ProjectController.downloadFile);
 
 // Module routes
 router.get("/modules", ModulesController.getModules);
@@ -37,10 +37,7 @@ router.post("/modules", ModulesController.createModule);
 router.put("/modules/:moduleId", ModulesController.updateModule);
 router.delete("/modules/:moduleId", ModulesController.deleteModule);
 router.get("/modules/:moduleId/projects", ModulesController.getProjects);
-router.post(
-    "/modules/:moduleId/projects/new",
-    ModulesController.createProject
-);
+router.post("/modules/:moduleId/projects/new", ModulesController.createProject);
 
 // User routes
 router.get("/users", UserController.getUsers);

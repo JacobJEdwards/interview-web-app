@@ -1,5 +1,9 @@
 import type { ActionArgs, LoaderArgs, V2_MetaFunction } from "@remix-run/node";
-import { json } from "@remix-run/node";
+import {
+  json,
+  unstable_parseMultipartFormData,
+  unstable_createMemoryUploadHandler,
+} from "@remix-run/node";
 import { useLoaderData, useActionData } from "@remix-run/react";
 import Breadcrumbs, { type RouteData } from "../components/Breadcrumbs";
 import ProjectForm from "../components/ProjectForm";
@@ -66,15 +70,25 @@ export const action = async ({ request, params }: ActionArgs) => {
 
   const { userId } = await getUserId(request);
 
-  const formData = await request.formData();
+  const uploadHandler = unstable_createMemoryUploadHandler({
+    maxPartSize: 10_000_000,
+  });
+
+  const formData = await unstable_parseMultipartFormData(
+    request,
+    uploadHandler
+  );
+
   const name = formData.get("name") as string;
   const description = formData.get("description") as string;
+  const file = formData.get("fileupload") as File;
 
   const [error, project] = await updateProject(
     name,
     description,
     Number(params.projectId),
-    request
+    request,
+    file
   );
 
   if (project) {

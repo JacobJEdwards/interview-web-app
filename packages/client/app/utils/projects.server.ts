@@ -103,10 +103,17 @@ export const updateProject = async (
   name: string,
   description: string,
   projectId: number,
-  request: Request
+  request: Request,
+  file?: File
 ) => {
   const token = await getUserToken(request);
   try {
+    const formData = new FormData();
+    formData.append("name", name);
+    formData.append("description", description);
+    if (file) {
+      formData.append("file", file);
+    }
     const response = await fetch(
       `http://localhost:6060/api/projects/${projectId}`,
       {
@@ -114,7 +121,7 @@ export const updateProject = async (
         headers: {
           Authorization: token,
         },
-        body: JSON.stringify({ name: name, description: description }),
+        body: formData,
       }
     );
 
@@ -146,6 +153,30 @@ export const deleteProject = async (id: string, request: Request) => {
     }
 
     return await response.json();
+  } catch (error) {
+    console.error(error);
+    return null;
+  }
+};
+
+export const downloadProject = async (id: string, request: Request) => {
+  const token = await getUserToken(request);
+  try {
+    const response = await fetch(
+      `http://localhost:6060/api/projects/${id}/download`,
+      {
+        method: "GET",
+        headers: {
+          Authorization: token,
+        },
+      }
+    );
+
+    if (!response.ok) {
+      return null;
+    }
+
+    return await response.blob();
   } catch (error) {
     console.error(error);
     return null;
