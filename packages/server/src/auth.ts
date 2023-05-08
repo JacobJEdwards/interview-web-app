@@ -27,14 +27,13 @@ const validateToken = (req: Request, res: Response, next: NextFunction) => {
 
         const validToken = schemas.token.parse(decoded);
 
-        // req.user = decoded;
         // will give the req object user info for use in future from token (? could be useful -> would have to extend Request interface and change type of routes)
-        // req.user = {
-        //   id: validToken.id,
-        //   email: validToken.email,
-        //   name: validToken.name,
-        //   role: validToken.role,
-        // };
+        req.user = {
+            id: validToken.id,
+            email: validToken.email,
+            name: validToken.name,
+            role: validToken.role,
+        };
 
         next();
     } catch (error) {

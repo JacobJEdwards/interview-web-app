@@ -5,28 +5,38 @@ import validateToken from "./auth";
 
 type Middleware = RequestHandler | ErrorRequestHandler;
 
+export interface AppOptions {
+    port: number | string;
+    middleware: Middleware[];
+    apiRoutes: Array<Router>;
+    authRoutes: Array<Router>;
+    otherRoutes: Middleware[];
+    apiPath?: string;
+    authPath?: string;
+}
+
 export default class App {
     public app: Application;
+    private authPath: string;
+    private apiPath: string;
+    private port: number | string;
 
     constructor(
-        readonly port: number | string,
-        middleware: Middleware[],
-        apiRoutes: Array<Router>,
-        authRoutes: Array<Router>,
-        otherRoutes: Middleware[],
-        private apiPath: string = "/api",
-        private authPath: string = "/auth"
+        private options: AppOptions,
     ) {
         this.app = express();
-        this.port = this.normalizePort(port) as number;
+        this.port = this.normalizePort(options.port) as number;
         this.app.set("port", this.port);
 
-        this.middlewares(middleware);
+        this.middlewares(options.middleware);
 
-        this.apiRoutes(apiRoutes);
-        this.authRoutes(authRoutes);
+        this.apiRoutes(options.apiRoutes);
+        this.authRoutes(options.authRoutes);
 
-        this.otherRoutes(otherRoutes);
+        this.otherRoutes(options.otherRoutes);
+
+        this.apiPath = options.apiPath || "/api";
+        this.authPath = options.authPath || "/auth";
     }
 
     private middlewares(middleware: Middleware[]) {
