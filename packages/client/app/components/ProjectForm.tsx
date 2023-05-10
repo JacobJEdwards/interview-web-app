@@ -78,7 +78,7 @@ const ProjectForm: FC<ProjectFormProps> = ({ project, edit, actionData }) => {
       )}
       <div className="w-full mb-6">
         <label className="label" htmlFor="fileupload">
-          <span className="label-text font-semibold">Files upload</span>
+          <span className="label-text font-semibold">File upload</span>
         </label>
         <input
           type="file"

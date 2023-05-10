@@ -2358,11 +2358,18 @@ html {
 .m-4 {
   margin: 1rem;
 }
+.my-8 {
+  margin-top: 2rem;
+  margin-bottom: 2rem;
+}
 .mb-4 {
   margin-bottom: 1rem;
 }
 .mb-6 {
   margin-bottom: 1.5rem;
+}
+.ml-auto {
+  margin-left: auto;
 }
 .mt-10 {
   margin-top: 2.5rem;
