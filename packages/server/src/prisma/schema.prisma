@@ -36,16 +36,19 @@ model Project {
     filePath          String?
     StudentSubmission StudentSubmission[]
     File              File[]
+    dateSet           DateTime
+    dateDue           DateTime
 }
 
 model StudentSubmission {
-    id        Int     @id @default(autoincrement())
-    studentId Int
-    projectId Int
-    student   User    @relation(fields: [studentId], references: [id])
-    project   Project @relation(fields: [projectId], references: [id])
-    filePath  String
-    File      File[]
+    id            Int      @id @default(autoincrement())
+    studentId     Int
+    projectId     Int
+    student       User     @relation(fields: [studentId], references: [id])
+    project       Project  @relation(fields: [projectId], references: [id])
+    filePath      String
+    File          File[]
+    dateSubmitted DateTime
 }
 
 model File {

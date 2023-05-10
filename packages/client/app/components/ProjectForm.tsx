@@ -62,6 +62,20 @@ const ProjectForm: FC<ProjectFormProps> = ({ project, edit, actionData }) => {
           required
         />
       </div>
+      {!edit && (
+        <div className="mb-6 w-full">
+          <label className="label" htmlFor="dateDue">
+            <span className="label-text font-semibold">Due date</span>
+          </label>
+          <input
+            type="date"
+            name="dateDue"
+            id="dateDue"
+            className="input input-bordered w-full bg-gray-800 placeholder:italic"
+            required
+          />
+        </div>
+      )}
       <div className="w-full mb-6">
         <label className="label" htmlFor="fileupload">
           <span className="label-text font-semibold">Files upload</span>

@@ -62,6 +62,7 @@ export const newProject = async (
   description: string,
   moduleId: number,
   teacherId: number,
+  dateDue: string,
   request: Request,
   file?: File
 ): Promise<any[]> => {
@@ -72,6 +73,7 @@ export const newProject = async (
     formData.append("description", description);
     formData.append("moduleId", moduleId.toString());
     formData.append("teacherId", teacherId.toString());
+    formData.append("dateDue", dateDue);
     if (file) {
       formData.append("file", file);
     }

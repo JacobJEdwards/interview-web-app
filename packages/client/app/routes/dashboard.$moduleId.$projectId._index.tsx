@@ -134,12 +134,13 @@ export const action = async ({ request, params }: ActionArgs) => {
 export default function ProjectRoute() {
     const { project, userRole, isProjectSelectedByUser, crumbs, projectFiles } =
         useLoaderData<typeof loader>();
-    const { name, description } = project;
+    const { name, description, dateDue } = project;
     return (
         <main>
             <Breadcrumbs crumbs={crumbs} />
             <section className="prose max-w-none">
                 <h1 className="text-3xl">{name}</h1>
+                <p>{new Date(dateDue).toLocaleString()}</p>
                 <div className="divider"></div>
                 <p>{description}</p>
                 <div className="flex flex-row justify-evenly mt-4 max-w-none w-full">

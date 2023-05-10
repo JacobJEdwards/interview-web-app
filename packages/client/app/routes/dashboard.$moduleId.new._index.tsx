@@ -66,12 +66,14 @@ export const action = async ({ request, params }: LoaderArgs) => {
   const name = formData.get("name") as string;
   const description = formData.get("description") as string;
   const file = formData.get("fileupload") as File;
+  const dateDue = formData.get("dateDue") as string;
 
   const [error, project] = await newProject(
     name,
     description,
     Number(moduleId),
     userId,
+    dateDue,
     request,
     file
   );

@@ -63,6 +63,8 @@ class ProjectsController {
         name: req.body.name,
         description: req.body.description,
         moduleId: Number(req.body.moduleId),
+        dateSet: new Date().toLocaleString(),
+        dateDue: new Date(req.body.dateDue).toLocaleString(),
       },
     });
     return res.status(201).json(project);

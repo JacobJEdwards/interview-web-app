@@ -44,6 +44,8 @@ export type Project = {
   description: string
   moduleId: number
   filePath: string | null
+  dateSet: Date
+  dateDue: Date
 }
 
 /**
@@ -55,6 +57,20 @@ export type StudentSubmission = {
   studentId: number
   projectId: number
   filePath: string
+  dateSubmitted: Date
+}
+
+/**
+ * Model File
+ * 
+ */
+export type File = {
+  id: number
+  name: string
+  filePath: string
+  projectId: number | null
+  submissionId: number | null
+  extension: string
 }
 
 /**
@@ -241,6 +257,16 @@ export class PrismaClient<
     * ```
     */
   get studentSubmission(): Prisma.StudentSubmissionDelegate<GlobalReject>;
+
+  /**
+   * `prisma.file`: Exposes CRUD operations for the **File** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more Files
+    * const files = await prisma.file.findMany()
+    * ```
+    */
+  get file(): Prisma.FileDelegate<GlobalReject>;
 
   /**
    * `prisma.module`: Exposes CRUD operations for the **Module** model.
@@ -724,6 +750,7 @@ export namespace Prisma {
     Admin: 'Admin',
     Project: 'Project',
     StudentSubmission: 'StudentSubmission',
+    File: 'File',
     Module: 'Module'
   };
 
@@ -942,11 +969,13 @@ export namespace Prisma {
   export type ProjectCountOutputType = {
     students: number
     StudentSubmission: number
+    File: number
   }
 
   export type ProjectCountOutputTypeSelect = {
     students?: boolean
     StudentSubmission?: boolean
+    File?: boolean
   }
 
   export type ProjectCountOutputTypeGetPayload<S extends boolean | null | undefined | ProjectCountOutputTypeArgs> =
@@ -975,6 +1004,49 @@ export namespace Prisma {
      * Select specific fields to fetch from the ProjectCountOutputType
      */
     select?: ProjectCountOutputTypeSelect | null
+  }
+
+
+
+  /**
+   * Count Type StudentSubmissionCountOutputType
+   */
+
+
+  export type StudentSubmissionCountOutputType = {
+    File: number
+  }
+
+  export type StudentSubmissionCountOutputTypeSelect = {
+    File?: boolean
+  }
+
+  export type StudentSubmissionCountOutputTypeGetPayload<S extends boolean | null | undefined | StudentSubmissionCountOutputTypeArgs> =
+    S extends { select: any, include: any } ? 'Please either choose `select` or `include`' :
+    S extends true ? StudentSubmissionCountOutputType :
+    S extends undefined ? never :
+    S extends { include: any } & (StudentSubmissionCountOutputTypeArgs)
+    ? StudentSubmissionCountOutputType 
+    : S extends { select: any } & (StudentSubmissionCountOutputTypeArgs)
+      ? {
+    [P in TruthyKeys<S['select']>]:
+    P extends keyof StudentSubmissionCountOutputType ? StudentSubmissionCountOutputType[P] : never
+  } 
+      : StudentSubmissionCountOutputType
+
+
+
+
+  // Custom InputTypes
+
+  /**
+   * StudentSubmissionCountOutputType without action
+   */
+  export type StudentSubmissionCountOutputTypeArgs = {
+    /**
+     * Select specific fields to fetch from the StudentSubmissionCountOutputType
+     */
+    select?: StudentSubmissionCountOutputTypeSelect | null
   }
 
 
@@ -3028,6 +3100,8 @@ export namespace Prisma {
     description: string | null
     moduleId: number | null
     filePath: string | null
+    dateSet: Date | null
+    dateDue: Date | null
   }
 
   export type ProjectMaxAggregateOutputType = {
@@ -3036,6 +3110,8 @@ export namespace Prisma {
     description: string | null
     moduleId: number | null
     filePath: string | null
+    dateSet: Date | null
+    dateDue: Date | null
   }
 
   export type ProjectCountAggregateOutputType = {
@@ -3044,6 +3120,8 @@ export namespace Prisma {
     description: number
     moduleId: number
     filePath: number
+    dateSet: number
+    dateDue: number
     _all: number
   }
 
@@ -3064,6 +3142,8 @@ export namespace Prisma {
     description?: true
     moduleId?: true
     filePath?: true
+    dateSet?: true
+    dateDue?: true
   }
 
   export type ProjectMaxAggregateInputType = {
@@ -3072,6 +3152,8 @@ export namespace Prisma {
     description?: true
     moduleId?: true
     filePath?: true
+    dateSet?: true
+    dateDue?: true
   }
 
   export type ProjectCountAggregateInputType = {
@@ -3080,6 +3162,8 @@ export namespace Prisma {
     description?: true
     moduleId?: true
     filePath?: true
+    dateSet?: true
+    dateDue?: true
     _all?: true
   }
 
@@ -3176,6 +3260,8 @@ export namespace Prisma {
     description: string
     moduleId: number
     filePath: string | null
+    dateSet: Date
+    dateDue: Date
     _count: ProjectCountAggregateOutputType | null
     _avg: ProjectAvgAggregateOutputType | null
     _sum: ProjectSumAggregateOutputType | null
@@ -3203,9 +3289,12 @@ export namespace Prisma {
     description?: boolean
     moduleId?: boolean
     filePath?: boolean
+    dateSet?: boolean
+    dateDue?: boolean
     module?: boolean | ModuleArgs
     students?: boolean | Project$studentsArgs
     StudentSubmission?: boolean | Project$StudentSubmissionArgs
+    File?: boolean | Project$FileArgs
     _count?: boolean | ProjectCountOutputTypeArgs
   }
 
@@ -3214,6 +3303,7 @@ export namespace Prisma {
     module?: boolean | ModuleArgs
     students?: boolean | Project$studentsArgs
     StudentSubmission?: boolean | Project$StudentSubmissionArgs
+    File?: boolean | Project$FileArgs
     _count?: boolean | ProjectCountOutputTypeArgs
   }
 
@@ -3227,6 +3317,7 @@ export namespace Prisma {
         P extends 'module' ? ModuleGetPayload<S['include'][P]> :
         P extends 'students' ? Array < UserGetPayload<S['include'][P]>>  :
         P extends 'StudentSubmission' ? Array < StudentSubmissionGetPayload<S['include'][P]>>  :
+        P extends 'File' ? Array < FileGetPayload<S['include'][P]>>  :
         P extends '_count' ? ProjectCountOutputTypeGetPayload<S['include'][P]> :  never
   } 
     : S extends { select: any } & (ProjectArgs | ProjectFindManyArgs)
@@ -3235,6 +3326,7 @@ export namespace Prisma {
         P extends 'module' ? ModuleGetPayload<S['select'][P]> :
         P extends 'students' ? Array < UserGetPayload<S['select'][P]>>  :
         P extends 'StudentSubmission' ? Array < StudentSubmissionGetPayload<S['select'][P]>>  :
+        P extends 'File' ? Array < FileGetPayload<S['select'][P]>>  :
         P extends '_count' ? ProjectCountOutputTypeGetPayload<S['select'][P]> :  P extends keyof Project ? Project[P] : never
   } 
       : Project
@@ -3612,6 +3704,8 @@ export namespace Prisma {
     students<T extends Project$studentsArgs= {}>(args?: Subset<T, Project$studentsArgs>): Prisma.PrismaPromise<Array<UserGetPayload<T>>| Null>;
 
     StudentSubmission<T extends Project$StudentSubmissionArgs= {}>(args?: Subset<T, Project$StudentSubmissionArgs>): Prisma.PrismaPromise<Array<StudentSubmissionGetPayload<T>>| Null>;
+
+    File<T extends Project$FileArgs= {}>(args?: Subset<T, Project$FileArgs>): Prisma.PrismaPromise<Array<FileGetPayload<T>>| Null>;
 
     private get _document();
     /**
@@ -4011,6 +4105,27 @@ export namespace Prisma {
 
 
   /**
+   * Project.File
+   */
+  export type Project$FileArgs = {
+    /**
+     * Select specific fields to fetch from the File
+     */
+    select?: FileSelect | null
+    /**
+     * Choose, which related nodes to fetch as well.
+     */
+    include?: FileInclude | null
+    where?: FileWhereInput
+    orderBy?: Enumerable<FileOrderByWithRelationInput>
+    cursor?: FileWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: Enumerable<FileScalarFieldEnum>
+  }
+
+
+  /**
    * Project without action
    */
   export type ProjectArgs = {
@@ -4056,6 +4171,7 @@ export namespace Prisma {
     studentId: number | null
     projectId: number | null
     filePath: string | null
+    dateSubmitted: Date | null
   }
 
   export type StudentSubmissionMaxAggregateOutputType = {
@@ -4063,6 +4179,7 @@ export namespace Prisma {
     studentId: number | null
     projectId: number | null
     filePath: string | null
+    dateSubmitted: Date | null
   }
 
   export type StudentSubmissionCountAggregateOutputType = {
@@ -4070,6 +4187,7 @@ export namespace Prisma {
     studentId: number
     projectId: number
     filePath: number
+    dateSubmitted: number
     _all: number
   }
 
@@ -4091,6 +4209,7 @@ export namespace Prisma {
     studentId?: true
     projectId?: true
     filePath?: true
+    dateSubmitted?: true
   }
 
   export type StudentSubmissionMaxAggregateInputType = {
@@ -4098,6 +4217,7 @@ export namespace Prisma {
     studentId?: true
     projectId?: true
     filePath?: true
+    dateSubmitted?: true
   }
 
   export type StudentSubmissionCountAggregateInputType = {
@@ -4105,6 +4225,7 @@ export namespace Prisma {
     studentId?: true
     projectId?: true
     filePath?: true
+    dateSubmitted?: true
     _all?: true
   }
 
@@ -4200,6 +4321,7 @@ export namespace Prisma {
     studentId: number
     projectId: number
     filePath: string
+    dateSubmitted: Date
     _count: StudentSubmissionCountAggregateOutputType | null
     _avg: StudentSubmissionAvgAggregateOutputType | null
     _sum: StudentSubmissionSumAggregateOutputType | null
@@ -4226,14 +4348,19 @@ export namespace Prisma {
     studentId?: boolean
     projectId?: boolean
     filePath?: boolean
+    dateSubmitted?: boolean
     student?: boolean | UserArgs
     project?: boolean | ProjectArgs
+    File?: boolean | StudentSubmission$FileArgs
+    _count?: boolean | StudentSubmissionCountOutputTypeArgs
   }
 
 
   export type StudentSubmissionInclude = {
     student?: boolean | UserArgs
     project?: boolean | ProjectArgs
+    File?: boolean | StudentSubmission$FileArgs
+    _count?: boolean | StudentSubmissionCountOutputTypeArgs
   }
 
   export type StudentSubmissionGetPayload<S extends boolean | null | undefined | StudentSubmissionArgs> =
@@ -4244,13 +4371,17 @@ export namespace Prisma {
     ? StudentSubmission  & {
     [P in TruthyKeys<S['include']>]:
         P extends 'student' ? UserGetPayload<S['include'][P]> :
-        P extends 'project' ? ProjectGetPayload<S['include'][P]> :  never
+        P extends 'project' ? ProjectGetPayload<S['include'][P]> :
+        P extends 'File' ? Array < FileGetPayload<S['include'][P]>>  :
+        P extends '_count' ? StudentSubmissionCountOutputTypeGetPayload<S['include'][P]> :  never
   } 
     : S extends { select: any } & (StudentSubmissionArgs | StudentSubmissionFindManyArgs)
       ? {
     [P in TruthyKeys<S['select']>]:
         P extends 'student' ? UserGetPayload<S['select'][P]> :
-        P extends 'project' ? ProjectGetPayload<S['select'][P]> :  P extends keyof StudentSubmission ? StudentSubmission[P] : never
+        P extends 'project' ? ProjectGetPayload<S['select'][P]> :
+        P extends 'File' ? Array < FileGetPayload<S['select'][P]>>  :
+        P extends '_count' ? StudentSubmissionCountOutputTypeGetPayload<S['select'][P]> :  P extends keyof StudentSubmission ? StudentSubmission[P] : never
   } 
       : StudentSubmission
 
@@ -4626,6 +4757,8 @@ export namespace Prisma {
 
     project<T extends ProjectArgs= {}>(args?: Subset<T, ProjectArgs>): Prisma__ProjectClient<ProjectGetPayload<T> | Null>;
 
+    File<T extends StudentSubmission$FileArgs= {}>(args?: Subset<T, StudentSubmission$FileArgs>): Prisma.PrismaPromise<Array<FileGetPayload<T>>| Null>;
+
     private get _document();
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
@@ -4982,6 +5115,27 @@ export namespace Prisma {
 
 
   /**
+   * StudentSubmission.File
+   */
+  export type StudentSubmission$FileArgs = {
+    /**
+     * Select specific fields to fetch from the File
+     */
+    select?: FileSelect | null
+    /**
+     * Choose, which related nodes to fetch as well.
+     */
+    include?: FileInclude | null
+    where?: FileWhereInput
+    orderBy?: Enumerable<FileOrderByWithRelationInput>
+    cursor?: FileWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: Enumerable<FileScalarFieldEnum>
+  }
+
+
+  /**
    * StudentSubmission without action
    */
   export type StudentSubmissionArgs = {
@@ -4993,6 +5147,993 @@ export namespace Prisma {
      * Choose, which related nodes to fetch as well.
      */
     include?: StudentSubmissionInclude | null
+  }
+
+
+
+  /**
+   * Model File
+   */
+
+
+  export type AggregateFile = {
+    _count: FileCountAggregateOutputType | null
+    _avg: FileAvgAggregateOutputType | null
+    _sum: FileSumAggregateOutputType | null
+    _min: FileMinAggregateOutputType | null
+    _max: FileMaxAggregateOutputType | null
+  }
+
+  export type FileAvgAggregateOutputType = {
+    id: number | null
+    projectId: number | null
+    submissionId: number | null
+  }
+
+  export type FileSumAggregateOutputType = {
+    id: number | null
+    projectId: number | null
+    submissionId: number | null
+  }
+
+  export type FileMinAggregateOutputType = {
+    id: number | null
+    name: string | null
+    filePath: string | null
+    projectId: number | null
+    submissionId: number | null
+    extension: string | null
+  }
+
+  export type FileMaxAggregateOutputType = {
+    id: number | null
+    name: string | null
+    filePath: string | null
+    projectId: number | null
+    submissionId: number | null
+    extension: string | null
+  }
+
+  export type FileCountAggregateOutputType = {
+    id: number
+    name: number
+    filePath: number
+    projectId: number
+    submissionId: number
+    extension: number
+    _all: number
+  }
+
+
+  export type FileAvgAggregateInputType = {
+    id?: true
+    projectId?: true
+    submissionId?: true
+  }
+
+  export type FileSumAggregateInputType = {
+    id?: true
+    projectId?: true
+    submissionId?: true
+  }
+
+  export type FileMinAggregateInputType = {
+    id?: true
+    name?: true
+    filePath?: true
+    projectId?: true
+    submissionId?: true
+    extension?: true
+  }
+
+  export type FileMaxAggregateInputType = {
+    id?: true
+    name?: true
+    filePath?: true
+    projectId?: true
+    submissionId?: true
+    extension?: true
+  }
+
+  export type FileCountAggregateInputType = {
+    id?: true
+    name?: true
+    filePath?: true
+    projectId?: true
+    submissionId?: true
+    extension?: true
+    _all?: true
+  }
+
+  export type FileAggregateArgs = {
+    /**
+     * Filter which File to aggregate.
+     */
+    where?: FileWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Files to fetch.
+     */
+    orderBy?: Enumerable<FileOrderByWithRelationInput>
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: FileWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Files from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Files.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned Files
+    **/
+    _count?: true | FileCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: FileAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: FileSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: FileMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: FileMaxAggregateInputType
+  }
+
+  export type GetFileAggregateType<T extends FileAggregateArgs> = {
+        [P in keyof T & keyof AggregateFile]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateFile[P]>
+      : GetScalarType<T[P], AggregateFile[P]>
+  }
+
+
+
+
+  export type FileGroupByArgs = {
+    where?: FileWhereInput
+    orderBy?: Enumerable<FileOrderByWithAggregationInput>
+    by: FileScalarFieldEnum[]
+    having?: FileScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: FileCountAggregateInputType | true
+    _avg?: FileAvgAggregateInputType
+    _sum?: FileSumAggregateInputType
+    _min?: FileMinAggregateInputType
+    _max?: FileMaxAggregateInputType
+  }
+
+
+  export type FileGroupByOutputType = {
+    id: number
+    name: string
+    filePath: string
+    projectId: number | null
+    submissionId: number | null
+    extension: string
+    _count: FileCountAggregateOutputType | null
+    _avg: FileAvgAggregateOutputType | null
+    _sum: FileSumAggregateOutputType | null
+    _min: FileMinAggregateOutputType | null
+    _max: FileMaxAggregateOutputType | null
+  }
+
+  type GetFileGroupByPayload<T extends FileGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickArray<FileGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof FileGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], FileGroupByOutputType[P]>
+            : GetScalarType<T[P], FileGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type FileSelect = {
+    id?: boolean
+    name?: boolean
+    filePath?: boolean
+    projectId?: boolean
+    submissionId?: boolean
+    extension?: boolean
+    project?: boolean | ProjectArgs
+    submission?: boolean | StudentSubmissionArgs
+  }
+
+
+  export type FileInclude = {
+    project?: boolean | ProjectArgs
+    submission?: boolean | StudentSubmissionArgs
+  }
+
+  export type FileGetPayload<S extends boolean | null | undefined | FileArgs> =
+    S extends { select: any, include: any } ? 'Please either choose `select` or `include`' :
+    S extends true ? File :
+    S extends undefined ? never :
+    S extends { include: any } & (FileArgs | FileFindManyArgs)
+    ? File  & {
+    [P in TruthyKeys<S['include']>]:
+        P extends 'project' ? ProjectGetPayload<S['include'][P]> | null :
+        P extends 'submission' ? StudentSubmissionGetPayload<S['include'][P]> | null :  never
+  } 
+    : S extends { select: any } & (FileArgs | FileFindManyArgs)
+      ? {
+    [P in TruthyKeys<S['select']>]:
+        P extends 'project' ? ProjectGetPayload<S['select'][P]> | null :
+        P extends 'submission' ? StudentSubmissionGetPayload<S['select'][P]> | null :  P extends keyof File ? File[P] : never
+  } 
+      : File
+
+
+  type FileCountArgs = 
+    Omit<FileFindManyArgs, 'select' | 'include'> & {
+      select?: FileCountAggregateInputType | true
+    }
+
+  export interface FileDelegate<GlobalRejectSettings extends Prisma.RejectOnNotFound | Prisma.RejectPerOperation | false | undefined> {
+
+    /**
+     * Find zero or one File that matches the filter.
+     * @param {FileFindUniqueArgs} args - Arguments to find a File
+     * @example
+     * // Get one File
+     * const file = await prisma.file.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+    **/
+    findUnique<T extends FileFindUniqueArgs,  LocalRejectSettings = T["rejectOnNotFound"] extends RejectOnNotFound ? T['rejectOnNotFound'] : undefined>(
+      args: SelectSubset<T, FileFindUniqueArgs>
+    ): HasReject<GlobalRejectSettings, LocalRejectSettings, 'findUnique', 'File'> extends True ? Prisma__FileClient<FileGetPayload<T>> : Prisma__FileClient<FileGetPayload<T> | null, null>
+
+    /**
+     * Find one File that matches the filter or throw an error  with `error.code='P2025'` 
+     *     if no matches were found.
+     * @param {FileFindUniqueOrThrowArgs} args - Arguments to find a File
+     * @example
+     * // Get one File
+     * const file = await prisma.file.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+    **/
+    findUniqueOrThrow<T extends FileFindUniqueOrThrowArgs>(
+      args?: SelectSubset<T, FileFindUniqueOrThrowArgs>
+    ): Prisma__FileClient<FileGetPayload<T>>
+
+    /**
+     * Find the first File that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {FileFindFirstArgs} args - Arguments to find a File
+     * @example
+     * // Get one File
+     * const file = await prisma.file.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+    **/
+    findFirst<T extends FileFindFirstArgs,  LocalRejectSettings = T["rejectOnNotFound"] extends RejectOnNotFound ? T['rejectOnNotFound'] : undefined>(
+      args?: SelectSubset<T, FileFindFirstArgs>
+    ): HasReject<GlobalRejectSettings, LocalRejectSettings, 'findFirst', 'File'> extends True ? Prisma__FileClient<FileGetPayload<T>> : Prisma__FileClient<FileGetPayload<T> | null, null>
+
+    /**
+     * Find the first File that matches the filter or
+     * throw `NotFoundError` if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {FileFindFirstOrThrowArgs} args - Arguments to find a File
+     * @example
+     * // Get one File
+     * const file = await prisma.file.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+    **/
+    findFirstOrThrow<T extends FileFindFirstOrThrowArgs>(
+      args?: SelectSubset<T, FileFindFirstOrThrowArgs>
+    ): Prisma__FileClient<FileGetPayload<T>>
+
+    /**
+     * Find zero or more Files that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {FileFindManyArgs=} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all Files
+     * const files = await prisma.file.findMany()
+     * 
+     * // Get first 10 Files
+     * const files = await prisma.file.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const fileWithIdOnly = await prisma.file.findMany({ select: { id: true } })
+     * 
+    **/
+    findMany<T extends FileFindManyArgs>(
+      args?: SelectSubset<T, FileFindManyArgs>
+    ): Prisma.PrismaPromise<Array<FileGetPayload<T>>>
+
+    /**
+     * Create a File.
+     * @param {FileCreateArgs} args - Arguments to create a File.
+     * @example
+     * // Create one File
+     * const File = await prisma.file.create({
+     *   data: {
+     *     // ... data to create a File
+     *   }
+     * })
+     * 
+    **/
+    create<T extends FileCreateArgs>(
+      args: SelectSubset<T, FileCreateArgs>
+    ): Prisma__FileClient<FileGetPayload<T>>
+
+    /**
+     * Create many Files.
+     *     @param {FileCreateManyArgs} args - Arguments to create many Files.
+     *     @example
+     *     // Create many Files
+     *     const file = await prisma.file.createMany({
+     *       data: {
+     *         // ... provide data here
+     *       }
+     *     })
+     *     
+    **/
+    createMany<T extends FileCreateManyArgs>(
+      args?: SelectSubset<T, FileCreateManyArgs>
+    ): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Delete a File.
+     * @param {FileDeleteArgs} args - Arguments to delete one File.
+     * @example
+     * // Delete one File
+     * const File = await prisma.file.delete({
+     *   where: {
+     *     // ... filter to delete one File
+     *   }
+     * })
+     * 
+    **/
+    delete<T extends FileDeleteArgs>(
+      args: SelectSubset<T, FileDeleteArgs>
+    ): Prisma__FileClient<FileGetPayload<T>>
+
+    /**
+     * Update one File.
+     * @param {FileUpdateArgs} args - Arguments to update one File.
+     * @example
+     * // Update one File
+     * const file = await prisma.file.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+    **/
+    update<T extends FileUpdateArgs>(
+      args: SelectSubset<T, FileUpdateArgs>
+    ): Prisma__FileClient<FileGetPayload<T>>
+
+    /**
+     * Delete zero or more Files.
+     * @param {FileDeleteManyArgs} args - Arguments to filter Files to delete.
+     * @example
+     * // Delete a few Files
+     * const { count } = await prisma.file.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+    **/
+    deleteMany<T extends FileDeleteManyArgs>(
+      args?: SelectSubset<T, FileDeleteManyArgs>
+    ): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Files.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {FileUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many Files
+     * const file = await prisma.file.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+    **/
+    updateMany<T extends FileUpdateManyArgs>(
+      args: SelectSubset<T, FileUpdateManyArgs>
+    ): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create or update one File.
+     * @param {FileUpsertArgs} args - Arguments to update or create a File.
+     * @example
+     * // Update or create a File
+     * const file = await prisma.file.upsert({
+     *   create: {
+     *     // ... data to create a File
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the File we want to update
+     *   }
+     * })
+    **/
+    upsert<T extends FileUpsertArgs>(
+      args: SelectSubset<T, FileUpsertArgs>
+    ): Prisma__FileClient<FileGetPayload<T>>
+
+    /**
+     * Count the number of Files.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {FileCountArgs} args - Arguments to filter Files to count.
+     * @example
+     * // Count the number of Files
+     * const count = await prisma.file.count({
+     *   where: {
+     *     // ... the filter for the Files we want to count
+     *   }
+     * })
+    **/
+    count<T extends FileCountArgs>(
+      args?: Subset<T, FileCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends _Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], FileCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a File.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {FileAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends FileAggregateArgs>(args: Subset<T, FileAggregateArgs>): Prisma.PrismaPromise<GetFileAggregateType<T>>
+
+    /**
+     * Group by File.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {FileGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends FileGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: FileGroupByArgs['orderBy'] }
+        : { orderBy?: FileGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends TupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, FileGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetFileGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for File.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export class Prisma__FileClient<T, Null = never> implements Prisma.PrismaPromise<T> {
+    private readonly _dmmf;
+    private readonly _queryType;
+    private readonly _rootField;
+    private readonly _clientMethod;
+    private readonly _args;
+    private readonly _dataPath;
+    private readonly _errorFormat;
+    private readonly _measurePerformance?;
+    private _isList;
+    private _callsite;
+    private _requestPromise?;
+    readonly [Symbol.toStringTag]: 'PrismaPromise';
+    constructor(_dmmf: runtime.DMMFClass, _queryType: 'query' | 'mutation', _rootField: string, _clientMethod: string, _args: any, _dataPath: string[], _errorFormat: ErrorFormat, _measurePerformance?: boolean | undefined, _isList?: boolean);
+
+    project<T extends ProjectArgs= {}>(args?: Subset<T, ProjectArgs>): Prisma__ProjectClient<ProjectGetPayload<T> | Null>;
+
+    submission<T extends StudentSubmissionArgs= {}>(args?: Subset<T, StudentSubmissionArgs>): Prisma__StudentSubmissionClient<StudentSubmissionGetPayload<T> | Null>;
+
+    private get _document();
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): Promise<TResult1 | TResult2>;
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): Promise<T | TResult>;
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): Promise<T>;
+  }
+
+
+
+  // Custom InputTypes
+
+  /**
+   * File base type for findUnique actions
+   */
+  export type FileFindUniqueArgsBase = {
+    /**
+     * Select specific fields to fetch from the File
+     */
+    select?: FileSelect | null
+    /**
+     * Choose, which related nodes to fetch as well.
+     */
+    include?: FileInclude | null
+    /**
+     * Filter, which File to fetch.
+     */
+    where: FileWhereUniqueInput
+  }
+
+  /**
+   * File findUnique
+   */
+  export interface FileFindUniqueArgs extends FileFindUniqueArgsBase {
+   /**
+    * Throw an Error if query returns no results
+    * @deprecated since 4.0.0: use `findUniqueOrThrow` method instead
+    */
+    rejectOnNotFound?: RejectOnNotFound
+  }
+      
+
+  /**
+   * File findUniqueOrThrow
+   */
+  export type FileFindUniqueOrThrowArgs = {
+    /**
+     * Select specific fields to fetch from the File
+     */
+    select?: FileSelect | null
+    /**
+     * Choose, which related nodes to fetch as well.
+     */
+    include?: FileInclude | null
+    /**
+     * Filter, which File to fetch.
+     */
+    where: FileWhereUniqueInput
+  }
+
+
+  /**
+   * File base type for findFirst actions
+   */
+  export type FileFindFirstArgsBase = {
+    /**
+     * Select specific fields to fetch from the File
+     */
+    select?: FileSelect | null
+    /**
+     * Choose, which related nodes to fetch as well.
+     */
+    include?: FileInclude | null
+    /**
+     * Filter, which File to fetch.
+     */
+    where?: FileWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Files to fetch.
+     */
+    orderBy?: Enumerable<FileOrderByWithRelationInput>
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for Files.
+     */
+    cursor?: FileWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Files from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Files.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Files.
+     */
+    distinct?: Enumerable<FileScalarFieldEnum>
+  }
+
+  /**
+   * File findFirst
+   */
+  export interface FileFindFirstArgs extends FileFindFirstArgsBase {
+   /**
+    * Throw an Error if query returns no results
+    * @deprecated since 4.0.0: use `findFirstOrThrow` method instead
+    */
+    rejectOnNotFound?: RejectOnNotFound
+  }
+      
+
+  /**
+   * File findFirstOrThrow
+   */
+  export type FileFindFirstOrThrowArgs = {
+    /**
+     * Select specific fields to fetch from the File
+     */
+    select?: FileSelect | null
+    /**
+     * Choose, which related nodes to fetch as well.
+     */
+    include?: FileInclude | null
+    /**
+     * Filter, which File to fetch.
+     */
+    where?: FileWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Files to fetch.
+     */
+    orderBy?: Enumerable<FileOrderByWithRelationInput>
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for Files.
+     */
+    cursor?: FileWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Files from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Files.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Files.
+     */
+    distinct?: Enumerable<FileScalarFieldEnum>
+  }
+
+
+  /**
+   * File findMany
+   */
+  export type FileFindManyArgs = {
+    /**
+     * Select specific fields to fetch from the File
+     */
+    select?: FileSelect | null
+    /**
+     * Choose, which related nodes to fetch as well.
+     */
+    include?: FileInclude | null
+    /**
+     * Filter, which Files to fetch.
+     */
+    where?: FileWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Files to fetch.
+     */
+    orderBy?: Enumerable<FileOrderByWithRelationInput>
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing Files.
+     */
+    cursor?: FileWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Files from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Files.
+     */
+    skip?: number
+    distinct?: Enumerable<FileScalarFieldEnum>
+  }
+
+
+  /**
+   * File create
+   */
+  export type FileCreateArgs = {
+    /**
+     * Select specific fields to fetch from the File
+     */
+    select?: FileSelect | null
+    /**
+     * Choose, which related nodes to fetch as well.
+     */
+    include?: FileInclude | null
+    /**
+     * The data needed to create a File.
+     */
+    data: XOR<FileCreateInput, FileUncheckedCreateInput>
+  }
+
+
+  /**
+   * File createMany
+   */
+  export type FileCreateManyArgs = {
+    /**
+     * The data used to create many Files.
+     */
+    data: Enumerable<FileCreateManyInput>
+    skipDuplicates?: boolean
+  }
+
+
+  /**
+   * File update
+   */
+  export type FileUpdateArgs = {
+    /**
+     * Select specific fields to fetch from the File
+     */
+    select?: FileSelect | null
+    /**
+     * Choose, which related nodes to fetch as well.
+     */
+    include?: FileInclude | null
+    /**
+     * The data needed to update a File.
+     */
+    data: XOR<FileUpdateInput, FileUncheckedUpdateInput>
+    /**
+     * Choose, which File to update.
+     */
+    where: FileWhereUniqueInput
+  }
+
+
+  /**
+   * File updateMany
+   */
+  export type FileUpdateManyArgs = {
+    /**
+     * The data used to update Files.
+     */
+    data: XOR<FileUpdateManyMutationInput, FileUncheckedUpdateManyInput>
+    /**
+     * Filter which Files to update
+     */
+    where?: FileWhereInput
+  }
+
+
+  /**
+   * File upsert
+   */
+  export type FileUpsertArgs = {
+    /**
+     * Select specific fields to fetch from the File
+     */
+    select?: FileSelect | null
+    /**
+     * Choose, which related nodes to fetch as well.
+     */
+    include?: FileInclude | null
+    /**
+     * The filter to search for the File to update in case it exists.
+     */
+    where: FileWhereUniqueInput
+    /**
+     * In case the File found by the `where` argument doesn't exist, create a new File with this data.
+     */
+    create: XOR<FileCreateInput, FileUncheckedCreateInput>
+    /**
+     * In case the File was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<FileUpdateInput, FileUncheckedUpdateInput>
+  }
+
+
+  /**
+   * File delete
+   */
+  export type FileDeleteArgs = {
+    /**
+     * Select specific fields to fetch from the File
+     */
+    select?: FileSelect | null
+    /**
+     * Choose, which related nodes to fetch as well.
+     */
+    include?: FileInclude | null
+    /**
+     * Filter which File to delete.
+     */
+    where: FileWhereUniqueInput
+  }
+
+
+  /**
+   * File deleteMany
+   */
+  export type FileDeleteManyArgs = {
+    /**
+     * Filter which Files to delete
+     */
+    where?: FileWhereInput
+  }
+
+
+  /**
+   * File without action
+   */
+  export type FileArgs = {
+    /**
+     * Select specific fields to fetch from the File
+     */
+    select?: FileSelect | null
+    /**
+     * Choose, which related nodes to fetch as well.
+     */
+    include?: FileInclude | null
   }
 
 
@@ -6032,6 +7173,18 @@ export namespace Prisma {
   export type AdminScalarFieldEnum = (typeof AdminScalarFieldEnum)[keyof typeof AdminScalarFieldEnum]
 
 
+  export const FileScalarFieldEnum: {
+    id: 'id',
+    name: 'name',
+    filePath: 'filePath',
+    projectId: 'projectId',
+    submissionId: 'submissionId',
+    extension: 'extension'
+  };
+
+  export type FileScalarFieldEnum = (typeof FileScalarFieldEnum)[keyof typeof FileScalarFieldEnum]
+
+
   export const ModuleScalarFieldEnum: {
     id: 'id',
     name: 'name',
@@ -6047,7 +7200,9 @@ export namespace Prisma {
     name: 'name',
     description: 'description',
     moduleId: 'moduleId',
-    filePath: 'filePath'
+    filePath: 'filePath',
+    dateSet: 'dateSet',
+    dateDue: 'dateDue'
   };
 
   export type ProjectScalarFieldEnum = (typeof ProjectScalarFieldEnum)[keyof typeof ProjectScalarFieldEnum]
@@ -6073,7 +7228,8 @@ export namespace Prisma {
     id: 'id',
     studentId: 'studentId',
     projectId: 'projectId',
-    filePath: 'filePath'
+    filePath: 'filePath',
+    dateSubmitted: 'dateSubmitted'
   };
 
   export type StudentSubmissionScalarFieldEnum = (typeof StudentSubmissionScalarFieldEnum)[keyof typeof StudentSubmissionScalarFieldEnum]
@@ -6210,9 +7366,12 @@ export namespace Prisma {
     description?: StringFilter | string
     moduleId?: IntFilter | number
     filePath?: StringNullableFilter | string | null
+    dateSet?: DateTimeFilter | Date | string
+    dateDue?: DateTimeFilter | Date | string
     module?: XOR<ModuleRelationFilter, ModuleWhereInput>
     students?: UserListRelationFilter
     StudentSubmission?: StudentSubmissionListRelationFilter
+    File?: FileListRelationFilter
   }
 
   export type ProjectOrderByWithRelationInput = {
@@ -6221,9 +7380,12 @@ export namespace Prisma {
     description?: SortOrder
     moduleId?: SortOrder
     filePath?: SortOrder
+    dateSet?: SortOrder
+    dateDue?: SortOrder
     module?: ModuleOrderByWithRelationInput
     students?: UserOrderByRelationAggregateInput
     StudentSubmission?: StudentSubmissionOrderByRelationAggregateInput
+    File?: FileOrderByRelationAggregateInput
   }
 
   export type ProjectWhereUniqueInput = {
@@ -6236,6 +7398,8 @@ export namespace Prisma {
     description?: SortOrder
     moduleId?: SortOrder
     filePath?: SortOrder
+    dateSet?: SortOrder
+    dateDue?: SortOrder
     _count?: ProjectCountOrderByAggregateInput
     _avg?: ProjectAvgOrderByAggregateInput
     _max?: ProjectMaxOrderByAggregateInput
@@ -6252,6 +7416,8 @@ export namespace Prisma {
     description?: StringWithAggregatesFilter | string
     moduleId?: IntWithAggregatesFilter | number
     filePath?: StringNullableWithAggregatesFilter | string | null
+    dateSet?: DateTimeWithAggregatesFilter | Date | string
+    dateDue?: DateTimeWithAggregatesFilter | Date | string
   }
 
   export type StudentSubmissionWhereInput = {
@@ -6262,8 +7428,10 @@ export namespace Prisma {
     studentId?: IntFilter | number
     projectId?: IntFilter | number
     filePath?: StringFilter | string
+    dateSubmitted?: DateTimeFilter | Date | string
     student?: XOR<UserRelationFilter, UserWhereInput>
     project?: XOR<ProjectRelationFilter, ProjectWhereInput>
+    File?: FileListRelationFilter
   }
 
   export type StudentSubmissionOrderByWithRelationInput = {
@@ -6271,8 +7439,10 @@ export namespace Prisma {
     studentId?: SortOrder
     projectId?: SortOrder
     filePath?: SortOrder
+    dateSubmitted?: SortOrder
     student?: UserOrderByWithRelationInput
     project?: ProjectOrderByWithRelationInput
+    File?: FileOrderByRelationAggregateInput
   }
 
   export type StudentSubmissionWhereUniqueInput = {
@@ -6284,6 +7454,7 @@ export namespace Prisma {
     studentId?: SortOrder
     projectId?: SortOrder
     filePath?: SortOrder
+    dateSubmitted?: SortOrder
     _count?: StudentSubmissionCountOrderByAggregateInput
     _avg?: StudentSubmissionAvgOrderByAggregateInput
     _max?: StudentSubmissionMaxOrderByAggregateInput
@@ -6299,6 +7470,62 @@ export namespace Prisma {
     studentId?: IntWithAggregatesFilter | number
     projectId?: IntWithAggregatesFilter | number
     filePath?: StringWithAggregatesFilter | string
+    dateSubmitted?: DateTimeWithAggregatesFilter | Date | string
+  }
+
+  export type FileWhereInput = {
+    AND?: Enumerable<FileWhereInput>
+    OR?: Enumerable<FileWhereInput>
+    NOT?: Enumerable<FileWhereInput>
+    id?: IntFilter | number
+    name?: StringFilter | string
+    filePath?: StringFilter | string
+    projectId?: IntNullableFilter | number | null
+    submissionId?: IntNullableFilter | number | null
+    extension?: StringFilter | string
+    project?: XOR<ProjectRelationFilter, ProjectWhereInput> | null
+    submission?: XOR<StudentSubmissionRelationFilter, StudentSubmissionWhereInput> | null
+  }
+
+  export type FileOrderByWithRelationInput = {
+    id?: SortOrder
+    name?: SortOrder
+    filePath?: SortOrder
+    projectId?: SortOrder
+    submissionId?: SortOrder
+    extension?: SortOrder
+    project?: ProjectOrderByWithRelationInput
+    submission?: StudentSubmissionOrderByWithRelationInput
+  }
+
+  export type FileWhereUniqueInput = {
+    id?: number
+  }
+
+  export type FileOrderByWithAggregationInput = {
+    id?: SortOrder
+    name?: SortOrder
+    filePath?: SortOrder
+    projectId?: SortOrder
+    submissionId?: SortOrder
+    extension?: SortOrder
+    _count?: FileCountOrderByAggregateInput
+    _avg?: FileAvgOrderByAggregateInput
+    _max?: FileMaxOrderByAggregateInput
+    _min?: FileMinOrderByAggregateInput
+    _sum?: FileSumOrderByAggregateInput
+  }
+
+  export type FileScalarWhereWithAggregatesInput = {
+    AND?: Enumerable<FileScalarWhereWithAggregatesInput>
+    OR?: Enumerable<FileScalarWhereWithAggregatesInput>
+    NOT?: Enumerable<FileScalarWhereWithAggregatesInput>
+    id?: IntWithAggregatesFilter | number
+    name?: StringWithAggregatesFilter | string
+    filePath?: StringWithAggregatesFilter | string
+    projectId?: IntNullableWithAggregatesFilter | number | null
+    submissionId?: IntNullableWithAggregatesFilter | number | null
+    extension?: StringWithAggregatesFilter | string
   }
 
   export type ModuleWhereInput = {
@@ -6462,9 +7689,12 @@ export namespace Prisma {
     name: string
     description: string
     filePath?: string | null
+    dateSet: Date | string
+    dateDue: Date | string
     module: ModuleCreateNestedOneWithoutProjectsInput
     students?: UserCreateNestedManyWithoutStudentProjectsInput
     StudentSubmission?: StudentSubmissionCreateNestedManyWithoutProjectInput
+    File?: FileCreateNestedManyWithoutProjectInput
   }
 
   export type ProjectUncheckedCreateInput = {
@@ -6473,17 +7703,23 @@ export namespace Prisma {
     description: string
     moduleId: number
     filePath?: string | null
+    dateSet: Date | string
+    dateDue: Date | string
     students?: UserUncheckedCreateNestedManyWithoutStudentProjectsInput
     StudentSubmission?: StudentSubmissionUncheckedCreateNestedManyWithoutProjectInput
+    File?: FileUncheckedCreateNestedManyWithoutProjectInput
   }
 
   export type ProjectUpdateInput = {
     name?: StringFieldUpdateOperationsInput | string
     description?: StringFieldUpdateOperationsInput | string
     filePath?: NullableStringFieldUpdateOperationsInput | string | null
+    dateSet?: DateTimeFieldUpdateOperationsInput | Date | string
+    dateDue?: DateTimeFieldUpdateOperationsInput | Date | string
     module?: ModuleUpdateOneRequiredWithoutProjectsNestedInput
     students?: UserUpdateManyWithoutStudentProjectsNestedInput
     StudentSubmission?: StudentSubmissionUpdateManyWithoutProjectNestedInput
+    File?: FileUpdateManyWithoutProjectNestedInput
   }
 
   export type ProjectUncheckedUpdateInput = {
@@ -6492,8 +7728,11 @@ export namespace Prisma {
     description?: StringFieldUpdateOperationsInput | string
     moduleId?: IntFieldUpdateOperationsInput | number
     filePath?: NullableStringFieldUpdateOperationsInput | string | null
+    dateSet?: DateTimeFieldUpdateOperationsInput | Date | string
+    dateDue?: DateTimeFieldUpdateOperationsInput | Date | string
     students?: UserUncheckedUpdateManyWithoutStudentProjectsNestedInput
     StudentSubmission?: StudentSubmissionUncheckedUpdateManyWithoutProjectNestedInput
+    File?: FileUncheckedUpdateManyWithoutProjectNestedInput
   }
 
   export type ProjectCreateManyInput = {
@@ -6502,12 +7741,16 @@ export namespace Prisma {
     description: string
     moduleId: number
     filePath?: string | null
+    dateSet: Date | string
+    dateDue: Date | string
   }
 
   export type ProjectUpdateManyMutationInput = {
     name?: StringFieldUpdateOperationsInput | string
     description?: StringFieldUpdateOperationsInput | string
     filePath?: NullableStringFieldUpdateOperationsInput | string | null
+    dateSet?: DateTimeFieldUpdateOperationsInput | Date | string
+    dateDue?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type ProjectUncheckedUpdateManyInput = {
@@ -6516,12 +7759,16 @@ export namespace Prisma {
     description?: StringFieldUpdateOperationsInput | string
     moduleId?: IntFieldUpdateOperationsInput | number
     filePath?: NullableStringFieldUpdateOperationsInput | string | null
+    dateSet?: DateTimeFieldUpdateOperationsInput | Date | string
+    dateDue?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type StudentSubmissionCreateInput = {
     filePath: string
+    dateSubmitted: Date | string
     student: UserCreateNestedOneWithoutStudentSubmissionInput
     project: ProjectCreateNestedOneWithoutStudentSubmissionInput
+    File?: FileCreateNestedManyWithoutSubmissionInput
   }
 
   export type StudentSubmissionUncheckedCreateInput = {
@@ -6529,12 +7776,16 @@ export namespace Prisma {
     studentId: number
     projectId: number
     filePath: string
+    dateSubmitted: Date | string
+    File?: FileUncheckedCreateNestedManyWithoutSubmissionInput
   }
 
   export type StudentSubmissionUpdateInput = {
     filePath?: StringFieldUpdateOperationsInput | string
+    dateSubmitted?: DateTimeFieldUpdateOperationsInput | Date | string
     student?: UserUpdateOneRequiredWithoutStudentSubmissionNestedInput
     project?: ProjectUpdateOneRequiredWithoutStudentSubmissionNestedInput
+    File?: FileUpdateManyWithoutSubmissionNestedInput
   }
 
   export type StudentSubmissionUncheckedUpdateInput = {
@@ -6542,6 +7793,8 @@ export namespace Prisma {
     studentId?: IntFieldUpdateOperationsInput | number
     projectId?: IntFieldUpdateOperationsInput | number
     filePath?: StringFieldUpdateOperationsInput | string
+    dateSubmitted?: DateTimeFieldUpdateOperationsInput | Date | string
+    File?: FileUncheckedUpdateManyWithoutSubmissionNestedInput
   }
 
   export type StudentSubmissionCreateManyInput = {
@@ -6549,10 +7802,12 @@ export namespace Prisma {
     studentId: number
     projectId: number
     filePath: string
+    dateSubmitted: Date | string
   }
 
   export type StudentSubmissionUpdateManyMutationInput = {
     filePath?: StringFieldUpdateOperationsInput | string
+    dateSubmitted?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type StudentSubmissionUncheckedUpdateManyInput = {
@@ -6560,6 +7815,65 @@ export namespace Prisma {
     studentId?: IntFieldUpdateOperationsInput | number
     projectId?: IntFieldUpdateOperationsInput | number
     filePath?: StringFieldUpdateOperationsInput | string
+    dateSubmitted?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type FileCreateInput = {
+    name: string
+    filePath: string
+    extension: string
+    project?: ProjectCreateNestedOneWithoutFileInput
+    submission?: StudentSubmissionCreateNestedOneWithoutFileInput
+  }
+
+  export type FileUncheckedCreateInput = {
+    id?: number
+    name: string
+    filePath: string
+    projectId?: number | null
+    submissionId?: number | null
+    extension: string
+  }
+
+  export type FileUpdateInput = {
+    name?: StringFieldUpdateOperationsInput | string
+    filePath?: StringFieldUpdateOperationsInput | string
+    extension?: StringFieldUpdateOperationsInput | string
+    project?: ProjectUpdateOneWithoutFileNestedInput
+    submission?: StudentSubmissionUpdateOneWithoutFileNestedInput
+  }
+
+  export type FileUncheckedUpdateInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    name?: StringFieldUpdateOperationsInput | string
+    filePath?: StringFieldUpdateOperationsInput | string
+    projectId?: NullableIntFieldUpdateOperationsInput | number | null
+    submissionId?: NullableIntFieldUpdateOperationsInput | number | null
+    extension?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type FileCreateManyInput = {
+    id?: number
+    name: string
+    filePath: string
+    projectId?: number | null
+    submissionId?: number | null
+    extension: string
+  }
+
+  export type FileUpdateManyMutationInput = {
+    name?: StringFieldUpdateOperationsInput | string
+    filePath?: StringFieldUpdateOperationsInput | string
+    extension?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type FileUncheckedUpdateManyInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    name?: StringFieldUpdateOperationsInput | string
+    filePath?: StringFieldUpdateOperationsInput | string
+    projectId?: NullableIntFieldUpdateOperationsInput | number | null
+    submissionId?: NullableIntFieldUpdateOperationsInput | number | null
+    extension?: StringFieldUpdateOperationsInput | string
   }
 
   export type ModuleCreateInput = {
@@ -6795,6 +8109,17 @@ export namespace Prisma {
     not?: NestedStringNullableFilter | string | null
   }
 
+  export type DateTimeFilter = {
+    equals?: Date | string
+    in?: Enumerable<Date> | Enumerable<string>
+    notIn?: Enumerable<Date> | Enumerable<string>
+    lt?: Date | string
+    lte?: Date | string
+    gt?: Date | string
+    gte?: Date | string
+    not?: NestedDateTimeFilter | Date | string
+  }
+
   export type ModuleRelationFilter = {
     is?: ModuleWhereInput
     isNot?: ModuleWhereInput
@@ -6806,7 +8131,17 @@ export namespace Prisma {
     none?: UserWhereInput
   }
 
+  export type FileListRelationFilter = {
+    every?: FileWhereInput
+    some?: FileWhereInput
+    none?: FileWhereInput
+  }
+
   export type UserOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type FileOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -6816,6 +8151,8 @@ export namespace Prisma {
     description?: SortOrder
     moduleId?: SortOrder
     filePath?: SortOrder
+    dateSet?: SortOrder
+    dateDue?: SortOrder
   }
 
   export type ProjectAvgOrderByAggregateInput = {
@@ -6829,6 +8166,8 @@ export namespace Prisma {
     description?: SortOrder
     moduleId?: SortOrder
     filePath?: SortOrder
+    dateSet?: SortOrder
+    dateDue?: SortOrder
   }
 
   export type ProjectMinOrderByAggregateInput = {
@@ -6837,6 +8176,8 @@ export namespace Prisma {
     description?: SortOrder
     moduleId?: SortOrder
     filePath?: SortOrder
+    dateSet?: SortOrder
+    dateDue?: SortOrder
   }
 
   export type ProjectSumOrderByAggregateInput = {
@@ -6862,14 +8203,28 @@ export namespace Prisma {
     _max?: NestedStringNullableFilter
   }
 
+  export type DateTimeWithAggregatesFilter = {
+    equals?: Date | string
+    in?: Enumerable<Date> | Enumerable<string>
+    notIn?: Enumerable<Date> | Enumerable<string>
+    lt?: Date | string
+    lte?: Date | string
+    gt?: Date | string
+    gte?: Date | string
+    not?: NestedDateTimeWithAggregatesFilter | Date | string
+    _count?: NestedIntFilter
+    _min?: NestedDateTimeFilter
+    _max?: NestedDateTimeFilter
+  }
+
   export type UserRelationFilter = {
     is?: UserWhereInput
     isNot?: UserWhereInput
   }
 
   export type ProjectRelationFilter = {
-    is?: ProjectWhereInput
-    isNot?: ProjectWhereInput
+    is?: ProjectWhereInput | null
+    isNot?: ProjectWhereInput | null
   }
 
   export type StudentSubmissionCountOrderByAggregateInput = {
@@ -6877,6 +8232,7 @@ export namespace Prisma {
     studentId?: SortOrder
     projectId?: SortOrder
     filePath?: SortOrder
+    dateSubmitted?: SortOrder
   }
 
   export type StudentSubmissionAvgOrderByAggregateInput = {
@@ -6890,6 +8246,7 @@ export namespace Prisma {
     studentId?: SortOrder
     projectId?: SortOrder
     filePath?: SortOrder
+    dateSubmitted?: SortOrder
   }
 
   export type StudentSubmissionMinOrderByAggregateInput = {
@@ -6897,12 +8254,84 @@ export namespace Prisma {
     studentId?: SortOrder
     projectId?: SortOrder
     filePath?: SortOrder
+    dateSubmitted?: SortOrder
   }
 
   export type StudentSubmissionSumOrderByAggregateInput = {
     id?: SortOrder
     studentId?: SortOrder
     projectId?: SortOrder
+  }
+
+  export type IntNullableFilter = {
+    equals?: number | null
+    in?: Enumerable<number> | null
+    notIn?: Enumerable<number> | null
+    lt?: number
+    lte?: number
+    gt?: number
+    gte?: number
+    not?: NestedIntNullableFilter | number | null
+  }
+
+  export type StudentSubmissionRelationFilter = {
+    is?: StudentSubmissionWhereInput | null
+    isNot?: StudentSubmissionWhereInput | null
+  }
+
+  export type FileCountOrderByAggregateInput = {
+    id?: SortOrder
+    name?: SortOrder
+    filePath?: SortOrder
+    projectId?: SortOrder
+    submissionId?: SortOrder
+    extension?: SortOrder
+  }
+
+  export type FileAvgOrderByAggregateInput = {
+    id?: SortOrder
+    projectId?: SortOrder
+    submissionId?: SortOrder
+  }
+
+  export type FileMaxOrderByAggregateInput = {
+    id?: SortOrder
+    name?: SortOrder
+    filePath?: SortOrder
+    projectId?: SortOrder
+    submissionId?: SortOrder
+    extension?: SortOrder
+  }
+
+  export type FileMinOrderByAggregateInput = {
+    id?: SortOrder
+    name?: SortOrder
+    filePath?: SortOrder
+    projectId?: SortOrder
+    submissionId?: SortOrder
+    extension?: SortOrder
+  }
+
+  export type FileSumOrderByAggregateInput = {
+    id?: SortOrder
+    projectId?: SortOrder
+    submissionId?: SortOrder
+  }
+
+  export type IntNullableWithAggregatesFilter = {
+    equals?: number | null
+    in?: Enumerable<number> | null
+    notIn?: Enumerable<number> | null
+    lt?: number
+    lte?: number
+    gt?: number
+    gte?: number
+    not?: NestedIntNullableWithAggregatesFilter | number | null
+    _count?: NestedIntNullableFilter
+    _avg?: NestedFloatNullableFilter
+    _sum?: NestedIntNullableFilter
+    _min?: NestedIntNullableFilter
+    _max?: NestedIntNullableFilter
   }
 
   export type ModuleCountOrderByAggregateInput = {
@@ -7131,6 +8560,13 @@ export namespace Prisma {
     connect?: Enumerable<StudentSubmissionWhereUniqueInput>
   }
 
+  export type FileCreateNestedManyWithoutProjectInput = {
+    create?: XOR<Enumerable<FileCreateWithoutProjectInput>, Enumerable<FileUncheckedCreateWithoutProjectInput>>
+    connectOrCreate?: Enumerable<FileCreateOrConnectWithoutProjectInput>
+    createMany?: FileCreateManyProjectInputEnvelope
+    connect?: Enumerable<FileWhereUniqueInput>
+  }
+
   export type UserUncheckedCreateNestedManyWithoutStudentProjectsInput = {
     create?: XOR<Enumerable<UserCreateWithoutStudentProjectsInput>, Enumerable<UserUncheckedCreateWithoutStudentProjectsInput>>
     connectOrCreate?: Enumerable<UserCreateOrConnectWithoutStudentProjectsInput>
@@ -7144,8 +8580,19 @@ export namespace Prisma {
     connect?: Enumerable<StudentSubmissionWhereUniqueInput>
   }
 
+  export type FileUncheckedCreateNestedManyWithoutProjectInput = {
+    create?: XOR<Enumerable<FileCreateWithoutProjectInput>, Enumerable<FileUncheckedCreateWithoutProjectInput>>
+    connectOrCreate?: Enumerable<FileCreateOrConnectWithoutProjectInput>
+    createMany?: FileCreateManyProjectInputEnvelope
+    connect?: Enumerable<FileWhereUniqueInput>
+  }
+
   export type NullableStringFieldUpdateOperationsInput = {
     set?: string | null
+  }
+
+  export type DateTimeFieldUpdateOperationsInput = {
+    set?: Date | string
   }
 
   export type ModuleUpdateOneRequiredWithoutProjectsNestedInput = {
@@ -7183,6 +8630,20 @@ export namespace Prisma {
     deleteMany?: Enumerable<StudentSubmissionScalarWhereInput>
   }
 
+  export type FileUpdateManyWithoutProjectNestedInput = {
+    create?: XOR<Enumerable<FileCreateWithoutProjectInput>, Enumerable<FileUncheckedCreateWithoutProjectInput>>
+    connectOrCreate?: Enumerable<FileCreateOrConnectWithoutProjectInput>
+    upsert?: Enumerable<FileUpsertWithWhereUniqueWithoutProjectInput>
+    createMany?: FileCreateManyProjectInputEnvelope
+    set?: Enumerable<FileWhereUniqueInput>
+    disconnect?: Enumerable<FileWhereUniqueInput>
+    delete?: Enumerable<FileWhereUniqueInput>
+    connect?: Enumerable<FileWhereUniqueInput>
+    update?: Enumerable<FileUpdateWithWhereUniqueWithoutProjectInput>
+    updateMany?: Enumerable<FileUpdateManyWithWhereWithoutProjectInput>
+    deleteMany?: Enumerable<FileScalarWhereInput>
+  }
+
   export type UserUncheckedUpdateManyWithoutStudentProjectsNestedInput = {
     create?: XOR<Enumerable<UserCreateWithoutStudentProjectsInput>, Enumerable<UserUncheckedCreateWithoutStudentProjectsInput>>
     connectOrCreate?: Enumerable<UserCreateOrConnectWithoutStudentProjectsInput>
@@ -7210,6 +8671,20 @@ export namespace Prisma {
     deleteMany?: Enumerable<StudentSubmissionScalarWhereInput>
   }
 
+  export type FileUncheckedUpdateManyWithoutProjectNestedInput = {
+    create?: XOR<Enumerable<FileCreateWithoutProjectInput>, Enumerable<FileUncheckedCreateWithoutProjectInput>>
+    connectOrCreate?: Enumerable<FileCreateOrConnectWithoutProjectInput>
+    upsert?: Enumerable<FileUpsertWithWhereUniqueWithoutProjectInput>
+    createMany?: FileCreateManyProjectInputEnvelope
+    set?: Enumerable<FileWhereUniqueInput>
+    disconnect?: Enumerable<FileWhereUniqueInput>
+    delete?: Enumerable<FileWhereUniqueInput>
+    connect?: Enumerable<FileWhereUniqueInput>
+    update?: Enumerable<FileUpdateWithWhereUniqueWithoutProjectInput>
+    updateMany?: Enumerable<FileUpdateManyWithWhereWithoutProjectInput>
+    deleteMany?: Enumerable<FileScalarWhereInput>
+  }
+
   export type UserCreateNestedOneWithoutStudentSubmissionInput = {
     create?: XOR<UserCreateWithoutStudentSubmissionInput, UserUncheckedCreateWithoutStudentSubmissionInput>
     connectOrCreate?: UserCreateOrConnectWithoutStudentSubmissionInput
@@ -7220,6 +8695,20 @@ export namespace Prisma {
     create?: XOR<ProjectCreateWithoutStudentSubmissionInput, ProjectUncheckedCreateWithoutStudentSubmissionInput>
     connectOrCreate?: ProjectCreateOrConnectWithoutStudentSubmissionInput
     connect?: ProjectWhereUniqueInput
+  }
+
+  export type FileCreateNestedManyWithoutSubmissionInput = {
+    create?: XOR<Enumerable<FileCreateWithoutSubmissionInput>, Enumerable<FileUncheckedCreateWithoutSubmissionInput>>
+    connectOrCreate?: Enumerable<FileCreateOrConnectWithoutSubmissionInput>
+    createMany?: FileCreateManySubmissionInputEnvelope
+    connect?: Enumerable<FileWhereUniqueInput>
+  }
+
+  export type FileUncheckedCreateNestedManyWithoutSubmissionInput = {
+    create?: XOR<Enumerable<FileCreateWithoutSubmissionInput>, Enumerable<FileUncheckedCreateWithoutSubmissionInput>>
+    connectOrCreate?: Enumerable<FileCreateOrConnectWithoutSubmissionInput>
+    createMany?: FileCreateManySubmissionInputEnvelope
+    connect?: Enumerable<FileWhereUniqueInput>
   }
 
   export type UserUpdateOneRequiredWithoutStudentSubmissionNestedInput = {
@@ -7236,6 +8725,74 @@ export namespace Prisma {
     upsert?: ProjectUpsertWithoutStudentSubmissionInput
     connect?: ProjectWhereUniqueInput
     update?: XOR<ProjectUpdateWithoutStudentSubmissionInput, ProjectUncheckedUpdateWithoutStudentSubmissionInput>
+  }
+
+  export type FileUpdateManyWithoutSubmissionNestedInput = {
+    create?: XOR<Enumerable<FileCreateWithoutSubmissionInput>, Enumerable<FileUncheckedCreateWithoutSubmissionInput>>
+    connectOrCreate?: Enumerable<FileCreateOrConnectWithoutSubmissionInput>
+    upsert?: Enumerable<FileUpsertWithWhereUniqueWithoutSubmissionInput>
+    createMany?: FileCreateManySubmissionInputEnvelope
+    set?: Enumerable<FileWhereUniqueInput>
+    disconnect?: Enumerable<FileWhereUniqueInput>
+    delete?: Enumerable<FileWhereUniqueInput>
+    connect?: Enumerable<FileWhereUniqueInput>
+    update?: Enumerable<FileUpdateWithWhereUniqueWithoutSubmissionInput>
+    updateMany?: Enumerable<FileUpdateManyWithWhereWithoutSubmissionInput>
+    deleteMany?: Enumerable<FileScalarWhereInput>
+  }
+
+  export type FileUncheckedUpdateManyWithoutSubmissionNestedInput = {
+    create?: XOR<Enumerable<FileCreateWithoutSubmissionInput>, Enumerable<FileUncheckedCreateWithoutSubmissionInput>>
+    connectOrCreate?: Enumerable<FileCreateOrConnectWithoutSubmissionInput>
+    upsert?: Enumerable<FileUpsertWithWhereUniqueWithoutSubmissionInput>
+    createMany?: FileCreateManySubmissionInputEnvelope
+    set?: Enumerable<FileWhereUniqueInput>
+    disconnect?: Enumerable<FileWhereUniqueInput>
+    delete?: Enumerable<FileWhereUniqueInput>
+    connect?: Enumerable<FileWhereUniqueInput>
+    update?: Enumerable<FileUpdateWithWhereUniqueWithoutSubmissionInput>
+    updateMany?: Enumerable<FileUpdateManyWithWhereWithoutSubmissionInput>
+    deleteMany?: Enumerable<FileScalarWhereInput>
+  }
+
+  export type ProjectCreateNestedOneWithoutFileInput = {
+    create?: XOR<ProjectCreateWithoutFileInput, ProjectUncheckedCreateWithoutFileInput>
+    connectOrCreate?: ProjectCreateOrConnectWithoutFileInput
+    connect?: ProjectWhereUniqueInput
+  }
+
+  export type StudentSubmissionCreateNestedOneWithoutFileInput = {
+    create?: XOR<StudentSubmissionCreateWithoutFileInput, StudentSubmissionUncheckedCreateWithoutFileInput>
+    connectOrCreate?: StudentSubmissionCreateOrConnectWithoutFileInput
+    connect?: StudentSubmissionWhereUniqueInput
+  }
+
+  export type ProjectUpdateOneWithoutFileNestedInput = {
+    create?: XOR<ProjectCreateWithoutFileInput, ProjectUncheckedCreateWithoutFileInput>
+    connectOrCreate?: ProjectCreateOrConnectWithoutFileInput
+    upsert?: ProjectUpsertWithoutFileInput
+    disconnect?: boolean
+    delete?: boolean
+    connect?: ProjectWhereUniqueInput
+    update?: XOR<ProjectUpdateWithoutFileInput, ProjectUncheckedUpdateWithoutFileInput>
+  }
+
+  export type StudentSubmissionUpdateOneWithoutFileNestedInput = {
+    create?: XOR<StudentSubmissionCreateWithoutFileInput, StudentSubmissionUncheckedCreateWithoutFileInput>
+    connectOrCreate?: StudentSubmissionCreateOrConnectWithoutFileInput
+    upsert?: StudentSubmissionUpsertWithoutFileInput
+    disconnect?: boolean
+    delete?: boolean
+    connect?: StudentSubmissionWhereUniqueInput
+    update?: XOR<StudentSubmissionUpdateWithoutFileInput, StudentSubmissionUncheckedUpdateWithoutFileInput>
+  }
+
+  export type NullableIntFieldUpdateOperationsInput = {
+    set?: number | null
+    increment?: number
+    decrement?: number
+    multiply?: number
+    divide?: number
   }
 
   export type UserCreateNestedOneWithoutOwnedModulesInput = {
@@ -7432,6 +8989,17 @@ export namespace Prisma {
     not?: NestedStringNullableFilter | string | null
   }
 
+  export type NestedDateTimeFilter = {
+    equals?: Date | string
+    in?: Enumerable<Date> | Enumerable<string>
+    notIn?: Enumerable<Date> | Enumerable<string>
+    lt?: Date | string
+    lte?: Date | string
+    gt?: Date | string
+    gte?: Date | string
+    not?: NestedDateTimeFilter | Date | string
+  }
+
   export type NestedStringNullableWithAggregatesFilter = {
     equals?: string | null
     in?: Enumerable<string> | null
@@ -7458,6 +9026,47 @@ export namespace Prisma {
     gt?: number
     gte?: number
     not?: NestedIntNullableFilter | number | null
+  }
+
+  export type NestedDateTimeWithAggregatesFilter = {
+    equals?: Date | string
+    in?: Enumerable<Date> | Enumerable<string>
+    notIn?: Enumerable<Date> | Enumerable<string>
+    lt?: Date | string
+    lte?: Date | string
+    gt?: Date | string
+    gte?: Date | string
+    not?: NestedDateTimeWithAggregatesFilter | Date | string
+    _count?: NestedIntFilter
+    _min?: NestedDateTimeFilter
+    _max?: NestedDateTimeFilter
+  }
+
+  export type NestedIntNullableWithAggregatesFilter = {
+    equals?: number | null
+    in?: Enumerable<number> | null
+    notIn?: Enumerable<number> | null
+    lt?: number
+    lte?: number
+    gt?: number
+    gte?: number
+    not?: NestedIntNullableWithAggregatesFilter | number | null
+    _count?: NestedIntNullableFilter
+    _avg?: NestedFloatNullableFilter
+    _sum?: NestedIntNullableFilter
+    _min?: NestedIntNullableFilter
+    _max?: NestedIntNullableFilter
+  }
+
+  export type NestedFloatNullableFilter = {
+    equals?: number | null
+    in?: Enumerable<number> | null
+    notIn?: Enumerable<number> | null
+    lt?: number
+    lte?: number
+    gt?: number
+    gte?: number
+    not?: NestedFloatNullableFilter | number | null
   }
 
   export type ModuleCreateWithoutTeacherInput = {
@@ -7507,13 +9116,17 @@ export namespace Prisma {
 
   export type StudentSubmissionCreateWithoutStudentInput = {
     filePath: string
+    dateSubmitted: Date | string
     project: ProjectCreateNestedOneWithoutStudentSubmissionInput
+    File?: FileCreateNestedManyWithoutSubmissionInput
   }
 
   export type StudentSubmissionUncheckedCreateWithoutStudentInput = {
     id?: number
     projectId: number
     filePath: string
+    dateSubmitted: Date | string
+    File?: FileUncheckedCreateNestedManyWithoutSubmissionInput
   }
 
   export type StudentSubmissionCreateOrConnectWithoutStudentInput = {
@@ -7530,8 +9143,11 @@ export namespace Prisma {
     name: string
     description: string
     filePath?: string | null
+    dateSet: Date | string
+    dateDue: Date | string
     module: ModuleCreateNestedOneWithoutProjectsInput
     StudentSubmission?: StudentSubmissionCreateNestedManyWithoutProjectInput
+    File?: FileCreateNestedManyWithoutProjectInput
   }
 
   export type ProjectUncheckedCreateWithoutStudentsInput = {
@@ -7540,7 +9156,10 @@ export namespace Prisma {
     description: string
     moduleId: number
     filePath?: string | null
+    dateSet: Date | string
+    dateDue: Date | string
     StudentSubmission?: StudentSubmissionUncheckedCreateNestedManyWithoutProjectInput
+    File?: FileUncheckedCreateNestedManyWithoutProjectInput
   }
 
   export type ProjectCreateOrConnectWithoutStudentsInput = {
@@ -7614,6 +9233,7 @@ export namespace Prisma {
     studentId?: IntFilter | number
     projectId?: IntFilter | number
     filePath?: StringFilter | string
+    dateSubmitted?: DateTimeFilter | Date | string
   }
 
   export type ProjectUpsertWithWhereUniqueWithoutStudentsInput = {
@@ -7641,6 +9261,8 @@ export namespace Prisma {
     description?: StringFilter | string
     moduleId?: IntFilter | number
     filePath?: StringNullableFilter | string | null
+    dateSet?: DateTimeFilter | Date | string
+    dateDue?: DateTimeFilter | Date | string
   }
 
   export type ModuleCreateWithoutProjectsInput = {
@@ -7691,13 +9313,17 @@ export namespace Prisma {
 
   export type StudentSubmissionCreateWithoutProjectInput = {
     filePath: string
+    dateSubmitted: Date | string
     student: UserCreateNestedOneWithoutStudentSubmissionInput
+    File?: FileCreateNestedManyWithoutSubmissionInput
   }
 
   export type StudentSubmissionUncheckedCreateWithoutProjectInput = {
     id?: number
     studentId: number
     filePath: string
+    dateSubmitted: Date | string
+    File?: FileUncheckedCreateNestedManyWithoutSubmissionInput
   }
 
   export type StudentSubmissionCreateOrConnectWithoutProjectInput = {
@@ -7707,6 +9333,31 @@ export namespace Prisma {
 
   export type StudentSubmissionCreateManyProjectInputEnvelope = {
     data: Enumerable<StudentSubmissionCreateManyProjectInput>
+    skipDuplicates?: boolean
+  }
+
+  export type FileCreateWithoutProjectInput = {
+    name: string
+    filePath: string
+    extension: string
+    submission?: StudentSubmissionCreateNestedOneWithoutFileInput
+  }
+
+  export type FileUncheckedCreateWithoutProjectInput = {
+    id?: number
+    name: string
+    filePath: string
+    submissionId?: number | null
+    extension: string
+  }
+
+  export type FileCreateOrConnectWithoutProjectInput = {
+    where: FileWhereUniqueInput
+    create: XOR<FileCreateWithoutProjectInput, FileUncheckedCreateWithoutProjectInput>
+  }
+
+  export type FileCreateManyProjectInputEnvelope = {
+    data: Enumerable<FileCreateManyProjectInput>
     skipDuplicates?: boolean
   }
 
@@ -7773,6 +9424,34 @@ export namespace Prisma {
     data: XOR<StudentSubmissionUpdateManyMutationInput, StudentSubmissionUncheckedUpdateManyWithoutStudentSubmissionInput>
   }
 
+  export type FileUpsertWithWhereUniqueWithoutProjectInput = {
+    where: FileWhereUniqueInput
+    update: XOR<FileUpdateWithoutProjectInput, FileUncheckedUpdateWithoutProjectInput>
+    create: XOR<FileCreateWithoutProjectInput, FileUncheckedCreateWithoutProjectInput>
+  }
+
+  export type FileUpdateWithWhereUniqueWithoutProjectInput = {
+    where: FileWhereUniqueInput
+    data: XOR<FileUpdateWithoutProjectInput, FileUncheckedUpdateWithoutProjectInput>
+  }
+
+  export type FileUpdateManyWithWhereWithoutProjectInput = {
+    where: FileScalarWhereInput
+    data: XOR<FileUpdateManyMutationInput, FileUncheckedUpdateManyWithoutFileInput>
+  }
+
+  export type FileScalarWhereInput = {
+    AND?: Enumerable<FileScalarWhereInput>
+    OR?: Enumerable<FileScalarWhereInput>
+    NOT?: Enumerable<FileScalarWhereInput>
+    id?: IntFilter | number
+    name?: StringFilter | string
+    filePath?: StringFilter | string
+    projectId?: IntNullableFilter | number | null
+    submissionId?: IntNullableFilter | number | null
+    extension?: StringFilter | string
+  }
+
   export type UserCreateWithoutStudentSubmissionInput = {
     email: string
     name: string
@@ -7803,8 +9482,11 @@ export namespace Prisma {
     name: string
     description: string
     filePath?: string | null
+    dateSet: Date | string
+    dateDue: Date | string
     module: ModuleCreateNestedOneWithoutProjectsInput
     students?: UserCreateNestedManyWithoutStudentProjectsInput
+    File?: FileCreateNestedManyWithoutProjectInput
   }
 
   export type ProjectUncheckedCreateWithoutStudentSubmissionInput = {
@@ -7813,12 +9495,40 @@ export namespace Prisma {
     description: string
     moduleId: number
     filePath?: string | null
+    dateSet: Date | string
+    dateDue: Date | string
     students?: UserUncheckedCreateNestedManyWithoutStudentProjectsInput
+    File?: FileUncheckedCreateNestedManyWithoutProjectInput
   }
 
   export type ProjectCreateOrConnectWithoutStudentSubmissionInput = {
     where: ProjectWhereUniqueInput
     create: XOR<ProjectCreateWithoutStudentSubmissionInput, ProjectUncheckedCreateWithoutStudentSubmissionInput>
+  }
+
+  export type FileCreateWithoutSubmissionInput = {
+    name: string
+    filePath: string
+    extension: string
+    project?: ProjectCreateNestedOneWithoutFileInput
+  }
+
+  export type FileUncheckedCreateWithoutSubmissionInput = {
+    id?: number
+    name: string
+    filePath: string
+    projectId?: number | null
+    extension: string
+  }
+
+  export type FileCreateOrConnectWithoutSubmissionInput = {
+    where: FileWhereUniqueInput
+    create: XOR<FileCreateWithoutSubmissionInput, FileUncheckedCreateWithoutSubmissionInput>
+  }
+
+  export type FileCreateManySubmissionInputEnvelope = {
+    data: Enumerable<FileCreateManySubmissionInput>
+    skipDuplicates?: boolean
   }
 
   export type UserUpsertWithoutStudentSubmissionInput = {
@@ -7856,8 +9566,11 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     description?: StringFieldUpdateOperationsInput | string
     filePath?: NullableStringFieldUpdateOperationsInput | string | null
+    dateSet?: DateTimeFieldUpdateOperationsInput | Date | string
+    dateDue?: DateTimeFieldUpdateOperationsInput | Date | string
     module?: ModuleUpdateOneRequiredWithoutProjectsNestedInput
     students?: UserUpdateManyWithoutStudentProjectsNestedInput
+    File?: FileUpdateManyWithoutProjectNestedInput
   }
 
   export type ProjectUncheckedUpdateWithoutStudentSubmissionInput = {
@@ -7866,7 +9579,122 @@ export namespace Prisma {
     description?: StringFieldUpdateOperationsInput | string
     moduleId?: IntFieldUpdateOperationsInput | number
     filePath?: NullableStringFieldUpdateOperationsInput | string | null
+    dateSet?: DateTimeFieldUpdateOperationsInput | Date | string
+    dateDue?: DateTimeFieldUpdateOperationsInput | Date | string
     students?: UserUncheckedUpdateManyWithoutStudentProjectsNestedInput
+    File?: FileUncheckedUpdateManyWithoutProjectNestedInput
+  }
+
+  export type FileUpsertWithWhereUniqueWithoutSubmissionInput = {
+    where: FileWhereUniqueInput
+    update: XOR<FileUpdateWithoutSubmissionInput, FileUncheckedUpdateWithoutSubmissionInput>
+    create: XOR<FileCreateWithoutSubmissionInput, FileUncheckedCreateWithoutSubmissionInput>
+  }
+
+  export type FileUpdateWithWhereUniqueWithoutSubmissionInput = {
+    where: FileWhereUniqueInput
+    data: XOR<FileUpdateWithoutSubmissionInput, FileUncheckedUpdateWithoutSubmissionInput>
+  }
+
+  export type FileUpdateManyWithWhereWithoutSubmissionInput = {
+    where: FileScalarWhereInput
+    data: XOR<FileUpdateManyMutationInput, FileUncheckedUpdateManyWithoutFileInput>
+  }
+
+  export type ProjectCreateWithoutFileInput = {
+    name: string
+    description: string
+    filePath?: string | null
+    dateSet: Date | string
+    dateDue: Date | string
+    module: ModuleCreateNestedOneWithoutProjectsInput
+    students?: UserCreateNestedManyWithoutStudentProjectsInput
+    StudentSubmission?: StudentSubmissionCreateNestedManyWithoutProjectInput
+  }
+
+  export type ProjectUncheckedCreateWithoutFileInput = {
+    id?: number
+    name: string
+    description: string
+    moduleId: number
+    filePath?: string | null
+    dateSet: Date | string
+    dateDue: Date | string
+    students?: UserUncheckedCreateNestedManyWithoutStudentProjectsInput
+    StudentSubmission?: StudentSubmissionUncheckedCreateNestedManyWithoutProjectInput
+  }
+
+  export type ProjectCreateOrConnectWithoutFileInput = {
+    where: ProjectWhereUniqueInput
+    create: XOR<ProjectCreateWithoutFileInput, ProjectUncheckedCreateWithoutFileInput>
+  }
+
+  export type StudentSubmissionCreateWithoutFileInput = {
+    filePath: string
+    dateSubmitted: Date | string
+    student: UserCreateNestedOneWithoutStudentSubmissionInput
+    project: ProjectCreateNestedOneWithoutStudentSubmissionInput
+  }
+
+  export type StudentSubmissionUncheckedCreateWithoutFileInput = {
+    id?: number
+    studentId: number
+    projectId: number
+    filePath: string
+    dateSubmitted: Date | string
+  }
+
+  export type StudentSubmissionCreateOrConnectWithoutFileInput = {
+    where: StudentSubmissionWhereUniqueInput
+    create: XOR<StudentSubmissionCreateWithoutFileInput, StudentSubmissionUncheckedCreateWithoutFileInput>
+  }
+
+  export type ProjectUpsertWithoutFileInput = {
+    update: XOR<ProjectUpdateWithoutFileInput, ProjectUncheckedUpdateWithoutFileInput>
+    create: XOR<ProjectCreateWithoutFileInput, ProjectUncheckedCreateWithoutFileInput>
+  }
+
+  export type ProjectUpdateWithoutFileInput = {
+    name?: StringFieldUpdateOperationsInput | string
+    description?: StringFieldUpdateOperationsInput | string
+    filePath?: NullableStringFieldUpdateOperationsInput | string | null
+    dateSet?: DateTimeFieldUpdateOperationsInput | Date | string
+    dateDue?: DateTimeFieldUpdateOperationsInput | Date | string
+    module?: ModuleUpdateOneRequiredWithoutProjectsNestedInput
+    students?: UserUpdateManyWithoutStudentProjectsNestedInput
+    StudentSubmission?: StudentSubmissionUpdateManyWithoutProjectNestedInput
+  }
+
+  export type ProjectUncheckedUpdateWithoutFileInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    name?: StringFieldUpdateOperationsInput | string
+    description?: StringFieldUpdateOperationsInput | string
+    moduleId?: IntFieldUpdateOperationsInput | number
+    filePath?: NullableStringFieldUpdateOperationsInput | string | null
+    dateSet?: DateTimeFieldUpdateOperationsInput | Date | string
+    dateDue?: DateTimeFieldUpdateOperationsInput | Date | string
+    students?: UserUncheckedUpdateManyWithoutStudentProjectsNestedInput
+    StudentSubmission?: StudentSubmissionUncheckedUpdateManyWithoutProjectNestedInput
+  }
+
+  export type StudentSubmissionUpsertWithoutFileInput = {
+    update: XOR<StudentSubmissionUpdateWithoutFileInput, StudentSubmissionUncheckedUpdateWithoutFileInput>
+    create: XOR<StudentSubmissionCreateWithoutFileInput, StudentSubmissionUncheckedCreateWithoutFileInput>
+  }
+
+  export type StudentSubmissionUpdateWithoutFileInput = {
+    filePath?: StringFieldUpdateOperationsInput | string
+    dateSubmitted?: DateTimeFieldUpdateOperationsInput | Date | string
+    student?: UserUpdateOneRequiredWithoutStudentSubmissionNestedInput
+    project?: ProjectUpdateOneRequiredWithoutStudentSubmissionNestedInput
+  }
+
+  export type StudentSubmissionUncheckedUpdateWithoutFileInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    studentId?: IntFieldUpdateOperationsInput | number
+    projectId?: IntFieldUpdateOperationsInput | number
+    filePath?: StringFieldUpdateOperationsInput | string
+    dateSubmitted?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type UserCreateWithoutOwnedModulesInput = {
@@ -7899,8 +9727,11 @@ export namespace Prisma {
     name: string
     description: string
     filePath?: string | null
+    dateSet: Date | string
+    dateDue: Date | string
     students?: UserCreateNestedManyWithoutStudentProjectsInput
     StudentSubmission?: StudentSubmissionCreateNestedManyWithoutProjectInput
+    File?: FileCreateNestedManyWithoutProjectInput
   }
 
   export type ProjectUncheckedCreateWithoutModuleInput = {
@@ -7908,8 +9739,11 @@ export namespace Prisma {
     name: string
     description: string
     filePath?: string | null
+    dateSet: Date | string
+    dateDue: Date | string
     students?: UserUncheckedCreateNestedManyWithoutStudentProjectsInput
     StudentSubmission?: StudentSubmissionUncheckedCreateNestedManyWithoutProjectInput
+    File?: FileUncheckedCreateNestedManyWithoutProjectInput
   }
 
   export type ProjectCreateOrConnectWithoutModuleInput = {
@@ -8016,6 +9850,7 @@ export namespace Prisma {
     id?: number
     projectId: number
     filePath: string
+    dateSubmitted: Date | string
   }
 
   export type ModuleUpdateWithoutTeacherInput = {
@@ -8063,27 +9898,35 @@ export namespace Prisma {
 
   export type StudentSubmissionUpdateWithoutStudentInput = {
     filePath?: StringFieldUpdateOperationsInput | string
+    dateSubmitted?: DateTimeFieldUpdateOperationsInput | Date | string
     project?: ProjectUpdateOneRequiredWithoutStudentSubmissionNestedInput
+    File?: FileUpdateManyWithoutSubmissionNestedInput
   }
 
   export type StudentSubmissionUncheckedUpdateWithoutStudentInput = {
     id?: IntFieldUpdateOperationsInput | number
     projectId?: IntFieldUpdateOperationsInput | number
     filePath?: StringFieldUpdateOperationsInput | string
+    dateSubmitted?: DateTimeFieldUpdateOperationsInput | Date | string
+    File?: FileUncheckedUpdateManyWithoutSubmissionNestedInput
   }
 
   export type StudentSubmissionUncheckedUpdateManyWithoutStudentSubmissionInput = {
     id?: IntFieldUpdateOperationsInput | number
     projectId?: IntFieldUpdateOperationsInput | number
     filePath?: StringFieldUpdateOperationsInput | string
+    dateSubmitted?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type ProjectUpdateWithoutStudentsInput = {
     name?: StringFieldUpdateOperationsInput | string
     description?: StringFieldUpdateOperationsInput | string
     filePath?: NullableStringFieldUpdateOperationsInput | string | null
+    dateSet?: DateTimeFieldUpdateOperationsInput | Date | string
+    dateDue?: DateTimeFieldUpdateOperationsInput | Date | string
     module?: ModuleUpdateOneRequiredWithoutProjectsNestedInput
     StudentSubmission?: StudentSubmissionUpdateManyWithoutProjectNestedInput
+    File?: FileUpdateManyWithoutProjectNestedInput
   }
 
   export type ProjectUncheckedUpdateWithoutStudentsInput = {
@@ -8092,7 +9935,10 @@ export namespace Prisma {
     description?: StringFieldUpdateOperationsInput | string
     moduleId?: IntFieldUpdateOperationsInput | number
     filePath?: NullableStringFieldUpdateOperationsInput | string | null
+    dateSet?: DateTimeFieldUpdateOperationsInput | Date | string
+    dateDue?: DateTimeFieldUpdateOperationsInput | Date | string
     StudentSubmission?: StudentSubmissionUncheckedUpdateManyWithoutProjectNestedInput
+    File?: FileUncheckedUpdateManyWithoutProjectNestedInput
   }
 
   export type ProjectUncheckedUpdateManyWithoutStudentProjectsInput = {
@@ -8101,12 +9947,23 @@ export namespace Prisma {
     description?: StringFieldUpdateOperationsInput | string
     moduleId?: IntFieldUpdateOperationsInput | number
     filePath?: NullableStringFieldUpdateOperationsInput | string | null
+    dateSet?: DateTimeFieldUpdateOperationsInput | Date | string
+    dateDue?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type StudentSubmissionCreateManyProjectInput = {
     id?: number
     studentId: number
     filePath: string
+    dateSubmitted: Date | string
+  }
+
+  export type FileCreateManyProjectInput = {
+    id?: number
+    name: string
+    filePath: string
+    submissionId?: number | null
+    extension: string
   }
 
   export type UserUpdateWithoutStudentProjectsInput = {
@@ -8140,13 +9997,63 @@ export namespace Prisma {
 
   export type StudentSubmissionUpdateWithoutProjectInput = {
     filePath?: StringFieldUpdateOperationsInput | string
+    dateSubmitted?: DateTimeFieldUpdateOperationsInput | Date | string
     student?: UserUpdateOneRequiredWithoutStudentSubmissionNestedInput
+    File?: FileUpdateManyWithoutSubmissionNestedInput
   }
 
   export type StudentSubmissionUncheckedUpdateWithoutProjectInput = {
     id?: IntFieldUpdateOperationsInput | number
     studentId?: IntFieldUpdateOperationsInput | number
     filePath?: StringFieldUpdateOperationsInput | string
+    dateSubmitted?: DateTimeFieldUpdateOperationsInput | Date | string
+    File?: FileUncheckedUpdateManyWithoutSubmissionNestedInput
+  }
+
+  export type FileUpdateWithoutProjectInput = {
+    name?: StringFieldUpdateOperationsInput | string
+    filePath?: StringFieldUpdateOperationsInput | string
+    extension?: StringFieldUpdateOperationsInput | string
+    submission?: StudentSubmissionUpdateOneWithoutFileNestedInput
+  }
+
+  export type FileUncheckedUpdateWithoutProjectInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    name?: StringFieldUpdateOperationsInput | string
+    filePath?: StringFieldUpdateOperationsInput | string
+    submissionId?: NullableIntFieldUpdateOperationsInput | number | null
+    extension?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type FileUncheckedUpdateManyWithoutFileInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    name?: StringFieldUpdateOperationsInput | string
+    filePath?: StringFieldUpdateOperationsInput | string
+    submissionId?: NullableIntFieldUpdateOperationsInput | number | null
+    extension?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type FileCreateManySubmissionInput = {
+    id?: number
+    name: string
+    filePath: string
+    projectId?: number | null
+    extension: string
+  }
+
+  export type FileUpdateWithoutSubmissionInput = {
+    name?: StringFieldUpdateOperationsInput | string
+    filePath?: StringFieldUpdateOperationsInput | string
+    extension?: StringFieldUpdateOperationsInput | string
+    project?: ProjectUpdateOneWithoutFileNestedInput
+  }
+
+  export type FileUncheckedUpdateWithoutSubmissionInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    name?: StringFieldUpdateOperationsInput | string
+    filePath?: StringFieldUpdateOperationsInput | string
+    projectId?: NullableIntFieldUpdateOperationsInput | number | null
+    extension?: StringFieldUpdateOperationsInput | string
   }
 
   export type ProjectCreateManyModuleInput = {
@@ -8154,14 +10061,19 @@ export namespace Prisma {
     name: string
     description: string
     filePath?: string | null
+    dateSet: Date | string
+    dateDue: Date | string
   }
 
   export type ProjectUpdateWithoutModuleInput = {
     name?: StringFieldUpdateOperationsInput | string
     description?: StringFieldUpdateOperationsInput | string
     filePath?: NullableStringFieldUpdateOperationsInput | string | null
+    dateSet?: DateTimeFieldUpdateOperationsInput | Date | string
+    dateDue?: DateTimeFieldUpdateOperationsInput | Date | string
     students?: UserUpdateManyWithoutStudentProjectsNestedInput
     StudentSubmission?: StudentSubmissionUpdateManyWithoutProjectNestedInput
+    File?: FileUpdateManyWithoutProjectNestedInput
   }
 
   export type ProjectUncheckedUpdateWithoutModuleInput = {
@@ -8169,8 +10081,11 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     description?: StringFieldUpdateOperationsInput | string
     filePath?: NullableStringFieldUpdateOperationsInput | string | null
+    dateSet?: DateTimeFieldUpdateOperationsInput | Date | string
+    dateDue?: DateTimeFieldUpdateOperationsInput | Date | string
     students?: UserUncheckedUpdateManyWithoutStudentProjectsNestedInput
     StudentSubmission?: StudentSubmissionUncheckedUpdateManyWithoutProjectNestedInput
+    File?: FileUncheckedUpdateManyWithoutProjectNestedInput
   }
 
   export type ProjectUncheckedUpdateManyWithoutProjectsInput = {
@@ -8178,6 +10093,8 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     description?: StringFieldUpdateOperationsInput | string
     filePath?: NullableStringFieldUpdateOperationsInput | string | null
+    dateSet?: DateTimeFieldUpdateOperationsInput | Date | string
+    dateDue?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type UserUpdateWithoutModulesInput = {
