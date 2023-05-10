@@ -2412,6 +2412,9 @@ html {
 .list-disc {
   list-style-type: disc;
 }
+.flex-row {
+  flex-direction: row;
+}
 .flex-col {
   flex-direction: column;
 }
@@ -2420,6 +2423,9 @@ html {
 }
 .justify-center {
   justify-content: center;
+}
+.justify-evenly {
+  justify-content: space-evenly;
 }
 .space-y-4 > :not([hidden]) ~ :not([hidden]) {
   --tw-space-y-reverse: 0;

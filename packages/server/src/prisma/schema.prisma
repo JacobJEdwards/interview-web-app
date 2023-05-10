@@ -35,6 +35,7 @@ model Project {
     students          User[]              @relation("StudentProjects")
     filePath          String?
     StudentSubmission StudentSubmission[]
+    File              File[]
 }
 
 model StudentSubmission {
@@ -44,6 +45,18 @@ model StudentSubmission {
     student   User    @relation(fields: [studentId], references: [id])
     project   Project @relation(fields: [projectId], references: [id])
     filePath  String
+    File      File[]
+}
+
+model File {
+    id           Int                @id @default(autoincrement())
+    name         String
+    filePath     String
+    projectId    Int?
+    project      Project?           @relation(fields: [projectId], references: [id])
+    submissionId Int?
+    submission   StudentSubmission? @relation(fields: [submissionId], references: [id])
+    extension    String
 }
 
 model Module {
