@@ -1,5 +1,8 @@
 import express from "express";
-import { idParamValidation } from "../middleware/validation";
+import {
+    idParamValidation,
+    newProjectValidation,
+} from "../middleware/validation";
 
 import ProjectController from "../controllers/projects.controller";
 import ModulesController from "../controllers/modules.controller";

@@ -1,5 +1,5 @@
 import schemas from "../utils/schemas";
-import type {NextFunction, Request, Response} from "express";
+import type { NextFunction, Request, Response } from "express";
 
 // validation middle ware
 
@@ -17,28 +17,41 @@ import type {NextFunction, Request, Response} from "express";
 
 // gets the id from the params and validates it
 export const idParamValidation = (
-  req: Request,
-  res: Response,
-  next: NextFunction,
-  value: string
+    req: Request,
+    res: Response,
+    next: NextFunction,
+    value: string
 ) => {
-  try {
-    schemas.id.parse(value);
-    next();
-  } catch (error: unknown) {
-    res.status(400).json({ error: error });
-  }
+    try {
+        schemas.id.parse(value);
+        next();
+    } catch (error: unknown) {
+        res.status(400).json({ error: error });
+    }
 };
 
 export const loginValidation = (
-  req: Request,
-  res: Response,
-  next: NextFunction
+    req: Request,
+    res: Response,
+    next: NextFunction
 ) => {
-  try {
-    req.body = schemas.login.parse(req.body);
-    next();
-  } catch (error: unknown) {
-    res.status(400).json({ error: error });
-  }
+    try {
+        req.body = schemas.login.parse(req.body);
+        next();
+    } catch (error: unknown) {
+        res.status(400).json({ error: error });
+    }
+};
+
+export const newProjectValidation = (
+    req: Request,
+    res: Response,
+    next: NextFunction
+) => {
+    try {
+        req.body = schemas.createProject.parse(req.body);
+        next();
+    } catch (error: unknown) {
+        res.status(400).json({ error: error });
+    }
 };

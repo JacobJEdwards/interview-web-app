@@ -44,6 +44,8 @@ export const createProjectSchema = z.object({
     name: nameSchema,
     description: descriptionSchema,
     teacherId: idSchema,
+    dateDue: z.date().optional(),
+    fileName: z.string().optional(),
 });
 
 export const getProjectsSchema = z.object({
