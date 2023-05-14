@@ -1,18 +1,18 @@
 import { z } from "zod";
 
-// auth
-export const LoginSchema = z.object({
-    email: z.string().trim().email({
-        message: "Invalidation email",
-    }),
-    password: z.string(),
-});
-
 export const idSchema = z.coerce.number().int().positive();
-
 export const nameSchema = z.string().trim().min(1).max(255);
 export const descriptionSchema = z.string().trim().min(1).max(255);
 export const roleSchema = z.enum(["STUDENT", "TEACHER", "ADMIN"]);
+export const emailSchema = z.string().trim().email({
+    message: "Invalid email",
+});
+
+// auth
+export const LoginSchema = z.object({
+    email: emailSchema,
+    password: z.string(),
+});
 
 export const getModuleSchema = z.object({
     name: nameSchema.optional(),
@@ -54,6 +54,14 @@ export const getProjectsSchema = z.object({
     moduleId: idSchema.optional(),
 });
 
+export const updateProjectSchema = z.object({
+    name: nameSchema.optional(),
+    description: descriptionSchema.optional(),
+    teacherId: idSchema.optional(),
+    dateDue: z.date().optional(),
+    fileName: z.string().optional(),
+});
+
 const schemas = {
     login: LoginSchema,
     id: idSchema,
@@ -65,6 +73,7 @@ const schemas = {
     updateModule: updateModuleSchema,
     getProjects: getProjectsSchema,
     createProject: createProjectSchema,
+    updateProject: updateProjectSchema,
 };
 
 export default schemas;

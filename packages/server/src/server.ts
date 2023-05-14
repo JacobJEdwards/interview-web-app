@@ -1,7 +1,4 @@
-require("module-alias/register");
-
-import { middleware } from "./middleware";
-import { errorHandler } from "./middleware";
+import { middleware, errorHandler } from "./middleware";
 
 import App, { type AppOptions } from "./application";
 

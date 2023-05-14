@@ -1,9 +1,11 @@
 import express from "express";
-import {
-    validators
-} from "../middleware";
+import { validators } from "../middleware";
 
-import { ProjectController, ModulesController, UserController } from "../controllers";
+import {
+    ProjectController,
+    ModulesController,
+    UserController,
+} from "../controllers";
 
 // /api routes
 const router = express.Router();
@@ -23,8 +25,16 @@ router.param("teacherId", validators.idParamValidation);
 // Project routes
 router.get("/projects", ProjectController.getProjects);
 router.get("/projects/:projectId", ProjectController.getProject);
-router.post("/projects", ProjectController.createProject);
-router.put("/projects/:projectId", ProjectController.updateProject);
+router.post(
+    "/projects",
+    validators.newProjectValidation,
+    ProjectController.createProject
+);
+router.put(
+    "/projects/:projectId",
+    validators.updateProjectValidation,
+    ProjectController.updateProject
+);
 router.delete("/projects/:projectId", ProjectController.deleteProject);
 router.get("/projects/:projectId/download", ProjectController.downloadFile);
 
