@@ -1,9 +1,9 @@
 import { generateToken, db, StatusCodes } from "../utils";
 import bcrypt from "bcryptjs";
 import type { User } from "../../types/generated/client";
+import type { ServiceResponse } from "./types";
 
-type LoginResponse = {
-    status: number;
+type LoginResponse = ServiceResponse & {
     response: {
         message: string;
         token?: string;

@@ -1,7 +1,8 @@
 import { NextFunction, Request, Response } from "express";
 import { Role } from "../../types/generated/client/";
-import prisma from "../utils/db";
-import { asyncHandler } from "../utils";
+import { asyncHandler, StatusCodes } from "../utils";
+import { getUsers, getUser, getUserModules, getStudentProjects, getStudentModuleProjects, selectProject, isProjectSelected, getSelectedProject, unselectProject } from "../services";
+import { user } from "../services";
 
 class UserController {
     // get all users
@@ -11,21 +12,14 @@ class UserController {
         const email = req.query.email ? String(req.query.email) : undefined;
         const name = req.query.name ? String(req.query.name) : undefined;
 
-        const users = await prisma.user.findMany({
-            where: { role, email, name },
-            select: {
-                id: true,
-                name: true,
-                email: true,
-                role: true,
-            },
-        });
+        const { status, response } = await user.getUsers(role, email, name);
 
-        if (!users || users.length === 0) {
-            return res.status(404).json({ message: "Users not found" });
+        if (status === StatusCodes.OK) {
+            return res.status(status).json(response.data);
         }
 
-        return res.status(200).json(users);
+        res.statusCode = status;
+        return next(response);
     }
 
     // get user by id (no password)
@@ -33,86 +27,29 @@ class UserController {
     public async getUser(req: Request, res: Response, next: NextFunction) {
         const { userId } = req.params;
 
-        const user = await prisma.user.findUnique({
-            where: {
-                id: Number(userId),
-            },
-            select: {
-                id: true,
-                name: true,
-                email: true,
-                role: true,
-            },
-        });
+        const { status, response } = await user.getUser(Number(userId));
 
-        if (!user) {
-            return res.status(404).json({ message: "User not found" });
+        if (status === StatusCodes.OK) {
+            return res.status(status).json(response.data);
         }
 
-        return res.status(200).json(user);
-    }
-
-    // create user
-    @asyncHandler
-    public async createUser(req: Request, res: Response, next: NextFunction) {
-        const { name, email, role, password } = req.body;
-        const user = await prisma.user.create({
-            data: {
-                name,
-                email,
-                role: role as Role,
-                password,
-            },
-        });
-
-        return res.status(201).json(user);
-    }
-
-    // update user
-    @asyncHandler
-    public async updateUser(req: Request, res: Response, next: NextFunction) {
-        const { name, email, role } = req.body;
-        const user = await prisma.user.update({
-            where: { id: Number(req.params.userId) },
-            data: {
-                name,
-                email,
-                role: role as Role,
-            },
-        });
-
-        if (!user) {
-            return res.status(404).json({ message: "User not found" });
-        }
-
-        res.status(200).json(user);
-    }
-
-    // delete user
-    @asyncHandler
-    public async deleteUser(req: Request, res: Response, next: NextFunction) {
-        const user = await prisma.user.delete({
-            where: { id: Number(req.params.userId) },
-        });
-
-        res.status(200).json(user);
+        res.statusCode = status;
+        return next(response)
     }
 
     // get a users modules
     @asyncHandler
     public async getModules(req: Request, res: Response, next: NextFunction) {
+        const { userId } = req.params;
 
-        const modules = await prisma.user
-            .findUnique({
-                where: { id: Number(req.params.userId) },
-            })
-            .modules();
+        const { status, response } = await user.getUserModules(Number(userId));
 
-        if (!modules || modules.length === 0) {
-            return res.status(404).json({ message: "Modules not found" });
+        if (status === StatusCodes.OK) {
+            return res.status(status).json(response.data);
         }
 
-        res.status(200).json(modules);
+        res.statusCode = status;
+        return next(response);
     }
 
     // get a users projects
@@ -120,17 +57,14 @@ class UserController {
     public async getProjects(req: Request, res: Response, next: NextFunction) {
         const { userId } = req.params;
 
-        const projects = await prisma.user
-            .findUnique({
-                where: { id: Number(req.params.userId) },
-            })
-            .studentProjects();
+        const { status, response } = await user.getStudentProjects(Number(userId));
 
-        if (!projects || projects.length === 0) {
-            return res.status(404).json({ message: "Projects not found" });
+        if (status === StatusCodes.OK) {
+            return res.status(status).json(response.data);
         }
 
-        res.status(200).json(projects);
+        res.statusCode = status;
+        return next(response);
     }
 
     // get a students selected projects for a module
@@ -141,84 +75,37 @@ class UserController {
         next: NextFunction
     ) {
         const { userId, moduleId } = req.params;
-        const projects = await prisma.user
-            .findUnique({
-                where: { id: Number(userId) },
-            })
-            .studentProjects({
-                where: {
-                    module: {
-                        id: Number(moduleId),
-                    },
-                },
-            });
 
-        if (!projects || projects.length === 0) {
-            return res.status(404).json({ message: "Projects not found" });
+        const { status, response } = await user.getStudentModuleProjects(
+            Number(userId),
+            Number(moduleId)
+        );
+
+        if (status === StatusCodes.OK) {
+            return res.status(status).json(response.data);
         }
 
-        res.status(200).json(projects);
+        res.statusCode = status;
+        return next(response);
     }
 
     // select a project for a module
     @asyncHandler
     public async selectProject(req: Request, res: Response, next: NextFunction) {
         const { userId, projectId, moduleId } = req.params;
-        const previousProject = await prisma.user.findUnique({
-            where: {
-                id: Number(userId),
-            },
-            select: {
-                studentProjects: {
-                    where: {
-                        module: {
-                            id: Number(moduleId),
-                        },
-                    },
-                },
-            },
-        });
 
-        if (previousProject && previousProject?.studentProjects?.length > 0) {
-            const previousProjectId = previousProject.studentProjects[0].id;
-            await prisma.user.update({
-                where: {
-                    id: Number(userId),
-                },
-                data: {
-                    studentProjects: {
-                        disconnect: {
-                            id: Number(previousProjectId),
-                        },
-                    },
-                },
-            });
+        const { status, response } = await user.selectProject(
+            Number(userId),
+            Number(moduleId),
+            Number(projectId)
+        );
+
+        if (status === StatusCodes.OK) {
+            return res.status(status).json(response.data);
         }
 
-        const project = await prisma.project.findUnique({
-            where: {
-                id: Number(projectId),
-            },
-        });
-
-        if (!project) {
-            return res.status(404).json({ message: "Project not found" });
-        }
-
-        const selectProject = await prisma.user.update({
-            where: {
-                id: Number(userId),
-            },
-            data: {
-                studentProjects: {
-                    connect: {
-                        id: Number(projectId),
-                    },
-                },
-            },
-        });
-
-        res.status(200).json(selectProject);
+        res.statusCode = status;
+        return next(response);
     }
 
     @asyncHandler
@@ -228,23 +115,18 @@ class UserController {
         next: NextFunction
     ) {
         const { userId, projectId } = req.params;
-        const user = await prisma.user.findUnique({
-            where: {
-                id: Number(userId),
-            },
-            select: {
-                studentProjects: {
-                    where: {
-                        id: Number(projectId),
-                    },
-                },
-            },
-        });
-        if (user && user?.studentProjects?.length > 0) {
-            return res.status(200).json(true);
-        } else {
-            return res.status(200).json(false);
+
+        const { status, response } = await user.isProjectSelected(
+            Number(userId),
+            Number(projectId)
+        );
+
+        if (status === StatusCodes.OK) {
+            return res.status(status).json(response.data);
         }
+
+        res.statusCode = status;
+        return next(response);
     }
 
     @asyncHandler
@@ -254,26 +136,18 @@ class UserController {
         next: NextFunction
     ) {
         const { userId, moduleId } = req.params;
-        const user = await prisma.user.findUnique({
-            where: {
-                id: Number(userId),
-            },
-            select: {
-                studentProjects: {
-                    where: {
-                        module: {
-                            id: Number(moduleId),
-                        },
-                    },
-                },
-            },
-        });
 
-        if (!user || user?.studentProjects?.length === 0) {
-            return res.status(404).json({ message: "Project not found" });
+        const { status, response } = await user.getSelectedProject(
+            Number(userId),
+            Number(moduleId)
+        );
+
+        if (status === StatusCodes.OK) {
+            return res.status(status).json(response.data);
         }
 
-        res.status(200).json(user.studentProjects[0]);
+        res.statusCode = status;
+        return next(response);
     }
 
     @asyncHandler
@@ -283,24 +157,18 @@ class UserController {
         next: NextFunction
     ) {
         const { userId, projectId } = req.params;
-        const project = await prisma.user.update({
-            where: {
-                id: Number(userId),
-            },
-            data: {
-                studentProjects: {
-                    disconnect: {
-                        id: Number(projectId),
-                    },
-                },
-            },
-        });
 
-        if (!project) {
-            return res.status(404).json({ message: "Project not found" });
+        const { status, response } = await user.unselectProject(
+            Number(userId),
+            Number(projectId)
+        );
+
+        if (status === StatusCodes.OK) {
+            return res.status(status).json(response.data);
         }
 
-        res.status(200).json(project);
+        res.statusCode = status;
+        return next(response);
     }
 }
 

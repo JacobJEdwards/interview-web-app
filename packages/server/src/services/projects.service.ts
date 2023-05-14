@@ -1,6 +1,10 @@
 import { db, StatusCodes } from "../utils";
+import { ServiceResponse } from "./types";
 
-export const getProjects = async (moduleId?: number, name?: string) => {
+export const getProjects = async (
+  moduleId?: number,
+  name?: string
+): Promise<ServiceResponse> => {
   try {
     const projects = await db.project.findMany({
       where: {
@@ -38,7 +42,9 @@ export const getProjects = async (moduleId?: number, name?: string) => {
   }
 };
 
-export const getProject = async (projectId: number) => {
+export const getProject = async (
+  projectId: number
+): Promise<ServiceResponse> => {
   try {
     const project = await db.project.findUnique({
       where: {
@@ -72,7 +78,12 @@ export const getProject = async (projectId: number) => {
   }
 };
 
-export const updateProject = async (projectId: number, name: string, description: string, filePath?: string) => {
+export const updateProject = async (
+  projectId: number,
+  name: string,
+  description: string,
+  filePath?: string
+): Promise<ServiceResponse> => {
   try {
     const project = await db.project.update({
       where: {
@@ -111,7 +122,9 @@ export const updateProject = async (projectId: number, name: string, description
   }
 };
 
-export const deleteProject = async (projectId: number) => {
+export const deleteProject = async (
+  projectId: number
+): Promise<ServiceResponse> => {
   try {
     const project = await db.project.delete({
       where: {
@@ -145,7 +158,9 @@ export const deleteProject = async (projectId: number) => {
   }
 };
 
-export const downloadProjectFile = async (projectId: number) => {
+export const downloadProjectFile = async (
+  projectId: number
+): Promise<ServiceResponse> => {
   try {
     const project = await db.project.findUnique({
       where: {
@@ -188,7 +203,13 @@ export const downloadProjectFile = async (projectId: number) => {
   }
 };
 
-export const createProject = async (moduleId: number, name: string, description: string, dateDue: string, filePath?: string) => {
+export const createProject = async (
+  moduleId: number,
+  name: string,
+  description: string,
+  dateDue: string,
+  filePath?: string
+): Promise<ServiceResponse> => {
   try {
     const project = await db.project.create({
       data: {
@@ -206,8 +227,8 @@ export const createProject = async (moduleId: number, name: string, description:
         status: StatusCodes.NOT_FOUND,
         response: {
           message: "Project not found",
-        }
-      }
+        },
+      };
     }
 
     return {

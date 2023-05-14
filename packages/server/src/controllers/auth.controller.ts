@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response } from "express";
-import { login } from "../services";
+import { auth } from "../services";
 import { asyncHandler } from "../utils";
 
 class AuthController {
@@ -7,7 +7,7 @@ class AuthController {
   public async login(req: Request, res: Response, next: NextFunction) {
     const { email, password } = req.body;
 
-    const { status, response } = await login(email, password);
+    const { status, response } = await auth.login(email, password);
 
     if (status === 200) {
       return res.status(status).json(response);
