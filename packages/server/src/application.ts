@@ -1,7 +1,7 @@
 import type { Application, RequestHandler, ErrorRequestHandler } from "express";
 import express, { Router } from "express";
 import { createServer, Server } from "http";
-import validateToken from "./middleware/auth";
+import { validateToken } from "./middleware";
 
 type Middleware = RequestHandler | ErrorRequestHandler;
 

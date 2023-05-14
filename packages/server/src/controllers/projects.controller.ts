@@ -1,8 +1,7 @@
 import { Request, Response, NextFunction } from "express";
 import prisma from "../utils/db";
-import { getProjectsSchema, createProjectSchema } from "../utils/schemas";
 import path from "path";
-import asyncHandler from "../utils/asyncHandler";
+import { asyncHandler, schemas } from "../utils";
 
 class ProjectsController {
   // basic CRUD operations
@@ -13,7 +12,7 @@ class ProjectsController {
     const name = String(req.query.name) ?? undefined;
     const moduleId = Number(req.query.moduleId) ?? undefined;
 
-    const validation = getProjectsSchema.safeParse({
+    const validation = schemas.getProjects.safeParse({
       name,
       moduleId,
     });
@@ -52,7 +51,7 @@ class ProjectsController {
   // create new project
   @asyncHandler
   public async createProject(req: Request, res: Response, next: NextFunction) {
-    const validation = createProjectSchema.safeParse(req.body);
+    const validation = schemas.createProject.safeParse(req.body);
 
     if (!validation.success) {
       return res.status(400).json({ message: validation.error });

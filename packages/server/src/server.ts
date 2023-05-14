@@ -1,5 +1,7 @@
-import middleware from "./middleware/middleware";
-import errorHandler from "./middleware/errorRoutes";
+require("module-alias/register");
+
+import { middleware } from "./middleware";
+import { errorHandler } from "./middleware";
 
 import App, { type AppOptions } from "./application";
 
@@ -9,11 +11,11 @@ import AuthRoutes from "./routes/auth.router";
 const port: number | string = process.env.PORT || 6060;
 
 const options = {
-  port,
-  middleware,
-  apiRoutes: [APIRoutes],
-  authRoutes: [AuthRoutes],
-  otherRoutes: errorHandler,
+    port,
+    middleware,
+    apiRoutes: [APIRoutes],
+    authRoutes: [AuthRoutes],
+    otherRoutes: errorHandler,
 };
 
 const app = new App(options as AppOptions);

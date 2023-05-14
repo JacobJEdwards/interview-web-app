@@ -1,12 +1,9 @@
 import express from "express";
 import {
-    idParamValidation,
-    newProjectValidation,
-} from "../middleware/validation";
+    validators
+} from "../middleware";
 
-import ProjectController from "../controllers/projects.controller";
-import ModulesController from "../controllers/modules.controller";
-import UserController from "../controllers/users.controller";
+import { ProjectController, ModulesController, UserController } from "../controllers";
 
 // /api routes
 const router = express.Router();
@@ -16,10 +13,10 @@ const router = express.Router();
  */
 
 // type checking on params using zod
-router.param("userId", idParamValidation);
-router.param("moduleId", idParamValidation);
-router.param("projectId", idParamValidation);
-router.param("teacherId", idParamValidation);
+router.param("userId", validators.idParamValidation);
+router.param("moduleId", validators.idParamValidation);
+router.param("projectId", validators.idParamValidation);
+router.param("teacherId", validators.idParamValidation);
 
 // Basic CRUD routes
 

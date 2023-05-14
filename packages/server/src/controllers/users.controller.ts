@@ -1,8 +1,7 @@
-import {NextFunction, Request, Response} from "express";
-import {Role} from "../../types/generated/client/";
+import { NextFunction, Request, Response } from "express";
+import { Role } from "../../types/generated/client/";
 import prisma from "../utils/db";
-import {idSchema} from "../utils/schemas";
-import asyncHandler from "../utils/asyncHandler";
+import { asyncHandler } from "../utils";
 
 class UserController {
     // get all users
@@ -102,13 +101,6 @@ class UserController {
     // get a users modules
     @asyncHandler
     public async getModules(req: Request, res: Response, next: NextFunction) {
-        const { userId } = req.params;
-
-        const validation = idSchema.safeParse(userId);
-
-        if (!validation.success) {
-            return res.status(400).json({ message: validation.error });
-        }
 
         const modules = await prisma.user
             .findUnique({
@@ -127,12 +119,6 @@ class UserController {
     @asyncHandler
     public async getProjects(req: Request, res: Response, next: NextFunction) {
         const { userId } = req.params;
-
-        const validation = idSchema.safeParse(userId);
-
-        if (!validation.success) {
-            return res.status(400).json({ message: validation.error });
-        }
 
         const projects = await prisma.user
             .findUnique({
@@ -316,29 +302,6 @@ class UserController {
 
         res.status(200).json(project);
     }
-
-    // public async assignProjectToUser(
-    //   req: Request,
-    //   res: Response,
-    //   next: NextFunction
-    // ) {
-    //   try {
-    //     const { userId, projectId } = req.params;
-    //     const project = await prisma.user.upsert({
-    //       where: {
-    //         id: Number(userId),
-    //       },
-    //       connect: {
-    //         projects: {
-    //           id: Number(projectId),
-    //         },
-    //       },
-    //     });
-    //     res.status(200).json(project);
-    //   } catch (error) {
-    //     next(error);
-    //   }
-    // }
 }
 
 export default new UserController();

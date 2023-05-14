@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { Request, Response, NextFunction } from "express";
-import db from "../utils/db";
+// replace with middleware
 import {
     getModuleSchema,
     createModuleSchema,
@@ -8,7 +8,7 @@ import {
     createProjectSchema,
     idSchema,
 } from "../utils/schemas";
-import asyncHandler from "../utils/asyncHandler";
+import { db, asyncHandler } from "../utils";
 
 class ModulesController {
     // basic CRUD operations
