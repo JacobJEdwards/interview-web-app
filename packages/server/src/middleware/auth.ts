@@ -1,7 +1,7 @@
 import jwt from "jsonwebtoken";
 import { Request, Response, NextFunction } from "express";
 import * as dotenv from "dotenv";
-import schemas from "../utils/schemas";
+import { schemas, StatusCodes } from "../utils";
 
 dotenv.config();
 
@@ -9,8 +9,7 @@ const validateToken = (req: Request, res: Response, next: NextFunction) => {
     const token = req.headers.authorization;
 
     if (!token) {
-        return res.status(401).json({
-            status: 401,
+        return res.status(StatusCodes.UNAUTHORIZED).json({
             error: "Unauthorized",
         });
     }
@@ -19,8 +18,7 @@ const validateToken = (req: Request, res: Response, next: NextFunction) => {
         const decoded = jwt.verify(token, process.env.SECRET_KEY as string);
 
         if (!decoded) {
-            return res.status(401).json({
-                status: 401,
+            return res.status(StatusCodes.UNAUTHORIZED).json({
                 error: "Invalid token",
             });
         }
@@ -37,8 +35,7 @@ const validateToken = (req: Request, res: Response, next: NextFunction) => {
 
         next();
     } catch (error) {
-        return res.status(401).json({
-            status: 401,
+        return res.status(StatusCodes.UNAUTHORIZED).json({
             error: "Invalid token",
         });
     }

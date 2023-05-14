@@ -9,18 +9,24 @@ import type { Request, Response, NextFunction } from "express";
  */
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 export default function asyncHandler(
-  fn: (req: Request, res: Response, next: NextFunction) => Promise<any>,
-  _context?: ClassMethodDecoratorContext
+    fn: (
+        req: Request,
+        res: Response,
+        next: NextFunction,
+        ...args: any[]
+    ) => Promise<any>,
+    _context?: ClassMethodDecoratorContext
 ) {
-  return async function (
-    req: Request,
-    res: Response,
-    next: NextFunction
-  ): Promise<any> {
-    try {
-      await fn(req, res, next);
-    } catch (err) {
-      next(err);
-    }
-  };
+    return async function(
+        req: Request,
+        res: Response,
+        next: NextFunction,
+        ...args: any[]
+    ): Promise<any> {
+        try {
+            await fn(req, res, next, ...args);
+        } catch (err) {
+            next(err);
+        }
+    };
 }

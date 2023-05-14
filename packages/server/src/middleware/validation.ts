@@ -1,4 +1,4 @@
-import schemas from "../utils/schemas";
+import { schemas, asyncHandler } from "../utils";
 import type { NextFunction, Request, Response } from "express";
 
 // validation middle ware
@@ -16,55 +16,30 @@ import type { NextFunction, Request, Response } from "express";
 } */
 
 // gets the id from the params and validates it
-export const idParamValidation = async (
-    req: Request,
-    res: Response,
-    next: NextFunction,
-    value: string
-) => {
-    try {
-        await schemas.id.parseAsync(value);
-        next();
-    } catch (error: unknown) {
-        res.status(400).json({ error: error });
-    }
-};
+export const idParamValidation = asyncHandler(
+  async (req: Request, res: Response, next: NextFunction, value: string) => {
+    await schemas.id.parseAsync(value);
+    next();
+  }
+);
 
-export const loginValidation = async (
-    req: Request,
-    res: Response,
-    next: NextFunction
-) => {
-    try {
-        req.body = await schemas.login.parseAsync(req.body);
-        next();
-    } catch (error: unknown) {
-        res.status(400).json({ error: error });
-    }
-};
+export const loginValidation = asyncHandler(
+  async (req: Request, res: Response, next: NextFunction) => {
+    req.body = await schemas.login.parseAsync(req.body);
+    next();
+  }
+);
 
-export const newProjectValidation = async (
-    req: Request,
-    res: Response,
-    next: NextFunction
-) => {
-    try {
-        req.body = await schemas.createProject.parseAsync(req.body);
-        next();
-    } catch (error: unknown) {
-        res.status(400).json({ error: error });
-    }
-};
+export const newProjectValidation = asyncHandler(
+  async (req: Request, res: Response, next: NextFunction) => {
+    req.body = await schemas.createProject.parseAsync(req.body);
+    next();
+  }
+);
 
-export const updateProjectValidation = async (
-    req: Request,
-    res: Response,
-    next: NextFunction
-) => {
-    try {
-        req.body = await schemas.updateProject.parseAsync(req.body);
-        next();
-    } catch (error: unknown) {
-        res.status(400).json({ error: error });
-    }
-};
+export const updateProjectValidation = asyncHandler(
+  async (req: Request, res: Response, next: NextFunction) => {
+    req.body = await schemas.updateProject.parseAsync(req.body);
+    next();
+  }
+);

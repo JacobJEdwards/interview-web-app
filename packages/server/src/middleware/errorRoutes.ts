@@ -5,6 +5,7 @@ import type {
   ErrorRequestHandler,
   RequestHandler,
 } from "express";
+import { StatusCodes } from "../utils";
 
 const errorHandler: ErrorRequestHandler = (
   err: unknown,
@@ -14,7 +15,7 @@ const errorHandler: ErrorRequestHandler = (
 ) => {
   console.log(err);
 
-  const statusCode = err instanceof Error ? 500 : 400;
+  const statusCode = err instanceof Error ? StatusCodes.BAD_REQUEST : StatusCodes.INTERNAL_SERVER_ERROR;
 
   res.status(statusCode).json({ error: err });
 };
@@ -24,7 +25,7 @@ const notFound: RequestHandler = (
   res: Response,
   _next: NextFunction
 ) => {
-  res.status(404).json({ message: "Endpoint does not exist" });
+  res.status(StatusCodes.NOT_FOUND).json({ message: "Endpoint does not exist" });
 };
 
 export default [errorHandler, notFound];
