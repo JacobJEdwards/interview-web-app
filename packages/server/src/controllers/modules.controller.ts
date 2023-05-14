@@ -8,42 +8,29 @@ import {
     createProjectSchema,
     idSchema,
 } from "../utils/schemas";
-import { db, asyncHandler } from "../utils";
+import { db, asyncHandler, StatusCodes } from "../utils";
+
+import { getModules } from "../services";
 
 class ModulesController {
     // basic CRUD operations
 
     // get all modules
     @asyncHandler
-    public async getModules(req: Request, res: Response, _next: NextFunction) {
+    public async getModules(req: Request, res: Response, next: NextFunction) {
         const teacherId = req.query.teacherId
             ? Number(req.query.teacherId)
             : undefined;
         const name = req.query.name ? String(req.query.name) : undefined;
 
-        const validation = getModuleSchema.safeParse({
-            name,
-            teacherId,
-        });
+        const { status, response } = await getModules(teacherId, name);
 
-        if (!validation.success) {
-            return res.status(400).json({ message: validation.error });
+        if (status === StatusCodes.OK) {
+            return res.status(status).json(response.data);
         }
 
-        const modules = await db.module.findMany({
-            where: {
-                teacherId,
-                name: {
-                    contains: name,
-                },
-            },
-        });
-
-        if (!modules || modules.length === 0) {
-            return res.status(404).json({ message: "No modules found" });
-        }
-
-        return res.status(200).json(modules);
+        res.statusCode = status;
+        next(response);
     }
 
     // get specific module

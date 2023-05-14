@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response } from "express";
-import { login } from "../services/auth.services";
+import { login } from "../services";
 import { asyncHandler } from "../utils";
 
 class AuthController {
