@@ -10,10 +10,6 @@ import {
 // /api routes
 const router = express.Router();
 
-/*
- * TODO: Add validation middle ware
- */
-
 // type checking on params using zod
 router.param("userId", validators.idParamValidation);
 router.param("moduleId", validators.idParamValidation);
@@ -41,18 +37,12 @@ router.get("/projects/:projectId/download", ProjectController.downloadFile);
 // Module routes
 router.get("/modules", ModulesController.getModules);
 router.get("/modules/:moduleId", ModulesController.getModule);
-router.post("/modules", ModulesController.createModule);
-router.put("/modules/:moduleId", ModulesController.updateModule);
-router.delete("/modules/:moduleId", ModulesController.deleteModule);
 router.get("/modules/:moduleId/projects", ModulesController.getProjects);
 router.post("/modules/:moduleId/projects/new", ModulesController.createProject);
 
 // User routes
 router.get("/users", UserController.getUsers);
 router.get("/users/:userId", UserController.getUser);
-router.post("/users", UserController.createUser);
-router.put("/users/:userId", UserController.updateUser);
-router.delete("/users/:userId", UserController.deleteUser);
 router.get("/users/:userId/modules", UserController.getModules);
 router.get("/users/:userId/projects", UserController.getProjects);
 router.get(
