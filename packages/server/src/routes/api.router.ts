@@ -52,7 +52,6 @@ router.get(
   "/users/:userId/:moduleId/selected",
   UserController.getSelectedProject
 );
-
 router.post(
   "/users/:userId/:moduleId/:projectId/select",
   UserController.selectProject

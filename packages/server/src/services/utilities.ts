@@ -1,4 +1,4 @@
-import { TStatusCodes, StatusCodes } from "../utils/statusCodes";
+import { TStatusCodes, StatusCodes } from "../utils";
 
 export type ServiceResponse = {
     status: TStatusCodes;
