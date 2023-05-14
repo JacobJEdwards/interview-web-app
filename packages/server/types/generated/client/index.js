@@ -175,8 +175,7 @@ const config = {
     "isCustomOutput": true
   },
   "relativeEnvPaths": {
-    "rootEnvPath": null,
-    "schemaEnvPath": "../../../../../.env"
+    "rootEnvPath": null
   },
   "relativePath": "../../../src/prisma",
   "clientVersion": "4.14.0",
@@ -196,7 +195,7 @@ if (!fs.existsSync(path.join(__dirname, 'schema.prisma'))) {
   warnOnce('bundled-warning-1', 'Your generated Prisma Client could not immediately find its `schema.prisma`, falling back to finding it via the current working directory.')
   warnOnce('bundled-warning-2', 'We are interested in learning about your project setup. We\'d appreciate if you could take the time to share some information with us.')
   warnOnce('bundled-warning-3', 'Please help us by answering a few questions: https://pris.ly/bundler-investigation')
-  config.dirname = path.join(process.cwd(), "packages/server/types/generated/client")
+  config.dirname = path.join(process.cwd(), "../server/types/generated/client")
   config.isBundled = true
 }
 
@@ -220,6 +219,6 @@ exports.PrismaClient = PrismaClient
 Object.assign(exports, Prisma)
 
 path.join(__dirname, "libquery_engine-darwin.dylib.node");
-path.join(process.cwd(), "packages/server/types/generated/client/libquery_engine-darwin.dylib.node")
+path.join(process.cwd(), "../server/types/generated/client/libquery_engine-darwin.dylib.node")
 path.join(__dirname, "schema.prisma");
-path.join(process.cwd(), "packages/server/types/generated/client/schema.prisma")
+path.join(process.cwd(), "../server/types/generated/client/schema.prisma")
