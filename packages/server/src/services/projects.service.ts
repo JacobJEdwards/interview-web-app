@@ -1,11 +1,8 @@
 import { db, StatusCodes } from "../utils";
-import { ServiceResponse } from "./types";
+import { ServiceResponse, withErrorHandling } from "./utilities";
 
-export const getProjects = async (
-  moduleId?: number,
-  name?: string
-): Promise<ServiceResponse> => {
-  try {
+export const getProjects = withErrorHandling(
+  async (moduleId?: number, name?: string): Promise<ServiceResponse> => {
     const projects = await db.project.findMany({
       where: {
         moduleId,
@@ -32,20 +29,11 @@ export const getProjects = async (
         data: projects,
       },
     };
-  } catch (error) {
-    return {
-      status: StatusCodes.INTERNAL_SERVER_ERROR,
-      response: {
-        message: error,
-      },
-    };
   }
-};
+);
 
-export const getProject = async (
-  projectId: number
-): Promise<ServiceResponse> => {
-  try {
+export const getProject = withErrorHandling(
+  async (projectId: number): Promise<ServiceResponse> => {
     const project = await db.project.findUnique({
       where: {
         id: projectId,
@@ -68,23 +56,16 @@ export const getProject = async (
         data: project,
       },
     };
-  } catch (error) {
-    return {
-      status: StatusCodes.INTERNAL_SERVER_ERROR,
-      response: {
-        message: error,
-      },
-    };
   }
-};
+);
 
-export const updateProject = async (
-  projectId: number,
-  name: string,
-  description: string,
-  filePath?: string
-): Promise<ServiceResponse> => {
-  try {
+export const updateProject = withErrorHandling(
+  async (
+    projectId: number,
+    name: string,
+    description: string,
+    filePath?: string
+  ): Promise<ServiceResponse> => {
     const project = await db.project.update({
       where: {
         id: projectId,
@@ -112,20 +93,11 @@ export const updateProject = async (
         data: project,
       },
     };
-  } catch (error) {
-    return {
-      status: StatusCodes.INTERNAL_SERVER_ERROR,
-      response: {
-        message: error,
-      },
-    };
   }
-};
+);
 
-export const deleteProject = async (
-  projectId: number
-): Promise<ServiceResponse> => {
-  try {
+export const deleteProject = withErrorHandling(
+  async (projectId: number): Promise<ServiceResponse> => {
     const project = await db.project.delete({
       where: {
         id: projectId,
@@ -148,20 +120,11 @@ export const deleteProject = async (
         data: project,
       },
     };
-  } catch (error) {
-    return {
-      status: StatusCodes.INTERNAL_SERVER_ERROR,
-      response: {
-        message: error,
-      },
-    };
   }
-};
+);
 
-export const downloadProjectFile = async (
-  projectId: number
-): Promise<ServiceResponse> => {
-  try {
+export const downloadProjectFile = withErrorHandling(
+  async (projectId: number): Promise<ServiceResponse> => {
     const project = await db.project.findUnique({
       where: {
         id: projectId,
@@ -193,24 +156,17 @@ export const downloadProjectFile = async (
         data: project.filePath,
       },
     };
-  } catch (error) {
-    return {
-      status: StatusCodes.INTERNAL_SERVER_ERROR,
-      response: {
-        message: error,
-      },
-    };
   }
-};
+);
 
-export const createProject = async (
-  moduleId: number,
-  name: string,
-  description: string,
-  dateDue: string,
-  filePath?: string
-): Promise<ServiceResponse> => {
-  try {
+export const createProject = withErrorHandling(
+  async (
+    moduleId: number,
+    name: string,
+    description: string,
+    dateDue: string,
+    filePath?: string
+  ): Promise<ServiceResponse> => {
     const project = await db.project.create({
       data: {
         name,
@@ -238,12 +194,5 @@ export const createProject = async (
         data: project,
       },
     };
-  } catch (error) {
-    return {
-      status: StatusCodes.INTERNAL_SERVER_ERROR,
-      response: {
-        message: error,
-      },
-    };
   }
-};
+);
