@@ -11,9 +11,9 @@ dotenv.config();
 /**
  * Middleware to validate token in request header (if present) and add user info to request object (not yet implemented)
  *
- * @param req Request object
- * @param res Response object
- * @param next Next function
+ * @param {Request} req Request object
+ * @param {Response} res Response object
+ * @param {NextFunction} next Next function
  * @returns Response object with error if token is invalid or missing
  * @returns Next function if token is valid
  * @returns Request object with user info if token is valid (not yet implemented)

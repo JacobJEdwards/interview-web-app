@@ -4,7 +4,12 @@ import type {User} from "../../types/generated/client";
 
 dotenv.config();
 
-const generateToken = (user: User) => {
+/**
+ * Generate a token for the user 
+ * @param {User} user
+ * @returns {string} token 
+ */
+const generateToken = (user: User): string => {
     return jwt.sign(
       {
           id: user.id,

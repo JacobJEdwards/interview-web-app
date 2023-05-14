@@ -1,3 +1,4 @@
+// Purpose: re-export all utility functions
 export { default as db } from "./db";
 export { default as asyncHandler } from "./asyncHandler";
 export { default as generateToken } from "./generateToken";

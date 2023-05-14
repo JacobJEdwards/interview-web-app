@@ -32,7 +32,7 @@ export default class App {
      * Constructor for the App class.
      * Creates an instance of the express application, sets the port to listen to, and
      * sets up middleware and routes.
-     * @param options - an object that specifies the options to create the app
+     * @param {AppOptions} options - an object that specifies the options to create the app
      */
     constructor(options: AppOptions) {
         // create an instance of the express application
@@ -58,7 +58,7 @@ export default class App {
 
     /**
      * Sets up middleware for the application
-     * @param middleware - an array of middleware functions to use
+     * @param {Middleware[]} middleware - an array of middleware functions to use
      */
     private middlewares(middleware: Middleware[]) {
         middleware.forEach((m) => {
@@ -68,7 +68,7 @@ export default class App {
 
     /**
      * Adds middleware to the application
-     * @param middleware - a middleware function to use
+     * @param {Middleware} middleware - a middleware function to use
      */
     public addMiddleware(middleware: Middleware) {
         this.app.use(middleware);
@@ -76,7 +76,7 @@ export default class App {
 
     /**
      * Sets up API routes for the application
-     * @param routes - an array of router instances for the API
+     * @param {Array<Router>} routes - an array of router instances for the API
      */
     private apiRoutes(routes: Array<Router>) {
         routes.forEach((r) => {
@@ -86,7 +86,7 @@ export default class App {
 
     /**
      * Sets up authentication routes for the application
-     * @param routes - an array of router instances for authentication
+     * @param {Array<Router>} routes - an array of router instances for authentication
      */
     private authRoutes(routes: Array<Router>) {
         routes.forEach((r) => {
@@ -96,7 +96,7 @@ export default class App {
 
     /**
      * Sets up other routes for the application
-     * @param routes - an array of middleware functions for other routes
+     * @param {Middleware[]} routes - an array of middleware functions for other routes
      */
     private otherRoutes(routes: Middleware[]) {
         routes.forEach((r) => {
@@ -118,7 +118,7 @@ export default class App {
 
     /**
      * Handles the listening event for the server
-     * @param server - the server to listen on
+     * @param {Server} server - the server to listen on
      */
     private onListening(server: Server): void {
         const addr = server.address();
@@ -130,7 +130,7 @@ export default class App {
 
     /**
      * Handles the error event for the server
-     * @param error - the error to handle
+     * @param {NodeJS.ErrnoException} error - the error to handle
      * @throws - an error if the error is not handled
      */
     private onError(error: NodeJS.ErrnoException): void {
@@ -159,9 +159,9 @@ export default class App {
 
     /**
      * Normalises the port number / pipe name
-     * @param val - the port number / pipe name to normalise
-     * @returns the normalised port number / pipe name
-     * @throws - an error if the port number / pipe name is invalid
+     * @param {?} val - the port number / pipe name to normalise
+     * @returns {string | number} the normalised port number / pipe name
+     * @throws {Error} error if the port number / pipe name is invalid
      */
     private normalizePort(val: unknown): string | number {
         if (typeof val === "number") {

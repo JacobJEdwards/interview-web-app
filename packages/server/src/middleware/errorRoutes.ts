@@ -10,11 +10,11 @@ import { StatusCodes } from "../utils";
 
 /**
  * Error handling middleware for express
- * @param err - Error object thrown by express
- * @param req - Express request object
- * @param res - Express response object
- * @param _next - Express next function (unused)
- * @returns - Express response object with error message
+ * @param {?} err - Error object thrown by express
+ * @param {Request} req - Express request object
+ * @param {Response} res - Express response object
+ * @param {NextFunction} _next - Express next function (unused)
+ * @returns {Response} res Express response object with error message
  */
 const errorHandler: ErrorRequestHandler = (
     err: unknown,
@@ -37,10 +37,10 @@ const errorHandler: ErrorRequestHandler = (
 
 /**
  * Request handler for non-existent endpoints
- * @param req - Express request object
- * @param res - Express response object
- * @param _next - Express next function (unused)
- * @returns - Express response object with error message
+ * @param {Request} req - Express request object
+ * @param {Response} res - Express response object
+ * @param {NextFunction} _next - Express next function (unused)
+ * @returns {Response} res - Express response object with error message
  */
 const notFound: RequestHandler = (
     req: Request,

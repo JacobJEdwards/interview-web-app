@@ -2,6 +2,7 @@ import type { Request, Response, NextFunction } from "express";
 
 /**
  * Wraps an async request handler function and adds proper error handling.
+ * Can be used as a class method decorator.
  *
  * @param {function} fn - The async request handler function to wrap.
  * @param _context

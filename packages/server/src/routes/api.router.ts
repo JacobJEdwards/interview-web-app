@@ -1,3 +1,4 @@
+// Purpose: Defines the routes for the api
 import express from "express";
 import { validators } from "../middleware";
 

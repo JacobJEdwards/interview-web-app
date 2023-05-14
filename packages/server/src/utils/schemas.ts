@@ -1,5 +1,7 @@
+// Purpose: Contains all the schemas used in the application
 import { z } from "zod";
 
+// basic schemas
 export const idSchema = z.coerce.number().int().positive();
 export const nameSchema = z.string().trim().min(1).max(255);
 export const descriptionSchema = z.string().trim().min(1).max(255);
@@ -8,15 +10,10 @@ export const emailSchema = z.string().trim().email({
   message: "Invalid email",
 });
 
-// auth
+// auth schemas
 export const LoginSchema = z.object({
   email: emailSchema,
   password: z.string(),
-});
-
-export const getModuleSchema = z.object({
-  name: nameSchema.optional(),
-  teacherId: idSchema.optional(),
 });
 
 export const tokenSchema = z.object({
@@ -26,6 +23,13 @@ export const tokenSchema = z.object({
   role: roleSchema,
   iat: z.number(),
   exp: z.number(),
+});
+
+
+// module schemas
+export const getModuleSchema = z.object({
+  name: nameSchema.optional(),
+  teacherId: idSchema.optional(),
 });
 
 export const createModuleSchema = z.object({
@@ -40,6 +44,8 @@ export const updateModuleSchema = z.object({
   teacherId: idSchema.optional(),
 });
 
+
+// project schemas
 export const createProjectSchema = z.object({
   name: nameSchema,
   description: descriptionSchema,
@@ -62,6 +68,7 @@ export const updateProjectSchema = z.object({
   fileName: z.string().optional(),
 });
 
+// export all schemas in an object
 const schemas = {
   login: LoginSchema,
   id: idSchema,
