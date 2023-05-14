@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction } from "express";
-import prisma from "../utils/db";
 import path from "path";
-import { asyncHandler, schemas } from "../utils";
+import { asyncHandler, StatusCodes } from "../utils";
+import { getProject, getProjects, updateProject, deleteProject, downloadProjectFile } from "../services";
 
 class ProjectsController {
   // basic CRUD operations
@@ -12,22 +12,14 @@ class ProjectsController {
     const name = String(req.query.name) ?? undefined;
     const moduleId = Number(req.query.moduleId) ?? undefined;
 
-    const validation = schemas.getProjects.safeParse({
-      name,
-      moduleId,
-    });
+    const { status, response } = await getProjects(moduleId, name);
 
-    if (!validation.success) {
-      return res.status(400).json({ message: validation.error });
+    if (status === StatusCodes.OK) {
+      return res.status(status).json(response.data);
     }
 
-    const projects = await prisma.project.findMany({
-      where: {
-        moduleId,
-        name,
-      },
-    });
-    return res.status(200).json(projects);
+    res.statusCode = status;
+    return next(response);
   }
 
   // get specific project
@@ -35,38 +27,14 @@ class ProjectsController {
   public async getProject(req: Request, res: Response, next: NextFunction) {
     const { projectId } = req.params;
 
-    const project = await prisma.project.findUnique({
-      where: {
-        id: Number(projectId),
-      },
-    });
+    const { status, response } = await getProject(Number(projectId));
 
-    if (!project) {
-      return res.status(404).json({ message: "Project not found" });
+    if (status === StatusCodes.OK) {
+      return res.status(status).json(response.data);
     }
 
-    return res.status(200).json(project);
-  }
-
-  // create new project
-  @asyncHandler
-  public async createProject(req: Request, res: Response, next: NextFunction) {
-    const validation = schemas.createProject.safeParse(req.body);
-
-    if (!validation.success) {
-      return res.status(400).json({ message: validation.error });
-    }
-
-    const project = await prisma.project.create({
-      data: {
-        name: req.body.name,
-        description: req.body.description,
-        moduleId: Number(req.body.moduleId),
-        dateSet: new Date().toLocaleString(),
-        dateDue: new Date(req.body.dateDue).toLocaleString(),
-      },
-    });
-    return res.status(201).json(project);
+    res.statusCode = status;
+    return next(response);
   }
 
   // update project
@@ -74,22 +42,21 @@ class ProjectsController {
   public async updateProject(req: Request, res: Response, next: NextFunction) {
     const { name, description } = req.body;
     const filePath = req.file?.path ?? undefined;
-    const project = await prisma.project.update({
-      where: {
-        id: Number(req.params.projectId),
-      },
-      data: {
-        name,
-        description,
-        filePath,
-      },
-    });
+    const { projectId } = req.params;
 
-    if (!project) {
-      return res.status(404).json({ message: "Project not found" });
+    const { status, response } = await updateProject(
+      Number(projectId),
+      name,
+      description,
+      filePath
+    );
+
+    if (status === StatusCodes.OK) {
+      return res.status(status).json(response.data);
     }
 
-    return res.status(200).json(project);
+    res.statusCode = status;
+    return next(response);
   }
 
   // delete project
@@ -97,12 +64,14 @@ class ProjectsController {
   public async deleteProject(req: Request, res: Response, next: NextFunction) {
     const { projectId } = req.params;
 
-    const project = await prisma.project.delete({
-      where: {
-        id: Number(projectId),
-      },
-    });
-    return res.status(200).json(project);
+    const { status, response } = await deleteProject(Number(projectId));
+
+    if (status === StatusCodes.OK) {
+      return res.status(status).json(response.data);
+    }
+
+    res.statusCode = status;
+    return next(response);
   }
 
   // download project file
@@ -110,21 +79,15 @@ class ProjectsController {
   public async downloadFile(req: Request, res: Response, next: NextFunction) {
     const { projectId } = req.params;
 
-    const project = await prisma.project.findUnique({
-      where: {
-        id: Number(projectId),
-      },
-    });
+    const { status, response } = await downloadProjectFile(Number(projectId));
 
-    if (!project) {
-      return res.status(404).json({ message: "Project not found" });
+    // on error
+    if (status !== StatusCodes.OK || !response.data) {
+      res.statusCode = status;
+      return next(response);
     }
 
-    if (!project.filePath) {
-      return res.status(404).json({ message: "File not found" });
-    }
-
-    return res.sendFile(project.filePath, {
+    return res.sendFile(response.data, {
       root: path.join(__dirname, "../../"),
     });
   }

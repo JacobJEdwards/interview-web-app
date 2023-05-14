@@ -40,3 +40,71 @@ export const getModules = async (teacherId?: number, name?: string) => {
         };
     }
 };
+
+export const getModule = async (moduleId: number) => {
+    try {
+        const module = await db.module.findUnique({
+            where: {
+                id: moduleId,
+            },
+        });
+
+        if (!module) {
+            return {
+                status: StatusCodes.NOT_FOUND,
+                response: {
+                    message: "Module not found",
+                },
+            };
+        }
+
+        return {
+            status: StatusCodes.OK,
+            response: {
+                message: "Module found",
+                data: module,
+            },
+        };
+    } catch (error) {
+        return {
+            status: StatusCodes.INTERNAL_SERVER_ERROR,
+            response: {
+                message: error,
+            },
+        };
+    }
+};
+
+export const getModuleProjects = async (moduleId: number) => {
+    try {
+        const projects = await db.project.findMany({
+            where: {
+                moduleId: Number(moduleId),
+            },
+        });
+
+        if (!projects || projects.length === 0) {
+            return {
+                status: StatusCodes.NOT_FOUND,
+                response: {
+                    message: "No projects found",
+                },
+            };
+        }
+
+        return {
+            status: StatusCodes.OK,
+            response: {
+                message: "Projects found",
+                data: projects,
+            },
+        };
+    } catch (error) {
+        return {
+            status: StatusCodes.INTERNAL_SERVER_ERROR,
+            response: {
+                message: error,
+            },
+        };
+    }
+};

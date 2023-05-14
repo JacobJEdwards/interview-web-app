@@ -2,9 +2,9 @@ import express from "express";
 import { validators } from "../middleware";
 
 import {
-    ProjectController,
-    ModulesController,
-    UserController,
+  ProjectController,
+  ModulesController,
+  UserController,
 } from "../controllers";
 
 // /api routes
@@ -21,15 +21,10 @@ router.param("teacherId", validators.idParamValidation);
 // Project routes
 router.get("/projects", ProjectController.getProjects);
 router.get("/projects/:projectId", ProjectController.getProject);
-router.post(
-    "/projects",
-    validators.newProjectValidation,
-    ProjectController.createProject
-);
 router.put(
-    "/projects/:projectId",
-    validators.updateProjectValidation,
-    ProjectController.updateProject
+  "/projects/:projectId",
+  validators.updateProjectValidation,
+  ProjectController.updateProject
 );
 router.delete("/projects/:projectId", ProjectController.deleteProject);
 router.get("/projects/:projectId/download", ProjectController.downloadFile);
@@ -37,8 +32,12 @@ router.get("/projects/:projectId/download", ProjectController.downloadFile);
 // Module routes
 router.get("/modules", ModulesController.getModules);
 router.get("/modules/:moduleId", ModulesController.getModule);
-router.get("/modules/:moduleId/projects", ModulesController.getProjects);
-router.post("/modules/:moduleId/projects/new", ModulesController.createProject);
+router.get("/modules/:moduleId/projects", ModulesController.getModuleProjects);
+router.post(
+  "/modules/:moduleId/projects/new",
+  validators.newProjectValidation,
+  ModulesController.createProject
+);
 
 // User routes
 router.get("/users", UserController.getUsers);
@@ -46,25 +45,25 @@ router.get("/users/:userId", UserController.getUser);
 router.get("/users/:userId/modules", UserController.getModules);
 router.get("/users/:userId/projects", UserController.getProjects);
 router.get(
-    "/users/:userId/:moduleId/projects",
-    UserController.getStudentModuleProjects
+  "/users/:userId/:moduleId/projects",
+  UserController.getStudentModuleProjects
 ); // is this ok?
 router.get(
-    "/users/:userId/:moduleId/selected",
-    UserController.getSelectedProject
+  "/users/:userId/:moduleId/selected",
+  UserController.getSelectedProject
 );
 
 router.post(
-    "/users/:userId/:moduleId/:projectId/select",
-    UserController.selectProject
+  "/users/:userId/:moduleId/:projectId/select",
+  UserController.selectProject
 );
 router.get(
-    "/users/:userId/:projectId/verify",
-    UserController.isProjectSelected
+  "/users/:userId/:projectId/verify",
+  UserController.isProjectSelected
 );
 router.post(
-    "/users/:userId/:projectId/unselect",
-    UserController.unselectProject
+  "/users/:userId/:projectId/unselect",
+  UserController.unselectProject
 );
 
 export default router;

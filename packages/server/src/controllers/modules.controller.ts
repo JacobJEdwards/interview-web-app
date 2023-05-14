@@ -1,16 +1,7 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import { Request, Response, NextFunction } from "express";
-// replace with middleware
-import {
-    getModuleSchema,
-    createModuleSchema,
-    updateModuleSchema,
-    createProjectSchema,
-    idSchema,
-} from "../utils/schemas";
-import { db, asyncHandler, StatusCodes } from "../utils";
+import { asyncHandler, StatusCodes } from "../utils";
 
-import { getModules } from "../services";
+import { getModules, getModule, createProject, getModuleProjects } from "../services";
 
 class ModulesController {
     // basic CRUD operations
@@ -35,142 +26,56 @@ class ModulesController {
 
     // get specific module
     @asyncHandler
-    public async getModule(req: Request, res: Response, _next: NextFunction) {
+    public async getModule(req: Request, res: Response, next: NextFunction) {
         const { moduleId } = req.params;
 
-        const module = await db.module.findUnique({
-            where: {
-                id: Number(moduleId),
-            },
-        });
+        const { status, response } = await getModule(Number(moduleId));
 
-        if (!module) {
-            return res.status(404).json({ message: "Module not found" });
+        if (status === StatusCodes.OK) {
+            return res.status(status).json(response.data);
         }
 
-        return res.status(200).json(module);
-    }
-
-    // create module
-    @asyncHandler
-    public async createModule(req: Request, res: Response, _next: NextFunction) {
-        const validation = createModuleSchema.safeParse(req.body);
-
-        if (!validation.success) {
-            return res.status(400).json({ message: validation.error });
-        }
-
-        const module = await db.module.create({
-            data: {
-                name: req.body.name,
-                description: req.body.description,
-                teacherId: Number(req.body.teacherId),
-            },
-        });
-
-        return res.status(201).json(module);
-    }
-
-    // update module
-    @asyncHandler
-    public async updateModule(req: Request, res: Response, _next: NextFunction) {
-        const { moduleId } = req.params;
-        const validation = updateModuleSchema.safeParse({
-            name: req.body.name,
-            moduleId: moduleId,
-            description: req.body.description,
-            teacherId: req.body.teacherId,
-        });
-
-        if (!validation.success) {
-            return res.status(400).json({ message: validation.error });
-        }
-
-        const module = await db.module.update({
-            where: {
-                id: Number(moduleId),
-            },
-            data: {
-                name: req.body.name,
-                description: req.body.description,
-                teacherId: Number(req.body.teacherId),
-            },
-        });
-
-        if (!module) {
-            return res.status(404).json({ message: "Module not found" });
-        }
-
-        return res.status(200).json(module);
-    }
-
-    // delete module
-    @asyncHandler
-    public async deleteModule(req: Request, res: Response, _next: NextFunction) {
-        const { moduleId } = req.params;
-
-        const validation = idSchema.safeParse(moduleId);
-
-        if (!validation.success) {
-            return res.status(400).json({ message: validation.error });
-        }
-
-        const module = await db.module.delete({
-            where: {
-                id: Number(moduleId),
-            },
-        });
-
-        return res.status(200).json(module);
+        res.statusCode = status;
+        next(response);
     }
 
     // get a module's projects
     @asyncHandler
-    public async getProjects(req: Request, res: Response, _next: NextFunction) {
+    public async getModuleProjects(req: Request, res: Response, next: NextFunction) {
         const { moduleId } = req.params;
 
-        const validation = idSchema.safeParse(moduleId);
+        const { status, response } = await getModuleProjects(Number(moduleId));
 
-        if (!validation.success) {
-            return res.status(400).json({ message: validation.error });
+        if (status === StatusCodes.OK) {
+            return res.status(status).json(response.data);
         }
 
-        const projects = await db.project.findMany({
-            where: {
-                moduleId: Number(moduleId),
-            },
-        });
-
-        if (!projects || projects.length === 0) {
-            return res.status(404).json({ message: "No projects found" });
-        }
-
-        return res.status(200).json(projects);
+        res.statusCode = status;
+        return next(response);
     }
 
     // create and connect project to module
     @asyncHandler
-    public async createProject(req: Request, res: Response, _next: NextFunction) {
+    public async createProject(req: Request, res: Response, next: NextFunction) {
         const filePath = req.file ? req.file.path : undefined;
 
-        //const validation = createProjectSchema.safeParse(req.body);
+        const { name, description, dateDue } = req.body;
+        const { moduleId } = req.params;
 
-        // if (!validation.success) {
-        //   return res.status(400).json({ message: validation.error });
-        // }
+        const { status, response } = await createProject(
+            Number(moduleId),
+            name,
+            description,
+            dateDue as string,
+            filePath,
+        );
 
-        const project = await db.project.create({
-            data: {
-                name: req.body.name as string,
-                description: req.body.description as string,
-                moduleId: Number(req.params.moduleId),
-                filePath,
-                dateSet: new Date(),
-                dateDue: new Date(req.body.dateDue as string),
-            },
-        });
+        if (status === StatusCodes.OK) {
+            return res.status(status).json(response.data);
+        }
 
-        return res.status(201).json(project);
+        res.statusCode = status;
+        return next(response);
     }
 }
 

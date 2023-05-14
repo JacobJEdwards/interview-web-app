@@ -1,2 +1,4 @@
 export { login } from './auth.service';
-export { getModules } from './modules.service';
+export { getModules, getModule, getModuleProjects } from './modules.service';
+export { getProjects, getProject, updateProject, deleteProject, downloadProjectFile, createProject } from './projects.service';
+
