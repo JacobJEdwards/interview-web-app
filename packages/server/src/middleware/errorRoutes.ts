@@ -15,7 +15,11 @@ const errorHandler: ErrorRequestHandler = (
 ) => {
   console.log(err);
 
-  const statusCode = err instanceof Error ? StatusCodes.BAD_REQUEST : StatusCodes.INTERNAL_SERVER_ERROR;
+  const statusCode = res.statusCode
+    ? res.statusCode
+    : err instanceof Error
+    ? StatusCodes.BAD_REQUEST
+    : StatusCodes.INTERNAL_SERVER_ERROR;
 
   res.status(statusCode).json({ error: err });
 };
@@ -25,7 +29,9 @@ const notFound: RequestHandler = (
   res: Response,
   _next: NextFunction
 ) => {
-  res.status(StatusCodes.NOT_FOUND).json({ message: "Endpoint does not exist" });
+  res
+    .status(StatusCodes.NOT_FOUND)
+    .json({ message: "Endpoint does not exist" });
 };
 
 export default [errorHandler, notFound];
