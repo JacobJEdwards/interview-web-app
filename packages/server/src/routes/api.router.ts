@@ -17,10 +17,12 @@ router.param("moduleId", validators.idParamValidation);
 router.param("projectId", validators.idParamValidation);
 router.param("teacherId", validators.idParamValidation);
 
-// Basic CRUD routes
-
 // Project routes
-router.get("/projects", ProjectController.getProjects);
+router.get(
+  "/projects",
+  validators.getProjectsValidation,
+  ProjectController.getProjects
+);
 router.get("/projects/:projectId", ProjectController.getProject);
 router.put(
   "/projects/:projectId",
@@ -31,7 +33,11 @@ router.delete("/projects/:projectId", ProjectController.deleteProject);
 router.get("/projects/:projectId/download", ProjectController.downloadFile);
 
 // Module routes
-router.get("/modules", ModulesController.getModules);
+router.get(
+  "/modules",
+  validators.getModulesValidation,
+  ModulesController.getModules
+);
 router.get("/modules/:moduleId", ModulesController.getModule);
 router.get("/modules/:moduleId/projects", ModulesController.getModuleProjects);
 router.post(
@@ -48,7 +54,7 @@ router.get("/users/:userId/projects", UserController.getProjects);
 router.get(
   "/users/:userId/:moduleId/projects",
   UserController.getStudentModuleProjects
-); // is this ok?
+);
 router.get(
   "/users/:userId/:moduleId/selected",
   UserController.getSelectedProject
