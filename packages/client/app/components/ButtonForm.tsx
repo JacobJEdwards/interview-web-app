@@ -1,18 +1,16 @@
 import React, { type FC, useState } from "react";
 import type { PropsWithChildren } from "react";
 import Popup from "./Popup";
-import NestedButtonForm from './NestedButtonForm'
+import NestedButtonForm from "./NestedButtonForm";
 
-
-type ButtonFormProps = {
+type ButtonFormProps = PropsWithChildren<{
     formAction: string;
-    children: React.ReactNode;
     requireConfirmation?: boolean;
     disabled?: boolean;
     confirmMessage?: string;
-};
+}>;
 
-const ButtonForm: FC<PropsWithChildren<ButtonFormProps>> = ({
+const ButtonForm: FC<ButtonFormProps> = ({
     formAction,
     requireConfirmation = false,
     disabled = false,
