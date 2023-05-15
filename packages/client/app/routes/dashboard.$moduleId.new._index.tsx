@@ -10,6 +10,7 @@ import { getUserId, requireUserType } from "~/utils/session.server";
 import { Role } from "server/types/generated/client";
 import { useActionData, useLoaderData } from "@remix-run/react";
 import { newProject } from "~/utils/projects.server";
+import { getModule } from "~/utils/modules.server";
 import Breadcrumbs, { RouteData } from "~/components/Breadcrumbs";
 import ProjectForm from "~/components/ProjectForm";
 import invariant from "tiny-invariant";
@@ -21,6 +22,7 @@ export const loader = async ({ request, params }: LoaderArgs) => {
   await requireUserType(request, Role.TEACHER);
 
   const { userId, userRole } = await getUserId(request);
+  const module = await getModule(Number(moduleId), request);
 
   const crumbs = [
     {
@@ -28,7 +30,7 @@ export const loader = async ({ request, params }: LoaderArgs) => {
       url: "/dashboard",
     },
     {
-      name: moduleId,
+      name: module.name,
       url: `/dashboard/${moduleId}`,
     },
     {
@@ -79,10 +81,11 @@ export const action = async ({ request, params }: LoaderArgs) => {
   );
 
   if (project) {
-    return redirect(`/dashboard/${moduleId}`);
+    return redirect(`/dashboard/${moduleId}/${project.id}`);
+  } else if (error) {
+    const values = Object.fromEntries(formData.entries());
+    return json({ error, values });
   }
-  // look at logout see how to fix it
-  return error;
 };
 
 const NewProject = () => {

@@ -4,7 +4,7 @@ import { z } from "zod";
 // basic schemas
 export const idSchema = z.coerce.number().int().positive();
 export const nameSchema = z.string().trim().min(1).max(255);
-export const descriptionSchema = z.string().trim().min(1).max(255);
+export const descriptionSchema = z.string().trim().min(1);
 export const roleSchema = z.enum(["STUDENT", "TEACHER", "ADMIN"]);
 export const emailSchema = z.string().trim().email({
     message: "Invalid email",

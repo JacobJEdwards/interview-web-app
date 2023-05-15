@@ -9,7 +9,6 @@ import Breadcrumbs, { type RouteData } from "../components/Breadcrumbs";
 import ProjectForm from "../components/ProjectForm";
 import {
   getUserId,
-  requireUser,
   requireUserType,
 } from "../utils/session.server";
 import { getModule } from "../utils/modules.server";
@@ -48,7 +47,7 @@ export const loader = async ({ request, params }: LoaderArgs) => {
       url: `/dashboard/${params.moduleId}/${params.projectId}`,
     },
     {
-      name: "Edit",
+      name: "Edit Project",
       url: `/dashboard/${params.moduleId}/${params.projectId}/edit`,
     },
   ];

@@ -1,10 +1,10 @@
 // Purpose: Error handling middleware for express
 import type {
-    Request,
-    Response,
-    NextFunction,
-    ErrorRequestHandler,
-    RequestHandler,
+  Request,
+  Response,
+  NextFunction,
+  ErrorRequestHandler,
+  RequestHandler,
 } from "express";
 import { StatusCodes } from "../utils";
 
@@ -17,22 +17,23 @@ import { StatusCodes } from "../utils";
  * @returns {Response} res Express response object with error message
  */
 const errorHandler: ErrorRequestHandler = (
-    err: unknown,
-    req: Request,
-    res: Response,
-    _next: NextFunction
+  err: unknown,
+  req: Request,
+  res: Response,
+  _next: NextFunction
 ) => {
-    console.log(err);
+  console.log(err);
 
-    // res interface is extended to include statusCode
-    // if it is not present, set it to 500 or 400 depending on the error
-    const statusCode = res.statusCode
-        ? res.statusCode
-        : err instanceof Error
-            ? StatusCodes.BAD_REQUEST
-            : StatusCodes.INTERNAL_SERVER_ERROR;
+  // res interface is extended to include statusCode
+  // if it is not present, set it to 500 or 400 depending on the error
+  const statusCode =
+    res.statusCode && res.statusCode !== StatusCodes.OK
+      ? res.statusCode
+      : err instanceof Error
+      ? StatusCodes.BAD_REQUEST
+      : StatusCodes.INTERNAL_SERVER_ERROR;
 
-    return res.status(statusCode).json({ error: err });
+  return res.status(statusCode).json({ error: err });
 };
 
 /**
@@ -43,13 +44,13 @@ const errorHandler: ErrorRequestHandler = (
  * @returns {Response} res - Express response object with error message
  */
 const notFound: RequestHandler = (
-    req: Request,
-    res: Response,
-    _next: NextFunction
+  req: Request,
+  res: Response,
+  _next: NextFunction
 ) => {
-    return res
-        .status(StatusCodes.NOT_FOUND)
-        .json({ message: "Endpoint does not exist" });
+  return res
+    .status(StatusCodes.NOT_FOUND)
+    .json({ message: "Endpoint does not exist" });
 };
 
 export default [errorHandler, notFound];

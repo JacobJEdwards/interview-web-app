@@ -22,6 +22,7 @@ const Breadcrumbs: FC<Props> = ({ crumbs }) => {
                   ? "opacity-80 hover:opacity-90 font-semibold"
                   : "opacity-60 hover:opacity-90 font-light"
               }
+              prefetch="intent"
               to={crumb.url}
             >
               {crumb.name}

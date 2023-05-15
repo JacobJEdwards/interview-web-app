@@ -1,83 +1,88 @@
 import { Request, Response, NextFunction } from "express";
 import { asyncHandler, StatusCodes } from "../utils";
 
-import { module, project } from "../services"
-
+import { module, project } from "../services";
 
 class ModulesController {
-    // basic CRUD operations
+  // basic CRUD operations
 
-    // get all modules
-    @asyncHandler
-    public async getModules(req: Request, res: Response, next: NextFunction) {
-        const teacherId = req.query.teacherId
-            ? Number(req.query.teacherId)
-            : undefined;
-        const name = req.query.name ? String(req.query.name) : undefined;
+  // get all modules
+  @asyncHandler
+  public async getModules(req: Request, res: Response, next: NextFunction) {
+    const teacherId = req.query.teacherId
+      ? Number(req.query.teacherId)
+      : undefined;
+    const name = req.query.name ? String(req.query.name) : undefined;
 
-        const { status, response } = await module.getModules(teacherId, name);
+    const { status, response } = await module.getModules(teacherId, name);
 
-        if (status === StatusCodes.OK) {
-            return res.status(status).json(response.data);
-        }
-
-        res.statusCode = status;
-        next(response);
+    if (status === StatusCodes.OK) {
+      return res.status(status).json(response.data);
     }
 
-    // get specific module
-    @asyncHandler
-    public async getModule(req: Request, res: Response, next: NextFunction) {
-        const { moduleId } = req.params;
+    res.statusCode = status;
+    next(response);
+  }
 
-        const { status, response } = await module.getModule(Number(moduleId));
+  // get specific module
+  @asyncHandler
+  public async getModule(req: Request, res: Response, next: NextFunction) {
+    const { moduleId } = req.params;
 
-        if (status === StatusCodes.OK) {
-            return res.status(status).json(response.data);
-        }
+    const { status, response } = await module.getModule(Number(moduleId));
 
-        res.statusCode = status;
-        next(response);
+    if (status === StatusCodes.OK) {
+      return res.status(status).json(response.data);
     }
 
-    // get a module's projects
-    @asyncHandler
-    public async getModuleProjects(req: Request, res: Response, next: NextFunction) {
-        const { moduleId } = req.params;
+    res.statusCode = status;
+    next(response);
+  }
 
-        const { status, response } = await module.getModuleProjects(Number(moduleId));
+  // get a module's projects
+  @asyncHandler
+  public async getModuleProjects(
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ) {
+    const { moduleId } = req.params;
 
-        if (status === StatusCodes.OK) {
-            return res.status(status).json(response.data);
-        }
+    const { status, response } = await module.getModuleProjects(
+      Number(moduleId)
+    );
 
-        res.statusCode = status;
-        return next(response);
+    if (status === StatusCodes.OK) {
+      return res.status(status).json(response.data);
     }
 
-    // create and connect project to module
-    @asyncHandler
-    public async createProject(req: Request, res: Response, next: NextFunction) {
-        const filePath = req.file ? req.file.path : undefined;
+    res.statusCode = status;
+    return next(response);
+  }
 
-        const { name, description, dateDue } = req.body;
-        const { moduleId } = req.params;
+  // create and connect project to module
+  @asyncHandler
+  public async createProject(req: Request, res: Response, next: NextFunction) {
+    const filePath = req.file ? req.file.path : undefined;
 
-        const { status, response } = await project.createProject(
-            Number(moduleId),
-            name,
-            description,
-            dateDue as string,
-            filePath,
-        );
+    const { name, description, dateDue } = req.body;
+    const { moduleId } = req.params;
 
-        if (status === StatusCodes.OK) {
-            return res.status(status).json(response.data);
-        }
+    const { status, response } = await project.createProject(
+      Number(moduleId),
+      name,
+      description,
+      dateDue as string,
+      filePath
+    );
 
-        res.statusCode = status;
-        return next(response);
+    if (status === StatusCodes.OK) {
+      return res.status(status).json(response.data);
     }
+
+    res.statusCode = status;
+    return next(response);
+  }
 }
 
 export default new ModulesController();

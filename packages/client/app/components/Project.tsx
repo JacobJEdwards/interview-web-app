@@ -23,6 +23,7 @@ const Project: FC<ProjectProps> = ({
         <Link
           className={disabled ? "btn btn-disabled mt-2" : "btn mt-2"}
           to={id.toString()}
+          prefetch="intent"
         >
           View Project
         </Link>
