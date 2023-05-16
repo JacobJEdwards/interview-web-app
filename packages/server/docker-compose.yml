@@ -1,6 +1,6 @@
 services:
-  db:
-    container_name: db
+  postgres:
+    container_name: postgres
     environment:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=password
@@ -17,7 +17,9 @@ services:
       dockerfile: Dockerfile
     container_name: project-management-api
     depends_on:
-      - db
+      - postgres
+    links:
+      - postgres
     ports:
       - "6060:6060"
     restart: always

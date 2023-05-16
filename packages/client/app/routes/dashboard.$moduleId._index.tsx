@@ -89,7 +89,10 @@ export default function DashboardModule() {
             {selectedProject && (
                 <>
                     <h2 className="text-2xl font-semibold">Selected Project:</h2>
-                    <Project {...selectedProject} />
+                    <Project
+                        {...selectedProject}
+                        dateDueString={new Date(selectedProject.dateDue).toUTCString()}
+                    />
                     <div className="divider"></div>
                 </>
             )}
@@ -102,15 +105,19 @@ export default function DashboardModule() {
                     <ul
                         className={selectedProject ? "list-disc opacity-60" : "list-disc"}
                     >
-                        {projects.map((project: SerializedProject) => (
-                            <li key={project.id} className="m-4">
-                                <Project
-                                    {...project}
-                                    disabled={selectedProject ? true : false}
-                                />
-                                <div className="divider"></div>
-                            </li>
-                        ))}
+                        {projects.map((project: SerializedProject) => {
+                            const dateDue = new Date(project.dateDue).toUTCString();
+                            return (
+                                <li key={project.id} className="m-4">
+                                    <Project
+                                        {...project}
+                                        dateDueString={dateDue}
+                                        disabled={selectedProject ? true : false}
+                                    />
+                                    <div className="divider"></div>
+                                </li>
+                            );
+                        })}
                     </ul>
                 </>
             ) : (
