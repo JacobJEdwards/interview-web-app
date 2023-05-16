@@ -20,7 +20,7 @@ const Project: FC<ProjectProps> = ({
   if (description.length > 100) description = description.slice(0, 100) + "...";
 
   return (
-    <div className="flex flex-col max-w-none w-full my-5">
+    <section className="flex flex-col max-w-none w-full my-5">
       <div className="flex flex-row max-w-none w-full my-3">
         <div className="flex flex-col prose max-w-none">
           <h2 className="text-2xl font-semibold">{name}</h2>
@@ -35,7 +35,7 @@ const Project: FC<ProjectProps> = ({
       >
         View Project
       </Link>
-    </div>
+    </section>
   );
 };
 

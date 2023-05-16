@@ -1,5 +1,5 @@
 import { Link } from "@remix-run/react";
-import { FC, memo } from "react";
+import React, { type FC, memo } from "react";
 
 export interface RouteData {
   name: string;
@@ -12,7 +12,7 @@ interface Props {
 
 const Breadcrumbs: FC<Props> = ({ crumbs }) => {
   return (
-    <div className="breadcrumbs text-sm mb-4">
+    <nav className="breadcrumbs text-sm mb-4">
       <ul>
         {crumbs.map((crumb: RouteData, index: number) => (
           <li key={index}>
@@ -30,7 +30,7 @@ const Breadcrumbs: FC<Props> = ({ crumbs }) => {
           </li>
         ))}
       </ul>
-    </div>
+    </nav>
   );
 };
 
