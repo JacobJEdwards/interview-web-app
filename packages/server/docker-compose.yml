@@ -1,0 +1,27 @@
+services:
+  db:
+    container_name: db
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=password
+      - POSTGRES_DB=interview
+    image: postgres
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/
+
+  project-management-api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: project-management-api
+    depends_on:
+      - db
+    ports:
+      - "6060:6060"
+    restart: always
+    stdin_open: true
+
+volumes:
+  postgres_data:

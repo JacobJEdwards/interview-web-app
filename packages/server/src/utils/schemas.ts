@@ -1,11 +1,12 @@
 // Purpose: Contains all the schemas used in the application
 import { z } from "zod";
+import { Role } from "../../types/generated/client";
 
 // basic schemas
 export const idSchema = z.coerce.number().int().positive();
 export const nameSchema = z.string().trim().min(1).max(255);
 export const descriptionSchema = z.string().trim().min(1);
-export const roleSchema = z.enum(["STUDENT", "TEACHER", "ADMIN"]);
+export const roleSchema = z.nativeEnum(Role);
 export const emailSchema = z.string().trim().email({
     message: "Invalid email",
 });
