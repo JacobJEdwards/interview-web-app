@@ -17,7 +17,7 @@ const ButtonForm: FC<ButtonFormProps> = ({
     children,
     confirmMessage = "Are you sure?",
 }) => {
-    const [confirming, setConfirming] = useState(false);
+    const [confirming, setConfirming] = useState<boolean>(false);
 
     return (
         <>
@@ -27,6 +27,7 @@ const ButtonForm: FC<ButtonFormProps> = ({
                         type="button"
                         className="btn"
                         onClick={() => setConfirming(true)}
+                        disabled={confirming || disabled}
                     >
                         {children}
                     </button>
